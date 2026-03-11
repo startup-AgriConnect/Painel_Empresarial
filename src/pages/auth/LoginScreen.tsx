@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { UserRole } from "../../types";
 import {
-  ShieldCheck,
   Building2,
   Lock,
   LogIn,
@@ -10,12 +9,10 @@ import {
   EyeOff,
   Sparkles,
   Phone,
-  BarChart3,
-  Globe,
-  TrendingUp,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import logoBranco from "../../assets/images/logo_simples_branca.png";
+import OrganicParticles from "../../components/shared/OrganicParticles";
 
 interface LoginScreenProps {
   onLogin: (role: UserRole) => void;
@@ -91,7 +88,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
           </div>
 
           {/* Content */}
-          <div className="relative z-10 w-full flex flex-col justify-between p-16">
+          <div className="relative z-10 w-full flex flex-col justify-between p-16 pt-40">
             {/* Logo and Main Title */}
             <div className="space-y-10">
               <div className="flex items-center gap-4">
@@ -130,148 +127,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
                   ponta.
                 </p>
               </div>
-
-              {/* Tech Features */}
-              <div
-                className="grid grid-cols-2 gap-3 max-w-2xl animate-in slide-in-from-left duration-700"
-                style={{ animationDelay: "400ms" }}
-              >
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 hover:bg-white/10 transition-all group">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                      <BarChart3 className="w-4 h-4 text-white/90" />
-                    </div>
-                    <p className="text-lg font-black text-white">98%</p>
-                  </div>
-                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-wider">
-                    Precisão Geoespacial
-                  </p>
-                </div>
-
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 hover:bg-white/10 transition-all group">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                      <Sparkles className="w-4 h-4 text-white/90" />
-                    </div>
-                    <p className="text-lg font-black text-white">Real-time</p>
-                  </div>
-                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-wider">
-                    Atualização de Dados
-                  </p>
-                </div>
-
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 hover:bg-white/10 transition-all group">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4 text-white/90" />
-                    </div>
-                    <p className="text-lg font-black text-white">4 semanas</p>
-                  </div>
-                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-wider">
-                    Antecedência Preditiva
-                  </p>
-                </div>
-
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 hover:bg-white/10 transition-all group">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                      <Globe className="w-4 h-4 text-white/90" />
-                    </div>
-                    <p className="text-lg font-black text-white">24/7</p>
-                  </div>
-                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-wider">
-                    Monitoramento IA
-                  </p>
-                </div>
-              </div>
-
-              {/* Tech Stack Icons */}
-              <div
-                className="flex items-center gap-4 flex-wrap animate-in slide-in-from-left duration-700"
-                style={{ animationDelay: "600ms" }}
-              >
-                <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2">
-                  <Sparkles className="w-4 h-4 text-white/80" />
-                  <span className="text-xs font-bold text-white">
-                    Machine Learning
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2">
-                  <ShieldCheck className="w-4 h-4 text-white/80" />
-                  <span className="text-xs font-bold text-white">
-                    Blockchain
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2">
-                  <Globe className="w-4 h-4 text-white/80" />
-                  <span className="text-xs font-bold text-white">
-                    Google Earth Engine
-                  </span>
-                </div>
-              </div>
             </div>
 
-            {/* Floating Data Visualization Elements */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-              <div
-                className="absolute top-1/4 left-1/4 w-20 h-20 border-2 border-emerald-400/30 rounded-lg animate-float"
-                style={{ animationDelay: "0s" }}
-              >
-                <div className="absolute inset-2 border border-emerald-400/20 rounded-md" />
-              </div>
-              <div
-                className="absolute top-1/3 right-1/4 w-16 h-16 border-2 border-agriYellow/30 rounded-full animate-float"
-                style={{ animationDelay: "1.5s" }}
-              >
-                <div className="absolute inset-2 border border-agriYellow/20 rounded-full" />
-              </div>
-              <div
-                className="absolute bottom-1/3 left-1/3 w-24 h-24 border-2 border-blue-400/30 rounded-xl animate-float"
-                style={{ animationDelay: "3s" }}
-              >
-                <div className="absolute inset-3 border border-blue-400/20 rounded-lg" />
-              </div>
-            </div>
-
-            {/* Bottom Info */}
-            <div
-              className="space-y-4 animate-in slide-in-from-bottom duration-700"
-              style={{ animationDelay: "800ms" }}
-            >
-              {/* Launch Info */}
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] font-black text-agriYellow uppercase tracking-widest mb-1">
-                      Lançamento Oficial
-                    </p>
-                    <p className="text-xl font-black text-white">
-                      3 de Julho de 2026
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider mb-1">
-                      Painel Empresarial
-                    </p>
-                    <p className="text-sm font-black text-white">
-                      Em Acesso Antecipado
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer Info */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-emerald-200">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span className="text-xs font-bold">
-                    Protocolo Seguro SSL
-                  </span>
-                </div>
-                <div className="text-emerald-200 text-xs font-bold">
-                  Angola • v4.0.5
-                </div>
-              </div>
+            {/* Organic Particles Animation */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              <OrganicParticles />
             </div>
           </div>
         </div>
@@ -424,21 +284,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Add custom animation styles */}
-      <style>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-20px) rotate(3deg);
-          }
-        }
-        .animate-float {
-          animation: float 8s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 };
