@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
+import { Button } from '../ui/button';
 
 interface ProductDetailsModalProps {
   isOpen: boolean;
@@ -58,12 +59,14 @@ export default function ProductDetailsModal({
           >
             {/* Header */}
             <div className="absolute top-6 right-6 z-10">
-              <button 
+              <Button 
                 onClick={onClose}
-                className="p-3 bg-white/80 backdrop-blur-md hover:bg-white text-gray-900 rounded-2xl transition-all shadow-lg"
+                className="rounded-2xl bg-white/80 p-3 text-gray-900 shadow-lg backdrop-blur-md hover:bg-white"
+                size="icon"
+                variant="ghost"
               >
                 <X className="w-6 h-6" />
-              </button>
+              </Button>
             </div>
 
             <div className="flex-1 overflow-y-auto">
@@ -90,9 +93,9 @@ export default function ProductDetailsModal({
                         </span>
                       )}
                     </div>
-                    <button className="absolute bottom-6 right-6 p-4 bg-white/80 backdrop-blur-md hover:bg-white text-rose-500 rounded-2xl transition-all shadow-xl">
+                    <Button className="absolute bottom-6 right-6 rounded-2xl bg-white/80 p-4 text-rose-500 shadow-xl backdrop-blur-md hover:bg-white" size="icon" variant="ghost">
                       <Heart className="w-6 h-6" />
-                    </button>
+                    </Button>
                   </div>
                   
                   {/* Thumbnails Placeholder */}
@@ -192,27 +195,31 @@ export default function ProductDetailsModal({
                   <div className="mt-auto space-y-4">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center bg-gray-100 p-2 rounded-2xl border border-gray-200">
-                        <button 
+                        <Button 
                           onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                          className="p-2 hover:bg-white rounded-xl transition-all text-gray-600"
+                          className="h-9 w-9 rounded-xl p-0 text-gray-600 hover:bg-white"
+                          size="icon"
+                          variant="ghost"
                         >
                           <Minus className="w-5 h-5" />
-                        </button>
+                        </Button>
                         <span className="w-12 text-center font-black text-lg text-gray-900">{quantity}</span>
-                        <button 
+                        <Button 
                           onClick={() => setQuantity(Math.min(product.quantidade, quantity + 1))}
-                          className="p-2 hover:bg-white rounded-xl transition-all text-gray-600"
+                          className="h-9 w-9 rounded-xl p-0 text-gray-600 hover:bg-white"
+                          size="icon"
+                          variant="ghost"
                         >
                           <Plus className="w-5 h-5" />
-                        </button>
+                        </Button>
                       </div>
-                      <button 
+                      <Button 
                         onClick={handleAddToCart}
-                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-3 shadow-xl shadow-emerald-600/20"
+                        className="flex-1 gap-3 rounded-2xl py-4 font-black shadow-xl shadow-emerald-600/20"
                       >
                         <ShoppingCart className="w-6 h-6" />
                         Adicionar ao Carrinho
-                      </button>
+                      </Button>
                     </div>
                     <p className="text-center text-xs text-gray-400 font-bold">
                       Total: {(product.preco_unitario * quantity).toLocaleString()} Kz
@@ -225,17 +232,18 @@ export default function ProductDetailsModal({
               <div className="p-8 border-t border-gray-100">
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="text-2xl font-black text-gray-900">Produtos Semelhantes</h3>
-                  <button className="text-emerald-600 font-black text-sm flex items-center gap-2 hover:underline">
+                  <Button className="h-auto gap-2 px-0 text-sm font-black text-emerald-600 hover:underline" variant="ghost">
                     Ver Todos
                     <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   {similarProducts.map((p) => (
-                    <button
+                    <Button
                       key={p.id}
                       onClick={() => onSelectProduct(p)}
-                      className="group text-left space-y-3"
+                      className="group h-auto space-y-3 p-0 text-left"
+                      variant="ghost"
                     >
                       <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gray-100 relative">
                         <img 
@@ -255,7 +263,7 @@ export default function ProductDetailsModal({
                         <h4 className="font-black text-gray-900 group-hover:text-emerald-600 transition-colors">{p.nome_produto}</h4>
                         <p className="text-sm font-black text-emerald-600">{p.preco_unitario.toLocaleString()} Kz</p>
                       </div>
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { X, Truck, MapPin, DollarSign, Scale, Loader2, ArrowRight, Package, Info, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 
 interface ManageHubStockModalProps {
   isOpen: boolean;
@@ -65,12 +68,14 @@ export default function ManageHubStockModal({ isOpen, onClose, hub, onDispatchSu
                   <p className="text-emerald-200 text-sm">{hub.name}</p>
                 </div>
               </div>
-              <button 
+              <Button 
                 onClick={onClose}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                className="rounded-full p-2 hover:bg-white/10"
+                size="icon"
+                variant="ghost"
               >
                 <X className="w-6 h-6" />
-              </button>
+              </Button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -94,64 +99,64 @@ export default function ManageHubStockModal({ isOpen, onClose, hub, onDispatchSu
 
                 <div className="space-y-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-bold text-gray-700">Quantidade a Despachar (Toneladas) *</label>
+                    <Label className="font-bold">Quantidade a Despachar (Toneladas) *</Label>
                     <div className="relative">
                       <Scale className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
+                      <Input
                         required
                         type="number"
                         step="0.1"
                         name="toneladas"
                         value={formData.toneladas}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                        className="h-12 pl-10 pr-4"
                         placeholder="Ex: 15.5"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-sm font-bold text-gray-700">Destino Final *</label>
+                    <Label className="font-bold">Destino Final *</Label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
+                      <Input
                         required
                         name="destino"
                         value={formData.destino}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                        className="h-12 pl-10 pr-4"
                         placeholder="Ex: Porto de Luanda"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-sm font-bold text-gray-700">Preço do Transporte (AKZ) *</label>
+                    <Label className="font-bold">Preço do Transporte (AKZ) *</Label>
                     <div className="relative">
                       <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
+                      <Input
                         required
                         type="number"
                         name="preco"
                         value={formData.preco}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                        className="h-12 pl-10 pr-4"
                         placeholder="Ex: 250000"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-sm font-bold text-gray-700">Cargas publicadas até (Data e Hora) *</label>
+                    <Label className="font-bold">Cargas publicadas até (Data e Hora) *</Label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
+                      <Input
                         required
                         type="datetime-local"
                         name="publicadoAte"
                         value={formData.publicadoAte}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm"
+                        className="h-12 pl-10 pr-4 text-sm"
                       />
                     </div>
                     <p className="text-[10px] text-gray-500 italic">
@@ -169,17 +174,18 @@ export default function ManageHubStockModal({ isOpen, onClose, hub, onDispatchSu
               </div>
 
               <div className="pt-4 flex gap-3">
-                <button
+                <Button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 rounded-xl font-black text-sm hover:bg-gray-50 transition-all"
+                  className="flex-1"
+                  variant="outline"
                 >
                   Cancelar
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="flex-2 px-4 py-3 bg-emerald-600 text-white rounded-xl font-black text-sm hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-emerald-600/20"
+                  className="flex-[2] gap-2"
                 >
                   {loading ? (
                     <>
@@ -192,7 +198,7 @@ export default function ManageHubStockModal({ isOpen, onClose, hub, onDispatchSu
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           </motion.div>

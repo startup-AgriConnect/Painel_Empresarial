@@ -45,6 +45,9 @@ import {
 } from 'recharts';
 import { cn } from '../../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
+import { Button } from '../../ui/button';
+import { Select } from '../../ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../ui/table';
 
 // Mock Data
 const priceHistory = [
@@ -114,19 +117,20 @@ export default function PriceDemand() {
       {/* Tabs Navigation */}
       <div className="flex bg-gray-100 p-1.5 rounded-[1.5rem] border border-gray-200 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
-          <button
+          <Button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "flex items-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+              "h-auto whitespace-nowrap rounded-xl px-6 py-3 text-[10px] font-black uppercase tracking-widest transition-all",
               activeTab === tab.id 
                 ? "bg-white text-[#16a34a] shadow-sm" 
                 : "text-gray-400 hover:text-gray-600"
             )}
+            variant="ghost"
           >
             <tab.icon className="w-4 h-4" />
             {tab.label}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -182,10 +186,10 @@ function OverviewTab() {
               <TrendingUp className="w-5 h-5 text-emerald-600" />
               Evolução do Preço de Frete
             </h3>
-            <select className="bg-gray-50 border-none text-[10px] font-bold uppercase tracking-widest rounded-xl px-4 py-2 focus:ring-2 focus:ring-emerald-500">
+            <Select className="border-none bg-gray-50 px-4 py-2 text-[10px] font-bold uppercase tracking-widest shadow-none focus-visible:ring-2 focus-visible:ring-emerald-500">
               <option>Últimos 6 Meses</option>
               <option>Último Ano</option>
-            </select>
+            </Select>
           </div>
           <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -219,9 +223,9 @@ function OverviewTab() {
               <p className="text-sm font-bold leading-relaxed mb-6">
                 "Preço de frete subiu 12% em Luanda devido à alta demanda. Oportunidade de frete premium em Benguela."
               </p>
-              <button className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+              <Button className="h-auto w-full rounded-xl py-3 text-[10px] font-black uppercase tracking-widest">
                 Ver Detalhes
-              </button>
+              </Button>
             </div>
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl" />
           </div>
@@ -290,19 +294,19 @@ function SupplyDemandTab() {
         <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
           <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-6">Status Regional</h4>
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left border-b border-gray-50">
-                  <th className="pb-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Região</th>
-                  <th className="pb-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
-                  <th className="pb-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Preço</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-b border-gray-50 hover:bg-transparent">
+                  <TableHead className="pb-4">Região</TableHead>
+                  <TableHead className="pb-4">Status</TableHead>
+                  <TableHead className="pb-4">Preço</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="divide-y divide-gray-50">
                 {supplyDemandByRegion.map((row, i) => (
-                  <tr key={i} className="group hover:bg-gray-50 transition-all">
-                    <td className="py-4 text-xs font-bold text-gray-900">{row.region}</td>
-                    <td className="py-4">
+                  <TableRow key={i} className="group transition-all hover:bg-gray-50">
+                    <TableCell className="py-4 text-xs font-bold text-gray-900">{row.region}</TableCell>
+                    <TableCell className="py-4">
                       <span className={cn(
                         "px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider",
                         row.status === 'Escassez' ? "bg-rose-100 text-rose-700" : 
@@ -310,12 +314,12 @@ function SupplyDemandTab() {
                       )}>
                         {row.status}
                       </span>
-                    </td>
-                    <td className="py-4 text-xs font-bold text-gray-600">{row.price}</td>
-                  </tr>
+                    </TableCell>
+                    <TableCell className="py-4 text-xs font-bold text-gray-600">{row.price}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </div>
 

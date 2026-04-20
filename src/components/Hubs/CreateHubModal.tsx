@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { X, Warehouse, Hash, MapPin, Info, Clock, Scale, Snowflake, Truck, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select } from '../ui/select';
+import { Textarea } from '../ui/textarea';
 
 interface CreateHubModalProps {
   isOpen: boolean;
@@ -130,12 +136,14 @@ export default function CreateHubModal({ isOpen, onClose, onSuccess, initialData
                 <h3 className="text-xl font-bold">{initialData ? 'Editar Hub de Consolidação' : 'Novo Hub de Consolidação'}</h3>
                 <p className="text-emerald-200 text-sm">{initialData ? 'Atualize os dados do ponto estratégico na rede.' : 'Registe um novo ponto estratégico na rede logística.'}</p>
               </div>
-              <button 
+              <Button 
                 onClick={onClose}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                className="rounded-full p-2 hover:bg-white/10"
+                size="icon"
+                variant="ghost"
               >
                 <X className="w-6 h-6" />
-              </button>
+              </Button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6">
@@ -147,24 +155,23 @@ export default function CreateHubModal({ isOpen, onClose, onSuccess, initialData
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Nome do Hub *</label>
-                    <input
+                    <Label>Nome do Hub *</Label>
+                    <Input
                       required
                       name="nome"
                       value={formData.nome}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Ex: Hub Luanda Norte"
                     />
                   </div>
                   <div className="md:col-span-2 space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Descrição</label>
-                    <textarea
+                    <Label>Descrição</Label>
+                    <Textarea
                       name="descricao"
                       value={formData.descricao}
                       onChange={handleChange}
                       rows={2}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all resize-none"
+                      className="resize-none"
                       placeholder="Breve descrição das instalações..."
                     />
                   </div>
@@ -179,45 +186,41 @@ export default function CreateHubModal({ isOpen, onClose, onSuccess, initialData
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Província *</label>
-                    <select
+                    <Label>Província *</Label>
+                    <Select
                       name="localizacao_id"
                       value={formData.localizacao_id}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-white"
                     >
                       {provinces.map(p => (
                         <option key={p} value={p}>{p}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Endereço</label>
-                    <input
+                    <Label>Endereço</Label>
+                    <Input
                       name="endereco"
                       value={formData.endereco}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Rua, Bairro..."
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Latitude</label>
-                    <input
+                    <Label>Latitude</Label>
+                    <Input
                       name="latitude"
                       value={formData.latitude}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="-8.8399"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Longitude</label>
-                    <input
+                    <Label>Longitude</Label>
+                    <Input
                       name="longitude"
                       value={formData.longitude}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="13.2894"
                     />
                   </div>
@@ -232,106 +235,105 @@ export default function CreateHubModal({ isOpen, onClose, onSuccess, initialData
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Capacidade Total (Ton) *</label>
-                    <input
+                    <Label>Capacidade Total (Ton) *</Label>
+                    <Input
                       required
                       type="number"
                       name="capacidade_total"
                       value={formData.capacidade_total}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Ex: 500"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Número de Docas</label>
+                    <Label>Número de Docas</Label>
                     <div className="relative">
                       <Truck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
+                      <Input
                         type="number"
                         name="numero_docas"
                         value={formData.numero_docas}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                        className="pl-10"
                       />
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Horário de Funcionamento</label>
+                    <Label>Horário de Funcionamento</Label>
                     <div className="relative">
                       <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
+                      <Input
                         name="horario_funcionamento"
                         value={formData.horario_funcionamento}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                        className="pl-10"
                         placeholder="Ex: 08:00 - 18:00"
                       />
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Status Inicial</label>
-                    <select
+                    <Label>Status Inicial</Label>
+                    <Select
                       name="status"
                       value={formData.status}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-white"
                     >
                       <option value="OPERACIONAL">Operacional</option>
                       <option value="SATURADO">Saturado</option>
                       <option value="MANUTENCAO">Manutenção</option>
                       <option value="INATIVO">Inativo</option>
-                    </select>
+                    </Select>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap gap-6 pt-2">
-                  <label className="flex items-center gap-2 cursor-pointer group">
+                  <Label className="flex cursor-pointer items-center gap-2 group">
                     <div className="relative flex items-center">
-                      <input
+                      <Checkbox
                         type="checkbox"
                         name="possui_balanca"
                         checked={formData.possui_balanca}
                         onChange={handleChange}
-                        className="w-5 h-5 border-2 border-gray-300 rounded text-emerald-600 focus:ring-emerald-500 transition-all cursor-pointer"
+                        className="h-5 w-5 cursor-pointer"
                       />
                     </div>
                     <div className="flex items-center gap-2">
                       <Scale className="w-4 h-4 text-gray-400 group-hover:text-emerald-500 transition-colors" />
                       <span className="text-sm font-medium text-gray-700">Possui Balança</span>
                     </div>
-                  </label>
+                  </Label>
 
-                  <label className="flex items-center gap-2 cursor-pointer group">
+                  <Label className="flex cursor-pointer items-center gap-2 group">
                     <div className="relative flex items-center">
-                      <input
+                      <Checkbox
                         type="checkbox"
                         name="possui_refrigeracao"
                         checked={formData.possui_refrigeracao}
                         onChange={handleChange}
-                        className="w-5 h-5 border-2 border-gray-300 rounded text-emerald-600 focus:ring-emerald-500 transition-all cursor-pointer"
+                        className="h-5 w-5 cursor-pointer"
                       />
                     </div>
                     <div className="flex items-center gap-2">
                       <Snowflake className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                       <span className="text-sm font-medium text-gray-700">Possui Refrigeração</span>
                     </div>
-                  </label>
+                  </Label>
                 </div>
               </div>
 
               <div className="pt-6 border-t border-gray-100 flex gap-3">
-                <button
+                <Button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-4 py-2 border border-gray-200 text-gray-600 rounded-lg font-bold hover:bg-gray-50 transition-colors"
+                  className="flex-1"
+                  variant="outline"
                 >
                   Cancelar
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 gap-2"
                 >
                   {loading ? (
                     <>
@@ -341,7 +343,7 @@ export default function CreateHubModal({ isOpen, onClose, onSuccess, initialData
                   ) : (
                     initialData ? 'Atualizar Hub' : 'Registar Hub'
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           </motion.div>

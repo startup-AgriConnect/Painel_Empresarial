@@ -23,6 +23,8 @@ import { cn, maskData } from '../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../../context/AuthContext';
 import FeedbackBanner from '../Common/FeedbackBanner';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 
 // CartoDB Positron Style (Light OSM)
 const TILE_LAYER_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
@@ -396,10 +398,10 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
         </div>
         <div className="flex gap-2">
           <div className="bg-white p-1 rounded-xl border border-gray-200 shadow-sm flex">
-            <button className="px-4 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold flex items-center gap-2">
+            <Button className="h-9 rounded-lg bg-emerald-50 px-4 text-xs font-bold text-emerald-700 hover:bg-emerald-100" variant="ghost">
              
               Ao Vivo
-            </button>
+            </Button>
           </div>
         </div>
       </header>
@@ -414,65 +416,70 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
           <div className="p-4 border-b border-gray-50 space-y-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input 
-                type="text" 
+              <Input
+                type="text"
                 placeholder="Pesquisar frete ou motorista..." 
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                className="border-none bg-gray-50 pl-10 pr-4 text-sm shadow-none focus-visible:ring-2 focus-visible:ring-emerald-500/20"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex flex-wrap gap-2">
-              <button 
+              <Button
                 onClick={() => setFilterStatus('TODOS')}
                 className={cn(
-                  "px-2 py-1 rounded-lg text-[10px] font-bold uppercase transition-colors",
+                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
                   filterStatus === 'TODOS' ? "bg-emerald-600 text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                 )}
+                variant="ghost"
               >
                 Todos: {freights.length}
-              </button>
-              <button 
+              </Button>
+              <Button
                 onClick={() => setFilterStatus('EM_TRANSITO')}
                 className={cn(
-                  "px-2 py-1 rounded-lg text-[10px] font-bold uppercase transition-colors",
+                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
                   filterStatus === 'EM_TRANSITO' ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
                 )}
+                variant="ghost"
               >
                 Em Trânsito: {freights.filter(f => f.status === 'EM_TRANSITO').length}
-              </button>
-              <button 
+              </Button>
+              <Button
                 onClick={() => setFilterStatus('PENDENTE')}
                 className={cn(
-                  "px-2 py-1 rounded-lg text-[10px] font-bold uppercase transition-colors",
+                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
                   filterStatus === 'PENDENTE' ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
                 )}
+                variant="ghost"
               >
                 Pendentes: {freights.filter(f => f.status === 'PENDENTE').length}
-              </button>
-              <button 
+              </Button>
+              <Button
                 onClick={() => setFilterStatus('COM_PROBLEMA')}
                 className={cn(
-                  "px-2 py-1 rounded-lg text-[10px] font-bold uppercase transition-colors",
+                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
                   filterStatus === 'COM_PROBLEMA' ? "bg-rose-600 text-white" : "bg-rose-50 text-rose-600 hover:bg-rose-100"
                 )}
+                variant="ghost"
               >
                 Com Problemas: {freights.filter(f => f.status === 'COM_PROBLEMA').length}
-              </button>
+              </Button>
             </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
             {filteredFreights.map((freight) => (
-              <button
+              <Button
                 key={freight.id}
                 onClick={() => handleSelectFreight(freight)}
                 className={cn(
-                  "w-full p-4 rounded-2xl text-left transition-all border-2",
+                  "h-auto w-full rounded-2xl border-2 p-4 text-left transition-all",
                   selectedFreight?.id === freight.id 
                     ? "bg-emerald-50 border-emerald-200 shadow-sm" 
                     : "bg-white border-transparent hover:bg-gray-50"
                 )}
+                variant="ghost"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
@@ -518,7 +525,7 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
                     </div>
                   )}
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         </motion.aside>
@@ -563,14 +570,16 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
           </MapContainer>
           
           {/* Botão de Toggle Sidebar */}
-          <button 
+          <Button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="absolute left-4 top-4 z-20 p-2 bg-white rounded-xl shadow-lg border border-gray-100 hover:bg-gray-50 transition-colors"
+            className="absolute left-4 top-4 z-20 rounded-xl border border-gray-100 bg-white shadow-lg hover:bg-gray-50"
+            size="icon"
+            variant="outline"
           >
             {isSidebarOpen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={() => setSimulateRouteFailure((prev) => !prev)}
             className={cn(
               'absolute left-20 top-4 z-20 rounded-xl border px-3 py-2 text-xs font-bold shadow-lg transition-colors',
@@ -578,9 +587,10 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
                 ? 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100'
                 : 'border-gray-100 bg-white text-gray-700 hover:bg-gray-50'
             )}
+            variant="outline"
           >
             {simulateRouteFailure ? 'Erro simulado: ligado' : 'Simular erro de fetch'}
-          </button>
+          </Button>
 
           {routeWarning && (
             <div className="absolute left-4 top-20 z-20 max-w-md">
@@ -610,9 +620,9 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
                     {selectedFreight.status === 'COM_PROBLEMA' ? <AlertCircle className="w-5 h-5 text-rose-400" /> : <Truck className="w-5 h-5 text-emerald-400" />}
                     <h3 className="font-bold">{selectedFreight.codigo}</h3>
                   </div>
-                  <button onClick={() => { setSelectedFreight(null); onClearSelection?.(); }} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
+                  <Button onClick={() => { setSelectedFreight(null); onClearSelection?.(); }} className="h-7 w-7 rounded-lg p-0 hover:bg-white/10" size="icon" variant="ghost">
                     <XCircle className="w-5 h-5" />
-                  </button>
+                  </Button>
                 </div>
                 <div className="p-4 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -672,12 +682,12 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
                   </div>
 
                   <div className="flex gap-2">
-                    <button className="flex-1 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors">
+                    <Button className="flex-1 rounded-xl py-2 text-xs font-bold">
                       Contactar Motorista
-                    </button>
-                    <button className="px-3 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                    </Button>
+                    <Button className="rounded-xl px-3 py-2" variant="outline">
                       <MoreVertical className="w-4 h-4 text-gray-400" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </motion.div>

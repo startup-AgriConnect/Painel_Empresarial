@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { X, Package, MapPin, Calendar, Truck, Loader2, DollarSign, Warehouse, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select } from '../ui/select';
 
 interface CreateFreightModalProps {
   isOpen: boolean;
@@ -83,12 +87,14 @@ export default function CreateFreightModal({ isOpen, onClose, onSuccess, hubs }:
                 <h3 className="text-xl font-bold">Nova Solicitação de Frete</h3>
                 <p className="text-emerald-100 text-sm">Registe uma nova carga no sistema AgriConnect.</p>
               </div>
-              <button 
+              <Button 
                 onClick={onClose}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                className="rounded-full p-2 hover:bg-white/10"
+                size="icon"
+                variant="ghost"
               >
                 <X className="w-6 h-6" />
-              </button>
+              </Button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6">
@@ -99,26 +105,24 @@ export default function CreateFreightModal({ isOpen, onClose, onSuccess, hubs }:
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Produto *</label>
-                    <input
+                    <Label>Produto *</Label>
+                    <Input
                       required
                       name="produto"
                       value={formData.produto}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Ex: Milho Branco"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Quantidade (Ton) *</label>
-                    <input
+                    <Label>Quantidade (Ton) *</Label>
+                    <Input
                       required
                       type="number"
                       step="0.01"
                       name="quantidade"
                       value={formData.quantidade}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Ex: 15.5"
                     />
                   </div>
@@ -132,56 +136,52 @@ export default function CreateFreightModal({ isOpen, onClose, onSuccess, hubs }:
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Origem *</label>
-                    <input
+                    <Label>Origem *</Label>
+                    <Input
                       required
                       name="origem_nome"
                       value={formData.origem_nome}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Cidade, Província"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Destino *</label>
-                    <input
+                    <Label>Destino *</Label>
+                    <Input
                       required
                       name="destino_nome"
                       value={formData.destino_nome}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Cidade, Província"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Tipo de Frete *</label>
-                    <select
+                    <Label>Tipo de Frete *</Label>
+                    <Select
                       required
                       name="tipo_frete"
                       value={formData.tipo_frete}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-white"
                     >
                       <option value="DIRETO">Direto (Ponto a Ponto)</option>
                       <option value="VIA_HUB">Via Hub (Consolidação)</option>
                       <option value="MARKETPLACE">Marketplace</option>
-                    </select>
+                    </Select>
                   </div>
                   {formData.tipo_frete === 'VIA_HUB' && (
                     <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">Hub de Destino *</label>
-                      <select
+                      <Label>Hub de Destino *</Label>
+                      <Select
                         required
                         name="hub_destino_id"
                         value={formData.hub_destino_id}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-white"
                       >
                         <option value="">Selecione um Hub</option>
                         {hubs.map(hub => (
                           <option key={hub.id} value={hub.id}>{hub.name}</option>
                         ))}
-                      </select>
+                      </Select>
                     </div>
                   )}
                 </div>
@@ -194,28 +194,27 @@ export default function CreateFreightModal({ isOpen, onClose, onSuccess, hubs }:
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Valor do Frete (Kz) *</label>
-                    <input
+                    <Label>Valor do Frete (Kz) *</Label>
+                    <Input
                       required
                       type="number"
                       name="valor_frete"
                       value={formData.valor_frete}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Ex: 150000"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Data de Coleta Prevista *</label>
+                    <Label>Data de Coleta Prevista *</Label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
+                      <Input
                         required
                         type="date"
                         name="data_coleta_prevista"
                         value={formData.data_coleta_prevista}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                        className="pl-10"
                       />
                     </div>
                   </div>
@@ -223,17 +222,18 @@ export default function CreateFreightModal({ isOpen, onClose, onSuccess, hubs }:
               </div>
 
               <div className="pt-6 border-t border-gray-100 flex gap-3">
-                <button
+                <Button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-4 py-2 border border-gray-200 text-gray-600 rounded-lg font-bold hover:bg-gray-50 transition-colors"
+                  className="flex-1"
+                  variant="outline"
                 >
                   Cancelar
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 gap-2"
                 >
                   {loading ? (
                     <>
@@ -243,7 +243,7 @@ export default function CreateFreightModal({ isOpen, onClose, onSuccess, hubs }:
                   ) : (
                     'Publicar Frete'
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           </motion.div>

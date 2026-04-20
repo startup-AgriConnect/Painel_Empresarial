@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
+import { Button } from '../ui/button';
 
 interface CartItem {
   id: string;
@@ -67,12 +68,14 @@ export default function CartModal({
                   <p className="text-xs text-emerald-300 font-bold">{items.length} itens selecionados</p>
                 </div>
               </div>
-              <button 
+              <Button 
                 onClick={onClose}
-                className="p-2 hover:bg-emerald-800 rounded-xl transition-all"
+                className="rounded-xl p-2 hover:bg-emerald-800"
+                size="icon"
+                variant="ghost"
               >
                 <X className="w-6 h-6" />
-              </button>
+              </Button>
             </div>
 
             {/* Items List */}
@@ -86,12 +89,13 @@ export default function CartModal({
                   <p className="text-sm text-gray-400 max-w-[200px]">
                     Ainda não adicionou nenhum produto ao seu carrinho.
                   </p>
-                  <button 
+                  <Button 
                     onClick={onClose}
-                    className="text-emerald-600 font-black text-sm hover:underline"
+                    className="h-auto px-0 text-sm font-black text-emerald-600 hover:underline"
+                    variant="ghost"
                   >
                     Continuar a Comprar
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 items.map((item) => (
@@ -107,29 +111,35 @@ export default function CartModal({
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start mb-1">
                         <h4 className="font-black text-gray-900 text-sm truncate">{item.nome_produto}</h4>
-                        <button 
+                        <Button 
                           onClick={() => onRemoveItem(item.id)}
-                          className="p-1 text-gray-400 hover:text-rose-500 transition-colors"
+                          className="h-6 w-6 p-0 text-gray-400 hover:text-rose-500"
+                          size="icon"
+                          variant="ghost"
                         >
                           <Trash2 className="w-4 h-4" />
-                        </button>
+                        </Button>
                       </div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase mb-2">Produtor: {item.produtor}</p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center bg-gray-50 rounded-lg border border-gray-100">
-                          <button 
+                          <Button 
                             onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantidade - 1))}
-                            className="p-1 hover:bg-white rounded-md transition-all text-gray-600"
+                            className="h-6 w-6 rounded-md p-0 text-gray-600 hover:bg-white"
+                            size="icon"
+                            variant="ghost"
                           >
                             <Minus className="w-3 h-3" />
-                          </button>
+                          </Button>
                           <span className="w-8 text-center font-black text-xs text-gray-900">{item.quantidade}</span>
-                          <button 
+                          <Button 
                             onClick={() => onUpdateQuantity(item.id, item.quantidade + 1)}
-                            className="p-1 hover:bg-white rounded-md transition-all text-gray-600"
+                            className="h-6 w-6 rounded-md p-0 text-gray-600 hover:bg-white"
+                            size="icon"
+                            variant="ghost"
                           >
                             <Plus className="w-3 h-3" />
-                          </button>
+                          </Button>
                         </div>
                         <p className="font-black text-emerald-600 text-sm">
                           {(item.preco_unitario * item.quantidade).toLocaleString()} Kz
@@ -164,14 +174,14 @@ export default function CartModal({
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
                     <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Compra 100% Segura via AgriConnect</p>
                   </div>
-                  <button 
+                  <Button 
                     onClick={onCheckout}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-3 shadow-xl shadow-emerald-600/20"
+                    className="h-auto w-full gap-3 rounded-2xl py-4 font-black shadow-xl shadow-emerald-600/20"
                   >
                     <CreditCard className="w-5 h-5" />
                     Fechar Compra
                     <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}

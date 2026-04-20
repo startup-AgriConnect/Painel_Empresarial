@@ -36,7 +36,9 @@ import {
 } from 'recharts';
 import { cn } from '../../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
-import FeedbackBanner from '../../Common/FeedbackBanner';
+import { Button } from '../../ui/button';
+import { Label } from '../../ui/label';
+import { Select } from '../../ui/select';
 
 const productionTrend = [
   { day: '01', volume: 420 },
@@ -94,7 +96,6 @@ const StatCard = ({ title, value, change, trend, icon: Icon, unit, colorClass = 
 );
 
 export default function BIOverview() {
-  const [initialLoadMs, setInitialLoadMs] = useState<number | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activePeriod, setActivePeriod] = useState('Hoje');
 
@@ -125,27 +126,8 @@ export default function BIOverview() {
   };
   const cultures = ['Todas', 'Milho', 'Feijão', 'Batata Doce', 'Mandioca', 'Café', 'Hortícolas'];
 
-  React.useEffect(() => {
-    const start = performance.now();
-    const rafId = window.requestAnimationFrame(() => {
-      const elapsed = Math.round(performance.now() - start);
-      setInitialLoadMs(elapsed);
-      console.info(`[BI smoke] painel inicial carregado em ${elapsed} ms`);
-    });
-
-    return () => window.cancelAnimationFrame(rafId);
-  }, []);
-
   return (
     <div className="space-y-8">
-      {initialLoadMs !== null && (
-        <FeedbackBanner
-          type={initialLoadMs < 1200 ? 'success' : 'info'}
-          title="Smoke test de carregamento"
-          message={`O painel BI inicial ficou interativo em aproximadamente ${initialLoadMs} ms nesta sessão.`}
-        />
-      )}
-
       <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Visão Geral BI</h2>
@@ -154,18 +136,19 @@ export default function BIOverview() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex bg-gray-100 p-1 rounded-xl border border-gray-200">
             {['Hoje', 'Semana', 'Mês'].map((period) => (
-              <button
+              <Button
                 key={period}
                 onClick={() => setActivePeriod(period)}
                 className={cn(
-                  "px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all",
+                  "h-auto rounded-lg px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all",
                   activePeriod === period 
                     ? "bg-white text-[#16a34a] shadow-sm" 
                     : "text-gray-400 hover:text-gray-600"
                 )}
+                variant="ghost"
               >
                 {period}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -178,66 +161,66 @@ export default function BIOverview() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Província</label>
-            <select 
+            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Província</Label>
+            <Select 
               value={filterProvince}
               onChange={(e) => {
                 setFilterProvince(e.target.value);
                 setFilterMunicipality('Todos');
                 setFilterCommune('Todas');
               }}
-              className="w-full bg-slate-50 border-slate-100 rounded-xl text-xs font-bold text-slate-900 focus:ring-emerald-500"
+              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900"
             >
               {provinces.map(p => (
                 <option key={p} value={p}>{p}</option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Município</label>
-            <select 
+            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Município</Label>
+            <Select 
               value={filterMunicipality}
               onChange={(e) => {
                 setFilterMunicipality(e.target.value);
                 setFilterCommune('Todas');
               }}
               disabled={filterProvince === 'Todas'}
-              className="w-full bg-slate-50 border-slate-100 rounded-xl text-xs font-bold text-slate-900 focus:ring-emerald-500 disabled:opacity-50"
+              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900 disabled:opacity-50"
             >
               <option value="Todos">Todos</option>
               {filterProvince !== 'Todas' && municipalitiesByProvince[filterProvince].map(m => (
                 <option key={m} value={m}>{m}</option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Comuna</label>
-            <select 
+            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Comuna</Label>
+            <Select 
               value={filterCommune}
               onChange={(e) => setFilterCommune(e.target.value)}
               disabled={filterMunicipality === 'Todos'}
-              className="w-full bg-slate-50 border-slate-100 rounded-xl text-xs font-bold text-slate-900 focus:ring-emerald-500 disabled:opacity-50"
+              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900 disabled:opacity-50"
             >
               <option value="Todas">Todas</option>
               {filterMunicipality !== 'Todos' && communesByMunicipality[filterMunicipality]?.map(c => (
                 <option key={c} value={c}>{c}</option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Cultura</label>
-            <select 
+            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Cultura</Label>
+            <Select 
               value={filterCulture}
               onChange={(e) => setFilterCulture(e.target.value)}
-              className="w-full bg-slate-50 border-slate-100 rounded-xl text-xs font-bold text-slate-900 focus:ring-emerald-500"
+              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900"
             >
               {cultures.map(c => (
                 <option key={c} value={c}>{c}</option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
       </div>
@@ -455,12 +438,12 @@ export default function BIOverview() {
             </h3>
             <p className="text-[#86efac]/70 text-xs font-medium mt-1">Baseado em dados de satélite e transações recentes na plataforma.</p>
           </div>
-          <button 
+          <Button 
             onClick={() => setIsDrawerOpen(true)}
-            className="px-5 py-2.5 bg-[#16a34a] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#15803d] transition-all shadow-lg shadow-[#16a34a]/20 whitespace-nowrap"
+            className="h-auto whitespace-nowrap rounded-xl px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-[#16a34a]/20"
           >
             Ver Detalhes
-          </button>
+          </Button>
         </div>
       </motion.div>
 
@@ -493,12 +476,14 @@ export default function BIOverview() {
                       <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Inteligência de Mercado</p>
                     </div>
                   </div>
-                  <button 
+                  <Button 
                     onClick={() => setIsDrawerOpen(false)}
-                    className="p-2 hover:bg-gray-100 rounded-xl transition-all"
+                    className="h-10 w-10 rounded-xl p-0 hover:bg-gray-100"
+                    size="icon"
+                    variant="ghost"
                   >
                     <X className="w-6 h-6 text-gray-400" />
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="space-y-8">

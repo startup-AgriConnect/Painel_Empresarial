@@ -22,6 +22,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../../context/AuthContext';
 import ConfirmationModal from '../Common/ConfirmationModal';
 import { LOGIN_HASH } from '../../lib/routes';
+import { Button } from '../ui/button';
 
 interface SidebarProps {
   activeTab: string;
@@ -108,15 +109,17 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           </div>
         )}
 
-        <button 
+        <Button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#166534] rounded-full flex items-center justify-center text-[#86efac] shadow-lg hover:bg-[#15803d] transition-colors z-30 border border-[#86efac]/30",
+            "absolute -right-3 top-1/2 z-30 h-6 w-6 -translate-y-1/2 rounded-full border border-[#86efac]/30 bg-[#166534] p-0 text-[#86efac] shadow-lg hover:bg-[#15803d]",
             isCollapsed && "right-[-12px]"
           )}
+          size="icon"
+          variant="ghost"
         >
           {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-        </button>
+        </Button>
       </div>
 
       <nav className="flex-1 py-6 px-3 space-y-6 overflow-y-auto custom-scrollbar">
@@ -129,15 +132,16 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (
-              <button
+              <Button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-2xl transition-all duration-200 group relative",
+                  "relative flex h-auto w-full items-center gap-3 rounded-2xl px-3 py-2 transition-all duration-200 group",
                   isActive 
                     ? "text-[#86efac]" 
                     : "text-[#dcfce7] hover:bg-[#166534]/30 hover:text-[#f0fdf4]"
                 )}
+                variant="ghost"
                 title={isCollapsed ? item.label : undefined}
               >
                 <div className={cn(
@@ -160,7 +164,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
                     {item.label}
                   </span>
                 </div>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -168,13 +172,14 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         {/* BI Section */}
         <div className="space-y-1">
           {!isCollapsed ? (
-            <button 
+            <Button 
               onClick={() => setIsBICategoryOpen(!isBICategoryOpen)}
-              className="w-full flex items-center justify-between px-4 mb-2 group"
+              className="mb-2 flex h-auto w-full items-center justify-between px-4 group"
+              variant="ghost"
             >
               <p className="text-[11px] font-bold text-[#86efac] uppercase tracking-wider opacity-60 group-hover:opacity-100 transition-opacity">Inteligência Estratégica</p>
               <ChevronDown className={cn("w-3 h-3 text-[#86efac] transition-transform", !isBICategoryOpen && "-rotate-90")} />
-            </button>
+            </Button>
           ) : (
             <div className="h-[1px] bg-[#166534]/30 mx-4 my-4" />
           )}
@@ -191,15 +196,16 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
                   return (
-                    <button
+                    <Button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
                       className={cn(
-                        "w-full flex items-center gap-3 px-3 py-2 rounded-2xl transition-all duration-200 group relative",
+                        "relative flex h-auto w-full items-center gap-3 rounded-2xl px-3 py-2 transition-all duration-200 group",
                         isActive 
                           ? "text-[#86efac]" 
                           : "text-[#dcfce7] hover:bg-[#166534]/30 hover:text-[#f0fdf4]"
                       )}
+                      variant="ghost"
                       title={isCollapsed ? item.label : undefined}
                     >
                       <div className={cn(
@@ -222,7 +228,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
                           {item.label}
                         </span>
                       </div>
-                    </button>
+                    </Button>
                   );
                 })}
               </motion.div>
@@ -232,10 +238,10 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       </nav>
 
       <div className="p-4 border-t border-[#166534]/30 space-y-1">
-        <button className={cn(
-          "w-full flex items-center gap-3 px-3 py-2.5 text-[#dcfce7] hover:text-[#f0fdf4] hover:bg-[#166534]/30 rounded-2xl transition-all group",
+        <Button className={cn(
+          "h-auto w-full justify-start gap-3 rounded-2xl px-3 py-2.5 text-[#dcfce7] transition-all group hover:bg-[#166534]/30 hover:text-[#f0fdf4]",
           isCollapsed && "justify-center"
-        )}>
+        )} variant="ghost">
           <Settings className="w-5 h-5 shrink-0 group-hover:rotate-90 transition-transform duration-500" />
           <span className={cn(
             "font-bold text-sm transition-all duration-300 overflow-hidden whitespace-nowrap",
@@ -243,13 +249,14 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           )}>
             Configurações
           </span>
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setIsLogoutModalOpen(true)}
           className={cn(
-            "w-full flex items-center gap-3 px-3 py-2.5 text-[#ffb4ab] hover:text-[#ffdad6] hover:bg-[#93000a]/20 rounded-2xl transition-all group",
+            "h-auto w-full justify-start gap-3 rounded-2xl px-3 py-2.5 text-[#ffb4ab] transition-all group hover:bg-[#93000a]/20 hover:text-[#ffdad6]",
             isCollapsed && "justify-center"
           )}
+          variant="ghost"
         >
           <LogOut className="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" />
           <span className={cn(
@@ -258,7 +265,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           )}>
             Sair
           </span>
-        </button>
+        </Button>
       </div>
       </motion.aside>
     </>

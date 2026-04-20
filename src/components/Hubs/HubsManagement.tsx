@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'motion/react';
 import CreateHubModal from './CreateHubModal';
 import ManageHubStockModal from './ManageHubStockModal';
 import { Edit2, Ban, Settings, CheckCircle2 } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Select } from '../ui/select';
 
 const initialHubs = [
   { 
@@ -126,13 +129,13 @@ export default function HubsManagement() {
           <h2 className="text-2xl font-bold text-gray-900">Hubs de Consolidação</h2>
           <p className="text-gray-500">Pontos estratégicos de recepção, pesagem e cross-docking.</p>
         </div>
-        <button 
+        <Button
           onClick={() => setIsModalOpen(true)}
-          className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-emerald-700 transition-colors shadow-sm"
+          className="gap-2 rounded-lg shadow-sm"
         >
           <Plus className="w-4 h-4" />
           Novo Hub
-        </button>
+        </Button>
       </header>
       <CreateHubModal 
         isOpen={isModalOpen}
@@ -151,27 +154,27 @@ export default function HubsManagement() {
       <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center">
         <div className="relative flex-1 w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input 
-            type="text" 
+          <Input
+            type="text"
             placeholder="Pesquisar por nome ou código..." 
-            className="w-full pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 outline-none"
+            className="border-none bg-gray-50 pl-10 pr-4 text-sm shadow-none focus-visible:ring-2 focus-visible:ring-emerald-500/20"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="flex items-center gap-2 w-full md:w-auto">
           <Filter className="w-4 h-4 text-gray-400" />
-          <select 
+          <Select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="flex-1 md:w-48 px-4 py-2 bg-gray-50 border-none rounded-xl text-sm font-medium text-gray-600 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+            className="h-10 flex-1 border-none bg-gray-50 text-sm font-medium text-gray-600 shadow-none md:w-48"
           >
             <option value="Todos">Todos os Status</option>
             <option value="OPERACIONAL">Operacional</option>
             <option value="SATURADO">Saturado</option>
             <option value="MANUTENCAO">Manutenção</option>
             <option value="INATIVO">Inativo</option>
-          </select>
+          </Select>
         </div>
       </div>
 
@@ -267,26 +270,27 @@ export default function HubsManagement() {
                 </div>
 
                 <div className="flex items-center gap-3 relative">
-                  <button 
+                  <Button
                     onClick={() => handleManageStock(hub)}
-                    className="px-6 py-3.5 bg-gray-900 text-white rounded-2xl text-sm font-black hover:bg-gray-800 transition-all flex items-center justify-center gap-2 shadow-xl shadow-gray-900/10 active:scale-[0.98]"
+                    className="h-auto rounded-2xl bg-gray-900 px-6 py-3.5 text-sm font-black shadow-xl shadow-gray-900/10 hover:bg-gray-800"
                   >
                     Gerir Stock
                     <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Button>
                   
                   <div className="relative">
-                    <button 
+                    <Button
                       onClick={() => setActiveDropdown(activeDropdown === hub.id ? null : hub.id)}
                       className={cn(
-                        "p-3.5 rounded-2xl transition-all border border-transparent",
+                        "h-auto rounded-2xl border border-transparent p-3.5 transition-all",
                         activeDropdown === hub.id 
                           ? "bg-gray-100 text-gray-900 border-gray-200" 
                           : "text-gray-400 hover:bg-gray-50 hover:border-gray-200"
                       )}
+                      variant="ghost"
                     >
                       <MoreVertical className="w-5 h-5" />
-                    </button>
+                    </Button>
 
                     <AnimatePresence>
                       {activeDropdown === hub.id && (
@@ -305,50 +309,54 @@ export default function HubsManagement() {
                               <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Gestão do Hub</p>
                             </div>
                             
-                            <button 
+                            <Button
                               onClick={() => handleEditHub(hub)}
-                              className="w-full flex items-center gap-4 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all group"
+                              className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 group"
+                              variant="ghost"
                             >
                               <div className="p-2 bg-gray-50 rounded-xl group-hover:bg-emerald-100 transition-colors">
                                 <Edit2 className="w-4 h-4" />
                               </div>
                               <span className="font-bold">Editar Hub</span>
-                            </button>
+                            </Button>
                             
                             {hub.status !== 'MANUTENCAO' && (
-                              <button 
+                              <Button
                                 onClick={() => handleStatusChange(hub.id, 'MANUTENCAO')}
-                                className="w-full flex items-center gap-4 px-5 py-3 text-sm text-amber-600 hover:bg-amber-50 transition-all group"
+                                className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-amber-600 hover:bg-amber-50 group"
+                                variant="ghost"
                               >
                                 <div className="p-2 bg-amber-50/50 rounded-xl group-hover:bg-amber-100 transition-colors">
                                   <Settings className="w-4 h-4" />
                                 </div>
                                 <span className="font-bold">Colocar em Manutenção</span>
-                              </button>
+                              </Button>
                             )}
 
                             {hub.status !== 'INATIVO' && (
-                              <button 
+                              <Button
                                 onClick={() => handleStatusChange(hub.id, 'INATIVO')}
-                                className="w-full flex items-center gap-4 px-5 py-3 text-sm text-rose-600 hover:bg-rose-50 transition-all group"
+                                className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-rose-600 hover:bg-rose-50 group"
+                                variant="ghost"
                               >
                                 <div className="p-2 bg-rose-50/50 rounded-xl group-hover:bg-rose-100 transition-colors">
                                   <Ban className="w-4 h-4" />
                                 </div>
                                 <span className="font-bold">Desativar Hub</span>
-                              </button>
+                              </Button>
                             )}
 
                             {(hub.status === 'INATIVO' || hub.status === 'MANUTENCAO') && (
-                              <button 
+                              <Button
                                 onClick={() => handleStatusChange(hub.id, 'OPERACIONAL')}
-                                className="w-full flex items-center gap-4 px-5 py-3 text-sm text-emerald-600 hover:bg-emerald-50 transition-all group"
+                                className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-emerald-600 hover:bg-emerald-50 group"
+                                variant="ghost"
                               >
                                 <div className="p-2 bg-emerald-50/50 rounded-xl group-hover:bg-emerald-100 transition-colors">
                                   <CheckCircle2 className="w-4 h-4" />
                                 </div>
                                 <span className="font-bold">Ativar Hub</span>
-                              </button>
+                              </Button>
                             )}
                           </motion.div>
                         </>
@@ -371,10 +379,10 @@ export default function HubsManagement() {
           <p className="text-emerald-200 text-sm mb-6">
             Todos os Hubs utilizam balanças digitais certificadas pela AgriConnect para garantir a precisão do peso e a confiança dos compradores.
           </p>
-          <button className="text-sm font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-2">
+          <Button className="h-auto px-0 text-sm font-bold text-emerald-400 hover:text-emerald-300" variant="ghost">
             Verificar Certificações
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
 
         <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">

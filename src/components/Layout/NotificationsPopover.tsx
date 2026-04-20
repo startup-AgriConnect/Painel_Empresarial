@@ -14,6 +14,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { cn, maskData } from '../../lib/utils';
 import { useAuth } from '../../context/AuthContext';
+import { Button } from '../ui/button';
 
 interface Notification {
   id: string;
@@ -120,19 +121,22 @@ export default function NotificationsPopover({ isOpen, onClose }: NotificationsP
               </div>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
-                  <button 
+                  <Button 
                     onClick={markAllAsRead}
-                    className="text-[10px] font-bold text-[#16a34a] hover:text-[#15803d] transition-colors"
+                    className="h-auto px-0 text-[10px] font-bold text-[#16a34a] hover:text-[#15803d]"
+                    variant="ghost"
                   >
                     Marcar todas como lidas
-                  </button>
+                  </Button>
                 )}
-                <button 
+                <Button 
                   onClick={onClose}
-                  className="p-1.5 hover:bg-gray-200 rounded-lg transition-colors"
+                  className="h-8 w-8 rounded-lg p-0 hover:bg-gray-200"
+                  size="icon"
+                  variant="ghost"
                 >
                   <X className="w-4 h-4 text-gray-400" />
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -190,9 +194,9 @@ export default function NotificationsPopover({ isOpen, onClose }: NotificationsP
             </div>
 
             <div className="p-3 bg-gray-50 border-t border-gray-100 text-center">
-              <button className="text-[11px] font-bold text-gray-500 hover:text-[#16a34a] transition-colors">
+              <Button className="h-auto px-0 text-[11px] font-bold text-gray-500 hover:text-[#16a34a]" variant="ghost">
                 Ver todo o histórico
-              </button>
+              </Button>
             </div>
           </motion.div>
         </>
