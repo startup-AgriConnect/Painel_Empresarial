@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Bell, User, FileText, FileSpreadsheet, Download } from 'lucide-react';
+import { Bell, Download, FileSpreadsheet, FileText, User } from 'lucide-react';
 import NotificationsPopover from './NotificationsPopover';
 import { useAuth } from '../../context/AuthContext';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
+import { Separator } from '../ui/separator';
 
 export default function Header() {
   const { user } = useAuth();
@@ -18,67 +21,44 @@ export default function Header() {
     }
   };
 
-  const handleExport = (type: 'csv' | 'pdf') => {
-    // Simulação de exportação
-    const timestamp = new Date().toLocaleDateString('pt-AO');
-    console.log(`Exportando relatório ${type.toUpperCase()} - ${timestamp}`);
-    // Feedback visual via console ou toast (se houvesse)
-  };
-
   return (
-    <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-10">
-      <div className="flex items-center gap-4 flex-1">
-        <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl p-1 shadow-sm">
-          <div className="px-3 py-1.5 flex items-center gap-2 border-r border-gray-200">
-            <Download className="w-4 h-4 text-[#16a34a]" />
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Exportar</span>
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-gray-100 bg-white px-8">
+      <div className="flex flex-1 items-center gap-4">
+        <Card className="flex items-center rounded-xl border-gray-200 bg-gray-50 p-1 shadow-none">
+          <div className="flex items-center gap-2 px-3 py-1.5">
+            <Download className="h-4 w-4 text-emerald-600" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Exportar</span>
           </div>
-          
-          <button 
-            onClick={() => handleExport('csv')}
-            className="flex items-center gap-2 px-4 py-1.5 text-xs font-bold text-gray-600 hover:text-[#16a34a] hover:bg-white rounded-lg transition-all"
-            title="Exportar para Excel/CSV"
-          >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span>CSV</span>
-          </button>
-
-          <button 
-            onClick={() => handleExport('pdf')}
-            className="flex items-center gap-2 px-4 py-1.5 text-xs font-bold text-gray-600 hover:text-[#16a34a] hover:bg-white rounded-lg transition-all"
-            title="Exportar para PDF"
-          >
-            <FileText className="w-4 h-4" />
-            <span>PDF</span>
-          </button>
-        </div>
+          <Separator orientation="vertical" className="mx-1 h-6" />
+          <Button variant="ghost" size="sm" className="text-xs font-bold text-gray-600 hover:text-emerald-700">
+            <FileSpreadsheet className="h-4 w-4" />
+            CSV
+          </Button>
+          <Button variant="ghost" size="sm" className="text-xs font-bold text-gray-600 hover:text-emerald-700">
+            <FileText className="h-4 w-4" />
+            PDF
+          </Button>
+        </Card>
       </div>
 
       <div className="flex items-center gap-4">
         <div className="relative">
-          <button 
-            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-            className="p-2 text-gray-500 hover:bg-gray-50 rounded-full relative transition-colors"
-          >
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
-          </button>
-          
-          <NotificationsPopover 
-            isOpen={isNotificationsOpen} 
-            onClose={() => setIsNotificationsOpen(false)} 
-          />
+          <Button variant="ghost" size="icon" className="relative rounded-full text-gray-500" onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}>
+            <Bell className="h-5 w-5" />
+            <span className="absolute right-2 top-2 h-2 w-2 rounded-full border-2 border-white bg-rose-500" />
+          </Button>
+          <NotificationsPopover isOpen={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
         </div>
-        
-        <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>
+
+        <Separator orientation="vertical" className="h-8" />
 
         <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-gray-900 leading-none">{user?.name || 'Utilizador'}</p>
-            <p className="text-xs text-gray-500 mt-1">{getRoleLabel(user?.role)}</p>
+          <div className="hidden text-right sm:block">
+            <p className="text-sm font-bold leading-none text-gray-900">{user?.name || 'Utilizador'}</p>
+            <p className="mt-1 text-xs text-gray-500">{getRoleLabel(user?.role)}</p>
           </div>
-          <div className="w-10 h-10 bg-[#f0fdf4] rounded-full flex items-center justify-center border border-[#dcfce7]">
-            <User className="w-6 h-6 text-[#16a34a]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-100 bg-emerald-50">
+            <User className="h-5 w-5 text-emerald-600" />
           </div>
         </div>
       </div>
