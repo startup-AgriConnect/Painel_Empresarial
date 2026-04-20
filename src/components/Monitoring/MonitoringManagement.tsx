@@ -22,6 +22,7 @@ import {
 import { cn, maskData } from '../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../../context/AuthContext';
+import FeedbackBanner from '../Common/FeedbackBanner';
 
 // CartoDB Positron Style (Light OSM)
 const TILE_LAYER_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
@@ -200,6 +201,8 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('TODOS');
   const [routeCache, setRouteCache] = useState<Record<string, [number, number][]>>({});
+  const [routeWarning, setRouteWarning] = useState('');
+  const [simulateRouteFailure, setSimulateRouteFailure] = useState(false);
 
   React.useEffect(() => {
     if (initialSelectedId) {
@@ -213,12 +216,18 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
   const fetchRoute = async (freight: any) => {
     if (routeCache[freight.id]) {
       setRouteData(routeCache[freight.id]);
+      setRouteWarning('');
       return;
     }
 
     setIsLoadingRoute(true);
     setRouteData([]); // Limpa a rota anterior
+    setRouteWarning('');
     try {
+      if (simulateRouteFailure) {
+        throw new Error('Falha simulada para smoke UX');
+      }
+
       // OSRM espera longitude,latitude
       const coords = [
         `${freight.origem_coords[1]},${freight.origem_coords[0]}`,
@@ -242,6 +251,7 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
           freight.destino_coords
         ] as [number, number][];
         setRouteData(fallback);
+        setRouteWarning('Não foi possível obter a rota detalhada. A visualização está a usar o traçado simplificado.');
       }
     } catch (error) {
       console.error("Erro ao buscar rota OSRM:", error);
@@ -251,6 +261,11 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
         freight.destino_coords
       ] as [number, number][];
       setRouteData(fallback);
+      setRouteWarning(
+        simulateRouteFailure
+          ? 'Falha simulada de fetch ativada. A rota está a ser apresentada com fallback simplificado.'
+          : 'A consulta da rota falhou. O mapa manteve um percurso simplificado para não bloquear a operação.'
+      );
     } finally {
       setIsLoadingRoute(false);
     }
@@ -554,6 +569,29 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
           >
             {isSidebarOpen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
           </button>
+
+          <button
+            onClick={() => setSimulateRouteFailure((prev) => !prev)}
+            className={cn(
+              'absolute left-20 top-4 z-20 rounded-xl border px-3 py-2 text-xs font-bold shadow-lg transition-colors',
+              simulateRouteFailure
+                ? 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100'
+                : 'border-gray-100 bg-white text-gray-700 hover:bg-gray-50'
+            )}
+          >
+            {simulateRouteFailure ? 'Erro simulado: ligado' : 'Simular erro de fetch'}
+          </button>
+
+          {routeWarning && (
+            <div className="absolute left-4 top-20 z-20 max-w-md">
+              <FeedbackBanner
+                type="info"
+                title="Fallback de rota ativo"
+                message={routeWarning}
+                onDismiss={() => setRouteWarning('')}
+              />
+            </div>
+          )}
 
           {/* Info Card Flutuante */}
           <AnimatePresence>

@@ -20,6 +20,8 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const STORAGE_KEY = 'agriconnect-company-auth';
+const FLASH_KEY = 'agriconnect-company-flash';
 
 // Mock users data
 const mockUsers: User[] = [
@@ -47,16 +49,22 @@ const mockUsers: User[] = [
 ];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = window.localStorage.getItem(STORAGE_KEY);
+    return storedUser ? JSON.parse(storedUser) as User : null;
+  });
 
   const login = async (email: string, pass: string): Promise<boolean> => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    const foundUser = mockUsers.find(u => u.email === email && pass === 'empresa123');
+    const foundUser = mockUsers.find(
+      (u) => u.email.toLowerCase() === email.trim().toLowerCase() && pass === 'empresa123'
+    );
     
     if (foundUser) {
       setUser(foundUser);
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(foundUser));
       return true;
     }
     return false;
@@ -64,6 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
+    window.localStorage.removeItem(STORAGE_KEY);
+    window.sessionStorage.setItem(FLASH_KEY, 'Sessão terminada com sucesso.');
   };
 
   return (

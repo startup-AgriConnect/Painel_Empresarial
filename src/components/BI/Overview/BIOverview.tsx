@@ -36,6 +36,7 @@ import {
 } from 'recharts';
 import { cn } from '../../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
+import FeedbackBanner from '../../Common/FeedbackBanner';
 
 const productionTrend = [
   { day: '01', volume: 420 },
@@ -93,6 +94,7 @@ const StatCard = ({ title, value, change, trend, icon: Icon, unit, colorClass = 
 );
 
 export default function BIOverview() {
+  const [initialLoadMs, setInitialLoadMs] = useState<number | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activePeriod, setActivePeriod] = useState('Hoje');
 
@@ -123,8 +125,27 @@ export default function BIOverview() {
   };
   const cultures = ['Todas', 'Milho', 'Feijão', 'Batata Doce', 'Mandioca', 'Café', 'Hortícolas'];
 
+  React.useEffect(() => {
+    const start = performance.now();
+    const rafId = window.requestAnimationFrame(() => {
+      const elapsed = Math.round(performance.now() - start);
+      setInitialLoadMs(elapsed);
+      console.info(`[BI smoke] painel inicial carregado em ${elapsed} ms`);
+    });
+
+    return () => window.cancelAnimationFrame(rafId);
+  }, []);
+
   return (
     <div className="space-y-8">
+      {initialLoadMs !== null && (
+        <FeedbackBanner
+          type={initialLoadMs < 1200 ? 'success' : 'info'}
+          title="Smoke test de carregamento"
+          message={`O painel BI inicial ficou interativo em aproximadamente ${initialLoadMs} ms nesta sessão.`}
+        />
+      )}
+
       <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Visão Geral BI</h2>

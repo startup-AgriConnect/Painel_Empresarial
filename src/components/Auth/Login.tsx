@@ -14,6 +14,8 @@ import {
 import { motion } from 'motion/react';
 import { cn } from '../../lib/utils';
 import OrganicParticles from './OrganicParticles';
+import FeedbackBanner from '../Common/FeedbackBanner';
+import { DEFAULT_APP_HASH, isLoginHash } from '../../lib/routes';
 
 export default function Login() {
   const { login } = useAuth();
@@ -22,17 +24,34 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  React.useEffect(() => {
+    const flashMessage = window.sessionStorage.getItem('agriconnect-company-flash');
+    if (flashMessage) {
+      setSuccess(flashMessage);
+      window.sessionStorage.removeItem('agriconnect-company-flash');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       const success = await login(email, password);
       if (!success) {
         setError('Credenciais inválidas. Verifique os seus dados de acesso.');
+        return;
       }
+
+      setSuccess('Login efetuado com sucesso. A redirecionar para o painel...');
+      window.setTimeout(() => {
+        const currentHash = window.location.hash;
+        window.location.hash = isLoginHash(currentHash) ? DEFAULT_APP_HASH : currentHash || DEFAULT_APP_HASH;
+      }, 500);
     } catch (err) {
       setError('Ocorreu um erro ao tentar entrar. Tente novamente mais tarde.');
     } finally {
@@ -97,17 +116,26 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {success && (
+              <FeedbackBanner
+                type="success"
+                title="Acesso autorizado"
+                message={success}
+                onDismiss={() => setSuccess('')}
+              />
+            )}
+
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-700 flex items-center gap-2 ml-1">
-                <Phone className="w-4 h-4 text-gray-400" />
-                Telefone
+                <Mail className="w-4 h-4 text-gray-400" />
+                Email de acesso
               </label>
               <input 
-                type="text" 
+                type="email" 
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="+244 900 000 000"
+                placeholder="empresa@agriconnect.ao"
                 className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium placeholder:text-gray-300"
               />
             </div>
@@ -143,15 +171,19 @@ export default function Login() {
             </div>
 
             {error && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3 text-rose-600"
-              >
-                <AlertCircle className="w-5 h-5 shrink-0" />
-                <p className="text-xs font-bold leading-relaxed">{error}</p>
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+                <FeedbackBanner
+                  type="error"
+                  title="Falha no login"
+                  message={error}
+                  onDismiss={() => setError('')}
+                />
               </motion.div>
             )}
+
+            <div className="rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-600">
+              Credenciais de demonstração: `empresa@agriconnect.ao` com a senha `empresa123`.
+            </div>
 
             <button
               type="submit"

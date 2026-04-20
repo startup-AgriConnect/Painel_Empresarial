@@ -17,10 +17,22 @@ import { cn } from './lib/utils';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Auth/Login';
+import { useHashRoute } from './hooks/useHashRoute';
+import { DEFAULT_APP_HASH, isLoginHash, isProtectedHash } from './lib/routes';
 
 function AppContent() {
   const { user, isAuthenticated } = useAuth();
-  const [activeTab, setActiveTab] = useState('bi-overview');
+  const { activeTab, navigateToTab } = useHashRoute();
+
+  React.useEffect(() => {
+    if (!isAuthenticated && isProtectedHash(window.location.hash)) {
+      window.history.replaceState(null, '', '#/login');
+    }
+
+    if (isAuthenticated && isLoginHash(window.location.hash)) {
+      window.history.replaceState(null, '', DEFAULT_APP_HASH);
+    }
+  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return <Login />;
@@ -57,7 +69,7 @@ function AppContent() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans text-gray-900">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} userRole={user?.role || 'COMPANY'} />
+      <Sidebar activeTab={activeTab} setActiveTab={navigateToTab} userRole={user?.role || 'COMPANY'} />
       
       <div className="flex-1 flex flex-col min-w-0">
         <Header />

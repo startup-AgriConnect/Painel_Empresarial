@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
+import FeedbackBanner from '../Common/FeedbackBanner';
+import { useAccessibleModal } from '../../hooks/useAccessibleModal';
 
 interface EditTeamMemberModalProps {
   isOpen: boolean;
@@ -20,6 +22,7 @@ interface EditTeamMemberModalProps {
 }
 
 export default function EditTeamMemberModal({ isOpen, onClose, onSuccess, member }: EditTeamMemberModalProps) {
+  const modalRef = useAccessibleModal(isOpen, onClose);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,6 +30,7 @@ export default function EditTeamMemberModal({ isOpen, onClose, onSuccess, member
     role: 'VISUALIZADOR'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (member) {
@@ -41,6 +45,13 @@ export default function EditTeamMemberModal({ isOpen, onClose, onSuccess, member
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
+    if (!formData.name.trim() || !formData.email.trim()) {
+      setError('Nome e email corporativo são obrigatórios.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     // Simular delay de rede
@@ -64,6 +75,9 @@ export default function EditTeamMemberModal({ isOpen, onClose, onSuccess, member
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
           <motion.div 
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -88,6 +102,15 @@ export default function EditTeamMemberModal({ isOpen, onClose, onSuccess, member
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              {error && (
+                <FeedbackBanner
+                  type="error"
+                  title="Corrija os dados antes de guardar"
+                  message={error}
+                  onDismiss={() => setError('')}
+                />
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Nome Completo</label>

@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
+import FeedbackBanner from '../Common/FeedbackBanner';
+import { useAccessibleModal } from '../../hooks/useAccessibleModal';
 
 interface CreateTeamMemberModalProps {
   isOpen: boolean;
@@ -21,6 +23,7 @@ interface CreateTeamMemberModalProps {
 }
 
 export default function CreateTeamMemberModal({ isOpen, onClose, onSuccess }: CreateTeamMemberModalProps) {
+  const modalRef = useAccessibleModal(isOpen, onClose);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,9 +34,22 @@ export default function CreateTeamMemberModal({ isOpen, onClose, onSuccess }: Cr
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
+    if (formData.password.length < 8) {
+      setError('A senha temporária deve ter pelo menos 8 caracteres.');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('A confirmação da senha não coincide com a senha temporária.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     // Simular delay de rede
@@ -67,6 +83,9 @@ export default function CreateTeamMemberModal({ isOpen, onClose, onSuccess }: Cr
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
           <motion.div 
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -91,6 +110,15 @@ export default function CreateTeamMemberModal({ isOpen, onClose, onSuccess }: Cr
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              {error && (
+                <FeedbackBanner
+                  type="error"
+                  title="Não foi possível criar o membro"
+                  message={error}
+                  onDismiss={() => setError('')}
+                />
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Nome Completo</label>

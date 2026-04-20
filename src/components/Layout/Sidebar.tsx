@@ -20,6 +20,8 @@ import {
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../../context/AuthContext';
+import ConfirmationModal from '../Common/ConfirmationModal';
+import { LOGIN_HASH } from '../../lib/routes';
 
 interface SidebarProps {
   activeTab: string;
@@ -48,14 +50,32 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isBICategoryOpen, setIsBICategoryOpen] = useState(true);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    window.location.hash = LOGIN_HASH;
+    setIsLogoutModalOpen(false);
+  };
 
   return (
-    <motion.aside 
-      initial={false}
-      animate={{ width: isCollapsed ? 80 : 280 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="bg-[#052e16] text-[#f0fdf4] h-screen flex flex-col sticky top-0 z-20 shadow-2xl border-r border-[#166534]/30"
-    >
+    <>
+      <ConfirmationModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogout}
+        title="Terminar sessão"
+        message="Tem a certeza de que deseja sair agora? Será redirecionado para a página de login."
+        confirmText="Terminar sessão"
+        cancelText="Continuar no painel"
+        variant="warning"
+      />
+      <motion.aside 
+        initial={false}
+        animate={{ width: isCollapsed ? 80 : 280 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className="bg-[#052e16] text-[#f0fdf4] h-screen flex flex-col sticky top-0 z-20 shadow-2xl border-r border-[#166534]/30"
+      >
       <div className={cn(
         "p-6 flex items-center relative",
         isCollapsed ? "justify-center" : "justify-between"
@@ -225,7 +245,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           </span>
         </button>
         <button 
-          onClick={logout}
+          onClick={() => setIsLogoutModalOpen(true)}
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2.5 text-[#ffb4ab] hover:text-[#ffdad6] hover:bg-[#93000a]/20 rounded-2xl transition-all group",
             isCollapsed && "justify-center"
@@ -240,6 +260,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           </span>
         </button>
       </div>
-    </motion.aside>
+      </motion.aside>
+    </>
   );
 }

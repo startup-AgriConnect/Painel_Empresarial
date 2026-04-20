@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, Package, Hash, User, MapPin, Calendar, DollarSign, ShieldCheck, Zap, AlertCircle, Loader2, Leaf, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import FeedbackBanner from '../Common/FeedbackBanner';
+import { useAccessibleModal } from '../../hooks/useAccessibleModal';
 
 interface CreateLotModalProps {
   isOpen: boolean;
@@ -9,7 +11,9 @@ interface CreateLotModalProps {
 }
 
 export default function CreateLotModal({ isOpen, onClose, onSuccess }: CreateLotModalProps) {
+  const modalRef = useAccessibleModal(isOpen, onClose);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     codigo: '',
     nome_produto: '',
@@ -28,6 +32,23 @@ export default function CreateLotModal({ isOpen, onClose, onSuccess }: CreateLot
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
+    if (Number(formData.quantidade) <= 0) {
+      setError('A quantidade deve ser superior a zero.');
+      return;
+    }
+
+    if (Number(formData.preco_unitario) <= 0) {
+      setError('O preço unitário deve ser superior a zero.');
+      return;
+    }
+
+    if (!formData.local_retirada.trim()) {
+      setError('Informe o local de retirada para orientar a logística do comprador.');
+      return;
+    }
+
     setLoading(true);
     
     // Simulating API call
@@ -55,6 +76,9 @@ export default function CreateLotModal({ isOpen, onClose, onSuccess }: CreateLot
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <motion.div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -74,6 +98,15 @@ export default function CreateLotModal({ isOpen, onClose, onSuccess }: CreateLot
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6">
+              {error && (
+                <FeedbackBanner
+                  type="error"
+                  title="Lote incompleto"
+                  message={error}
+                  onDismiss={() => setError('')}
+                />
+              )}
+
               {/* Seção: Produto e Quantidade */}
               <div className="space-y-4">
                 <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
