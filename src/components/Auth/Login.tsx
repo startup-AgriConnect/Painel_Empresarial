@@ -16,6 +16,9 @@ import { cn } from '../../lib/utils';
 import OrganicParticles from './OrganicParticles';
 import FeedbackBanner from '../Common/FeedbackBanner';
 import { DEFAULT_APP_HASH, isLoginHash } from '../../lib/routes';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Card, CardContent } from '../ui/card';
 
 export default function Login() {
   const { login } = useAuth();
@@ -115,6 +118,8 @@ export default function Login() {
             </div>
           </div>
 
+          <Card className="border-gray-100 shadow-none">
+            <CardContent className="space-y-6 p-0">
           <form onSubmit={handleSubmit} className="space-y-6">
             {success && (
               <FeedbackBanner
@@ -130,13 +135,13 @@ export default function Login() {
                 <Mail className="w-4 h-4 text-gray-400" />
                 Email de acesso
               </label>
-              <input 
-                type="email" 
+              <Input
+                type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="empresa@agriconnect.ao"
-                className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium placeholder:text-gray-300"
+                className="h-14 rounded-2xl border-gray-100 bg-gray-50 px-6"
               />
             </div>
 
@@ -146,28 +151,30 @@ export default function Login() {
                 Senha de Acesso
               </label>
               <div className="relative">
-                <input 
+                <Input
                   type={showPassword ? "text" : "password"} 
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium placeholder:text-gray-300"
+                  className="h-14 rounded-2xl border-gray-100 bg-gray-50 px-6 pr-14"
                 />
-                <button 
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-emerald-600 transition-colors"
+                  className="absolute right-4 top-1/2 h-8 w-8 -translate-y-1/2 rounded-full p-0 text-gray-400 hover:text-emerald-600"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                </Button>
               </div>
             </div>
 
             <div className="flex justify-end">
-              <button type="button" className="text-xs font-bold text-gray-400 hover:text-emerald-600 transition-colors">
+              <Button type="button" variant="link" className="h-auto p-0 text-xs font-bold text-gray-400 hover:text-emerald-600">
                 Esqueceu a senha?
-              </button>
+              </Button>
             </div>
 
             {error && (
@@ -185,10 +192,10 @@ export default function Login() {
               Credenciais de demonstração: `empresa@agriconnect.ao` com a senha `empresa123`.
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full py-5 bg-[#10b981] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#059669] transition-all shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3 disabled:opacity-50"
+              className="h-14 w-full rounded-2xl bg-[#10b981] font-black uppercase tracking-widest text-xs shadow-xl shadow-emerald-500/20 hover:bg-[#059669]"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -198,8 +205,10 @@ export default function Login() {
                   Entrar no Sistema
                 </>
               )}
-            </button>
+            </Button>
           </form>
+            </CardContent>
+          </Card>
 
           <div className="pt-8 border-t border-gray-100 space-y-8">
 

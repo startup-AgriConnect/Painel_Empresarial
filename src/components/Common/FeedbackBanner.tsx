@@ -1,5 +1,7 @@
 import React from 'react';
 import { AlertCircle, CheckCircle2, Info, X } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { Button } from '../ui/button';
 
 interface FeedbackBannerProps {
   type: 'success' | 'error' | 'info';
@@ -30,24 +32,26 @@ export default function FeedbackBanner({ type, title, message, onDismiss }: Feed
   const { container, icon: Icon, iconClassName } = styles[type];
 
   return (
-    <div className={`rounded-2xl border px-4 py-3 ${container}`} role="status" aria-live="polite">
+    <Alert className={container} variant={type === 'error' ? 'destructive' : type} role="status" aria-live="polite">
       <div className="flex items-start gap-3">
         <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${iconClassName}`} />
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold">{title}</p>
-          <p className="mt-1 text-sm">{message}</p>
+          <AlertTitle>{title}</AlertTitle>
+          <AlertDescription>{message}</AlertDescription>
         </div>
         {onDismiss && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={onDismiss}
-            className="rounded-full p-1 text-current/70 transition hover:bg-white/60 hover:text-current"
+            className="h-8 w-8 rounded-full text-current/70 hover:bg-white/60 hover:text-current"
             aria-label="Fechar mensagem"
           >
             <X className="h-4 w-4" />
-          </button>
+          </Button>
         )}
       </div>
-    </div>
+    </Alert>
   );
 }
