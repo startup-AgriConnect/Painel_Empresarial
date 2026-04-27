@@ -6,6 +6,7 @@ import {
   EyeOff,
   Filter,
   Lock,
+  MoreVertical,
   Search,
   Shield,
   ShieldAlert,
@@ -18,7 +19,7 @@ import CreateTeamMemberModal from './CreateTeamMemberModal';
 import EditTeamMemberModal from './EditTeamMemberModal';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { Card, CardContent } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
@@ -41,17 +42,16 @@ const initialTeam: TeamMember[] = [
 ];
 
 const availableMenus = [
+  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'users', label: 'Utilizadores' },
+  { id: 'companies', label: 'Empresas' },
   { id: 'marketplace', label: 'Marketplace' },
+  { id: 'micro-aggregators', label: 'Micro-Agregadores' },
   { id: 'hubs', label: 'Hubs de Consolidação' },
   { id: 'freights', label: 'Monitorização' },
   { id: 'loads', label: 'Gestão de Cargas' },
+  { id: 'support', label: 'Suporte' },
   { id: 'team', label: 'Equipa' },
-  { id: 'bi-overview', label: 'Visão Geral BI' },
-  { id: 'agricultural-production', label: 'Produção Agrícola' },
-  { id: 'geointelligence', label: 'Geointeligência' },
-  { id: 'producers-farms', label: 'Produtores / Fazendas' },
-  { id: 'price-demand', label: 'Preços e Demanda' },
-  { id: 'reports', label: 'Relatórios' },
 ];
 
 export default function TeamManagement() {
@@ -94,8 +94,8 @@ export default function TeamManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Gestão da Equipa Interna</h2>
-          <p className="text-sm text-gray-500">Controle de acessos, permissões e estado das contas dos colaboradores.</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Gestão da Equipa Interna</h2>
+          <p className="text-sm text-muted-foreground">Controle de acessos, permissões e estado das contas dos colaboradores.</p>
         </div>
         <Button onClick={() => setIsCreateModalOpen(true)}>
           <UserPlus className="h-4 w-4" />
@@ -103,18 +103,16 @@ export default function TeamManagement() {
         </Button>
       </div>
 
-      <Card>
-        <CardContent className="flex items-center gap-4 p-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <Input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Pesquisar por nome, email ou cargo..." className="pl-10" />
-          </div>
-          <Button variant="outline">
-            <Filter className="h-4 w-4" />
-            Filtros
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Pesquisar por nome, email ou cargo..." className="pl-9" />
+        </div>
+        <Button variant="outline">
+          <Filter className="h-4 w-4" />
+          Filtros
+        </Button>
+      </div>
 
       <Card>
         <CardContent className="p-0">
@@ -133,19 +131,19 @@ export default function TeamManagement() {
                 <TableRow key={member.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-sm font-semibold text-primary">
                         {member.name.split(' ').map((n) => n[0]).join('')}
                       </div>
                       <div>
-                        <p className="font-bold text-gray-900">{member.name}</p>
-                        <p className="text-xs text-gray-500">{member.email}</p>
+                        <p className="font-semibold text-foreground">{member.name}</p>
+                        <p className="text-xs text-muted-foreground">{member.email}</p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Shield className="h-4 w-4 text-gray-400" />
-                      <span className="text-xs font-bold uppercase tracking-wide text-gray-700">{member.role.replace('_', ' ')}</span>
+                      <Shield className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-xs font-semibold uppercase tracking-wide text-foreground">{member.role.replace('_', ' ')}</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -154,7 +152,7 @@ export default function TeamManagement() {
                       {member.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-xs text-gray-500">{member.lastLogin}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{member.lastLogin}</TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" size="sm" onClick={() => { setSelectedMemberId(member.id); setIsEditModalOpen(true); }}>
@@ -192,7 +190,7 @@ export default function TeamManagement() {
                   key={menu.id}
                   type="button"
                   variant="outline"
-                  className={`h-auto justify-between p-4 ${hasAccess ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : ''}`}
+                  className={`h-auto justify-between p-4 ${hasAccess ? 'border-success/20 bg-success/10 text-success' : ''}`}
                   onClick={() => handleUpdatePermissions(currentMember.id, menu.id)}
                 >
                   <div className="flex items-center gap-3">

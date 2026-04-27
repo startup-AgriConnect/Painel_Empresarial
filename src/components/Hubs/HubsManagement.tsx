@@ -126,8 +126,8 @@ export default function HubsManagement() {
     <div className="space-y-6">
       <header className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Hubs de Consolidação</h2>
-          <p className="text-gray-500">Pontos estratégicos de recepção, pesagem e cross-docking.</p>
+          <h2 className="text-2xl font-semibold text-foreground">Hubs de Consolidação</h2>
+          <p className="text-muted-foreground">Pontos estratégicos de recepção, pesagem e cross-docking.</p>
         </div>
         <Button
           onClick={() => setIsModalOpen(true)}
@@ -151,218 +151,173 @@ export default function HubsManagement() {
         onDispatchSuccess={handleDispatchSuccess}
       />
 
-      <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Pesquisar por nome ou código..." 
-            className="border-none bg-gray-50 pl-10 pr-4 text-sm shadow-none focus-visible:ring-2 focus-visible:ring-emerald-500/20"
+            placeholder="Pesquisar por nome ou código..."
+            className="pl-9"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <Filter className="w-4 h-4 text-gray-400" />
-          <Select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-10 flex-1 border-none bg-gray-50 text-sm font-medium text-gray-600 shadow-none md:w-48"
-          >
-            <option value="Todos">Todos os Status</option>
-            <option value="OPERACIONAL">Operacional</option>
-            <option value="SATURADO">Saturado</option>
-            <option value="MANUTENCAO">Manutenção</option>
-            <option value="INATIVO">Inativo</option>
-          </Select>
-        </div>
+        <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
+        <Select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="w-auto min-w-[160px]"
+        >
+          <option value="Todos">Todos os Status</option>
+          <option value="OPERACIONAL">Operacional</option>
+          <option value="SATURADO">Saturado</option>
+          <option value="MANUTENCAO">Manutenção</option>
+          <option value="INATIVO">Inativo</option>
+        </Select>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="flex flex-col gap-2">
         {filteredHubs.map((hub) => (
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            key={hub.id} 
+            key={hub.id}
             className={cn(
-              "bg-white rounded-2xl border border-gray-100 shadow-sm group relative",
+              "bg-card rounded-lg border border-border shadow-sm relative",
               activeDropdown === hub.id ? "z-30" : "z-0"
             )}
           >
-            <div className="p-6 flex flex-col lg:flex-row lg:items-center gap-6">
-              <div className="p-4 bg-emerald-50 rounded-2xl shrink-0">
-                <Warehouse className="w-8 h-8 text-emerald-600" />
+            <div className="p-3 flex items-center gap-3">
+              <div className="p-2 bg-muted rounded-md shrink-0">
+                <Warehouse className="w-4 h-4 text-foreground" />
               </div>
-              
-              <div className="flex-1 space-y-3">
-                <div className="flex items-center gap-3">
-                  <h3 className="text-2xl font-black text-gray-900 tracking-tight">{hub.name}</h3>
+
+              <div className="flex-1 min-w-0 flex flex-col gap-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-sm font-semibold text-foreground truncate">{hub.name}</h3>
                   <span className={cn(
-                    "px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-                    hub.status === 'OPERACIONAL' ? "bg-emerald-100 text-emerald-700" : 
-                    hub.status === 'SATURADO' ? "bg-rose-100 text-rose-700" : "bg-amber-100 text-amber-700"
+                    "px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider shrink-0",
+                    hub.status === 'OPERACIONAL' ? "bg-success/10 text-success" :
+                    hub.status === 'SATURADO' ? "bg-destructive/10 text-destructive" : "bg-warning/15 text-warning"
                   )}>
-                    {hub.status === 'OPERACIONAL' ? 'Operacional' : 
-                     hub.status === 'SATURADO' ? 'Saturado' : 
+                    {hub.status === 'OPERACIONAL' ? 'Operacional' :
+                     hub.status === 'SATURADO' ? 'Saturado' :
                      hub.status === 'MANUTENCAO' ? 'Manutenção' : 'Inativo'}
                   </span>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{hub.codigo}</span>
-                </div>
-                
-                <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-gray-500">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-emerald-500" />
-                    <span className="font-medium">{hub.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-emerald-500" />
-                    <span className="font-medium">{hub.aggregators} Agregadores</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Truck className="w-4 h-4 text-emerald-500" />
-                    <span className="font-medium">{hub.numero_docas} Docas</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-emerald-500" />
-                    <span className="font-medium">{hub.horario_funcionamento}</span>
-                  </div>
+                  <span className="text-[10px] font-medium text-muted-foreground shrink-0">{hub.codigo}</span>
                 </div>
 
-                <div className="flex items-center gap-3 pt-1">
-                  <div className={cn(
-                    "flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors",
-                    hub.possui_balanca ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-gray-50 text-gray-400 border border-gray-100"
-                  )}>
-                    <Scale className="w-3.5 h-3.5" />
-                    Balança
-                  </div>
-                  <div className={cn(
-                    "flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors",
-                    hub.possui_refrigeracao ? "bg-blue-50 text-blue-600 border border-blue-100" : "bg-gray-50 text-gray-400 border border-gray-100"
-                  )}>
-                    <Snowflake className="w-3.5 h-3.5" />
-                    Frio
-                  </div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+                  <div className="flex items-center gap-1"><MapPin className="w-3 h-3" /><span>{hub.location}</span></div>
+                  <div className="flex items-center gap-1"><Users className="w-3 h-3" /><span>{hub.aggregators} Agreg.</span></div>
+                  <div className="flex items-center gap-1"><Truck className="w-3 h-3" /><span>{hub.numero_docas} Docas</span></div>
+                  <div className="flex items-center gap-1"><Clock className="w-3 h-3" /><span>{hub.horario_funcionamento}</span></div>
+                  {hub.possui_balanca && (
+                    <div className="flex items-center gap-1"><Scale className="w-3 h-3" /><span>Balança</span></div>
+                  )}
+                  {hub.possui_refrigeracao && (
+                    <div className="flex items-center gap-1 text-info"><Snowflake className="w-3 h-3" /><span>Frio</span></div>
+                  )}
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row lg:items-center gap-8 lg:pl-8 lg:border-l border-gray-100">
-                <div className="flex flex-row lg:flex-col gap-8 lg:gap-3 lg:text-right min-w-[160px]">
-                  <div>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.1em] mb-1">Carga Atual</p>
-                    <p className="text-2xl font-black text-emerald-600 leading-none">{hub.stock}</p>
-                  </div>
-                  <div className="flex-1 lg:flex-none">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.1em] mb-1.5">Capacidade</p>
-                    <div className="flex items-center lg:justify-end gap-3">
-                      <div className="flex-1 lg:w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div 
-                          className={cn(
-                            "h-full rounded-full transition-all duration-700 ease-out",
-                            parseInt(hub.capacity) > 80 ? "bg-rose-500" : "bg-emerald-500"
-                          )} 
-                          style={{ width: hub.capacity }}
-                        ></div>
-                      </div>
-                      <span className="text-xs font-black text-gray-700 tabular-nums">{hub.capacity}</span>
-                    </div>
-                  </div>
+              <div className="hidden md:flex flex-col items-end gap-1 min-w-[140px] pl-3 border-l border-border">
+                <div className="flex items-baseline gap-1.5">
+                  <p className="text-[9px] font-medium text-muted-foreground uppercase tracking-wider">Carga</p>
+                  <p className="text-sm font-semibold text-foreground tabular-nums">{hub.stock}</p>
                 </div>
-
-                <div className="flex items-center gap-3 relative">
-                  <Button
-                    onClick={() => handleManageStock(hub)}
-                    className="h-auto rounded-2xl bg-gray-900 px-6 py-3.5 text-sm font-black shadow-xl shadow-gray-900/10 hover:bg-gray-800"
-                  >
-                    Gerir Stock
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                  
-                  <div className="relative">
-                    <Button
-                      onClick={() => setActiveDropdown(activeDropdown === hub.id ? null : hub.id)}
+                <div className="flex items-center gap-2 w-full">
+                  <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+                    <div
                       className={cn(
-                        "h-auto rounded-2xl border border-transparent p-3.5 transition-all",
-                        activeDropdown === hub.id 
-                          ? "bg-gray-100 text-gray-900 border-gray-200" 
-                          : "text-gray-400 hover:bg-gray-50 hover:border-gray-200"
+                        "h-full rounded-full transition-all duration-500",
+                        parseInt(hub.capacity) > 80 ? "bg-destructive" : "bg-foreground"
                       )}
-                      variant="ghost"
-                    >
-                      <MoreVertical className="w-5 h-5" />
-                    </Button>
-
-                    <AnimatePresence>
-                      {activeDropdown === hub.id && (
-                        <>
-                          <div 
-                            className="fixed inset-0 z-10" 
-                            onClick={() => setActiveDropdown(null)}
-                          />
-                          <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                            className="absolute right-0 mt-3 w-64 bg-white rounded-[24px] shadow-2xl border border-gray-100 py-3 z-20 overflow-hidden"
-                          >
-                            <div className="px-5 py-2 border-b border-gray-50 mb-2">
-                              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Gestão do Hub</p>
-                            </div>
-                            
-                            <Button
-                              onClick={() => handleEditHub(hub)}
-                              className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 group"
-                              variant="ghost"
-                            >
-                              <div className="p-2 bg-gray-50 rounded-xl group-hover:bg-emerald-100 transition-colors">
-                                <Edit2 className="w-4 h-4" />
-                              </div>
-                              <span className="font-bold">Editar Hub</span>
-                            </Button>
-                            
-                            {hub.status !== 'MANUTENCAO' && (
-                              <Button
-                                onClick={() => handleStatusChange(hub.id, 'MANUTENCAO')}
-                                className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-amber-600 hover:bg-amber-50 group"
-                                variant="ghost"
-                              >
-                                <div className="p-2 bg-amber-50/50 rounded-xl group-hover:bg-amber-100 transition-colors">
-                                  <Settings className="w-4 h-4" />
-                                </div>
-                                <span className="font-bold">Colocar em Manutenção</span>
-                              </Button>
-                            )}
-
-                            {hub.status !== 'INATIVO' && (
-                              <Button
-                                onClick={() => handleStatusChange(hub.id, 'INATIVO')}
-                                className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-rose-600 hover:bg-rose-50 group"
-                                variant="ghost"
-                              >
-                                <div className="p-2 bg-rose-50/50 rounded-xl group-hover:bg-rose-100 transition-colors">
-                                  <Ban className="w-4 h-4" />
-                                </div>
-                                <span className="font-bold">Desativar Hub</span>
-                              </Button>
-                            )}
-
-                            {(hub.status === 'INATIVO' || hub.status === 'MANUTENCAO') && (
-                              <Button
-                                onClick={() => handleStatusChange(hub.id, 'OPERACIONAL')}
-                                className="h-auto w-full justify-start gap-4 px-5 py-3 text-sm text-emerald-600 hover:bg-emerald-50 group"
-                                variant="ghost"
-                              >
-                                <div className="p-2 bg-emerald-50/50 rounded-xl group-hover:bg-emerald-100 transition-colors">
-                                  <CheckCircle2 className="w-4 h-4" />
-                                </div>
-                                <span className="font-bold">Ativar Hub</span>
-                              </Button>
-                            )}
-                          </motion.div>
-                        </>
-                      )}
-                    </AnimatePresence>
+                      style={{ width: hub.capacity }}
+                    />
                   </div>
+                  <span className="text-[10px] font-medium text-foreground tabular-nums">{hub.capacity}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1 shrink-0">
+                <Button
+                  onClick={() => handleManageStock(hub)}
+                  size="sm"
+                  className="gap-1.5"
+                >
+                  Gerir Stock
+                  <ArrowRight className="w-3 h-3" />
+                </Button>
+
+                <div className="relative">
+                  <Button
+                    onClick={() => setActiveDropdown(activeDropdown === hub.id ? null : hub.id)}
+                    variant="ghost"
+                    size="icon"
+                    className="size-8"
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+
+                  <AnimatePresence>
+                    {activeDropdown === hub.id && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-10"
+                          onClick={() => setActiveDropdown(null)}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95, y: 4 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: 4 }}
+                          className="absolute right-0 mt-1 w-52 bg-popover text-popover-foreground rounded-md shadow-md border p-1 z-20"
+                        >
+                          <Button
+                            onClick={() => handleEditHub(hub)}
+                            variant="ghost"
+                            className="h-8 w-full justify-start gap-2 px-2 text-sm"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                            Editar Hub
+                          </Button>
+
+                          {hub.status !== 'MANUTENCAO' && (
+                            <Button
+                              onClick={() => handleStatusChange(hub.id, 'MANUTENCAO')}
+                              variant="ghost"
+                              className="h-8 w-full justify-start gap-2 px-2 text-sm text-warning hover:bg-warning/10 hover:text-warning"
+                            >
+                              <Settings className="w-3.5 h-3.5" />
+                              Em Manutenção
+                            </Button>
+                          )}
+
+                          {hub.status !== 'INATIVO' && (
+                            <Button
+                              onClick={() => handleStatusChange(hub.id, 'INATIVO')}
+                              variant="ghost"
+                              className="h-8 w-full justify-start gap-2 px-2 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                            >
+                              <Ban className="w-3.5 h-3.5" />
+                              Desativar
+                            </Button>
+                          )}
+
+                          {(hub.status === 'INATIVO' || hub.status === 'MANUTENCAO') && (
+                            <Button
+                              onClick={() => handleStatusChange(hub.id, 'OPERACIONAL')}
+                              variant="ghost"
+                              className="h-8 w-full justify-start gap-2 px-2 text-sm"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              Ativar Hub
+                            </Button>
+                          )}
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
@@ -371,38 +326,38 @@ export default function HubsManagement() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-emerald-900 rounded-2xl p-6 text-white">
+        <div className="bg-primary rounded-lg p-6 text-primary-foreground">
           <div className="flex items-center gap-3 mb-4">
-            <Scale className="w-6 h-6 text-emerald-400" />
-            <h3 className="text-lg font-bold">Validação de Balanças</h3>
+            <Scale className="w-6 h-6 text-primary-foreground" />
+            <h3 className="text-lg font-semibold">Validação de Balanças</h3>
           </div>
-          <p className="text-emerald-200 text-sm mb-6">
+          <p className="text-primary-foreground/80 text-sm mb-6">
             Todos os Hubs utilizam balanças digitais certificadas pela AgriConnect para garantir a precisão do peso e a confiança dos compradores.
           </p>
-          <Button className="h-auto px-0 text-sm font-bold text-emerald-400 hover:text-emerald-300" variant="ghost">
+          <Button className="h-auto px-0 text-sm font-semibold text-primary-foreground hover:text-primary-foreground/80" variant="ghost">
             Verificar Certificações
             <ArrowRight className="w-4 h-4" />
           </Button>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
           <div className="flex items-center gap-3 mb-4">
-            <Package className="w-6 h-6 text-emerald-600" />
-            <h3 className="text-lg font-bold text-gray-900">Próximos Despachos</h3>
+            <Package className="w-6 h-6 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">Próximos Despachos</h3>
           </div>
           <div className="space-y-4">
             {[
               { hub: 'Hub Cuanza Norte', truck: 'Camião 30T', eta: '2h 15m' },
               { hub: 'Hub Huambo', truck: 'Camião 20T', eta: '45m' },
             ].map((dispatch, i) => (
-              <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+              <div key={i} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div>
-                  <p className="text-sm font-bold text-gray-900">{dispatch.hub}</p>
-                  <p className="text-xs text-gray-500">{dispatch.truck}</p>
+                  <p className="text-sm font-semibold text-foreground">{dispatch.hub}</p>
+                  <p className="text-xs text-muted-foreground">{dispatch.truck}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-bold text-emerald-600 uppercase">ETA</p>
-                  <p className="text-sm font-bold text-gray-900">{dispatch.eta}</p>
+                  <p className="text-xs font-semibold text-primary uppercase">ETA</p>
+                  <p className="text-sm font-semibold text-foreground">{dispatch.eta}</p>
                 </div>
               </div>
             ))}

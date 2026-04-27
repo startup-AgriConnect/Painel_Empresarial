@@ -234,56 +234,31 @@ export default function MarketplaceManagement() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Hero / Header Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-emerald-900 text-white p-8 md:p-12">
-        <div className="relative z-10 max-w-2xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/50 border border-emerald-700 text-emerald-200 text-xs font-bold uppercase tracking-wider mb-6"
-          >
+      {/* Page Header */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-muted-foreground text-[10px] font-semibold uppercase tracking-wider mb-1">
             <ShoppingBag className="w-3 h-3" />
             Marketplace AgriConnect
-          </motion.div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-black mb-4 leading-tight"
-          >
-            Produtos Frescos Direto do <span className="text-emerald-400">Produtor</span>
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-emerald-100/80 text-lg mb-8"
-          >
+          </div>
+          <h1 className="text-2xl font-semibold text-foreground leading-tight">
+            Produtos Frescos Direto do Produtor
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
             A maior plataforma de comercialização agrícola de Angola. Conectamos produtores e compradores com transparência e eficiência.
-          </motion.p>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-wrap gap-4"
-          >
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="bg-emerald-500 hover:bg-emerald-400 text-emerald-950 px-8 py-4 rounded-2xl font-black transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20"
-            >
-              <Plus className="w-5 h-5" />
-              Anunciar Produto
-            </button>
-            <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-2xl font-black transition-all border border-white/10">
-              Ver Meus Pedidos
-            </button>
-          </motion.div>
+          </p>
         </div>
-        
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
-          <div className="absolute top-10 right-10 w-64 h-64 bg-emerald-400 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-40 w-96 h-96 bg-emerald-500 rounded-full blur-3xl" />
+        <div className="flex items-center gap-2">
+          <button className="inline-flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium border border-border bg-background hover:bg-accent transition-colors">
+            Ver Meus Pedidos
+          </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="inline-flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Anunciar Produto
+          </button>
         </div>
       </div>
 
@@ -292,8 +267,8 @@ export default function MarketplaceManagement() {
         <aside className="w-full lg:w-72 shrink-0 space-y-8">
           {/* Categorias */}
           <div className="space-y-4">
-            <h3 className="text-sm font-black text-gray-900 uppercase tracking-wider flex items-center gap-2">
-              <LayoutGrid className="w-4 h-4 text-emerald-600" />
+            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+              <LayoutGrid className="w-4 h-4 text-primary" />
               Categorias
             </h3>
             <div className="flex flex-col gap-1">
@@ -302,16 +277,16 @@ export default function MarketplaceManagement() {
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
                   className={cn(
-                    "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all group",
-                    selectedCategory === cat.id 
-                      ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20" 
-                      : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"
+                    "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all group",
+                    selectedCategory === cat.id
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "text-muted-foreground hover:bg-accent hover:text-primary"
                   )}
                 >
                   <div className="flex items-center gap-3">
                     <cat.icon className={cn(
                       "w-4 h-4",
-                      selectedCategory === cat.id ? "text-white" : "text-gray-400 group-hover:text-emerald-500"
+                      selectedCategory === cat.id ? "text-primary-foreground" : "text-muted-foreground group-hover:text-primary"
                     )} />
                     {cat.name}
                   </div>
@@ -325,17 +300,17 @@ export default function MarketplaceManagement() {
           </div>
 
           {/* Filtros Avançados */}
-          <div className="space-y-6 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
-            <h3 className="text-sm font-black text-gray-900 uppercase tracking-wider flex items-center gap-2">
-              <Filter className="w-4 h-4 text-emerald-600" />
+          <div className="space-y-3 p-4 bg-card rounded-lg border border-border">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+              <Filter className="w-3.5 h-3.5" />
               Filtros
             </h3>
-            
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-400 uppercase">Qualidade</label>
-                <select 
-                  className="w-full px-4 py-2 bg-gray-50 border-none rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+
+            <div className="space-y-3">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-medium text-muted-foreground uppercase">Qualidade</label>
+                <select
+                  className="w-full h-9 px-3 bg-background border border-input rounded-md text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                   value={filters.qualidade}
                   onChange={(e) => setFilters(prev => ({ ...prev, qualidade: e.target.value }))}
                 >
@@ -346,10 +321,10 @@ export default function MarketplaceManagement() {
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-400 uppercase">Status</label>
-                <select 
-                  className="w-full px-4 py-2 bg-gray-50 border-none rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-medium text-muted-foreground uppercase">Status</label>
+                <select
+                  className="w-full h-9 px-3 bg-background border border-input rounded-md text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                   value={filters.status}
                   onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
                 >
@@ -359,86 +334,81 @@ export default function MarketplaceManagement() {
                 </select>
               </div>
 
-              <div className="pt-4">
-                <button 
-                  onClick={() => {
-                    setSearchTerm('');
-                    setSelectedCategory('Todos');
-                    setFilters({ qualidade: 'Todos', status: 'Todos', precoRange: 'Todos' });
-                  }}
-                  className="w-full py-3 text-xs font-bold text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all"
-                >
-                  Limpar Todos os Filtros
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedCategory('Todos');
+                  setFilters({ qualidade: 'Todos', status: 'Todos', precoRange: 'Todos' });
+                }}
+                className="w-full h-8 text-xs text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-all"
+              >
+                Limpar Filtros
+              </button>
             </div>
           </div>
 
           {/* Banner Lateral */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-6 text-white">
+          <div className="relative overflow-hidden rounded-xl bg-primary p-6 text-primary-foreground">
             <div className="relative z-10">
-              <h4 className="font-black text-lg mb-2">Certificação AgriConnect</h4>
-              <p className="text-emerald-100 text-xs leading-relaxed mb-4">
+              <h4 className="font-semibold text-lg mb-2">Certificação AgriConnect</h4>
+              <p className="text-primary-foreground/90 text-xs leading-relaxed mb-4">
                 Garanta a melhor qualidade com produtos certificados pela nossa equipa técnica.
               </p>
-              <button className="text-[10px] font-black uppercase tracking-widest bg-white text-emerald-700 px-4 py-2 rounded-lg">
+              <button className="text-[10px] font-semibold uppercase tracking-widest bg-background text-primary px-4 py-2 rounded-lg">
                 Saiba Mais
               </button>
             </div>
-            <ShieldCheck className="absolute -right-4 -bottom-4 w-24 h-24 text-white/10" />
+            <ShieldCheck className="absolute -right-4 -bottom-4 w-24 h-24 text-primary-foreground/10" />
           </div>
         </aside>
 
         {/* Main Content */}
         <main className="flex-1 space-y-6">
           {/* Top Bar Controls */}
-          <div className="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input 
-                type="text" 
-                placeholder="O que procura hoje? (ex: Milho, Feijão...)" 
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-emerald-500/20 outline-none"
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative flex-1 min-w-[220px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="O que procura hoje? (ex: Milho, Feijão...)"
+                className="w-full h-9 pl-9 pr-3 bg-background border border-input rounded-md text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center bg-gray-50 p-1 rounded-xl border border-gray-100">
-                <button 
-                  onClick={() => setViewMode('grid')}
-                  className={cn(
-                    "p-2 rounded-lg transition-all",
-                    viewMode === 'grid' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-400 hover:text-gray-600"
-                  )}
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                </button>
-                <button 
-                  onClick={() => setViewMode('list')}
-                  className={cn(
-                    "p-2 rounded-lg transition-all",
-                    viewMode === 'list' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-400 hover:text-gray-600"
-                  )}
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </div>
-              <div className="h-8 w-px bg-gray-100 mx-1" />
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-xs font-bold text-gray-600 transition-all border border-gray-100">
-                <SortAsc className="w-4 h-4" />
-                Ordenar por: Relevância
+            <div className="inline-flex items-center bg-muted p-0.5 rounded-md h-9">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={cn(
+                  "h-8 px-2 rounded transition-all",
+                  viewMode === 'grid' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={cn(
+                  "h-8 px-2 rounded transition-all",
+                  viewMode === 'list' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <List className="w-4 h-4" />
               </button>
             </div>
+            <button className="h-9 inline-flex items-center gap-2 px-3 bg-background border border-input rounded-md text-sm shadow-xs hover:bg-accent transition-colors">
+              <SortAsc className="w-4 h-4" />
+              Relevância
+            </button>
           </div>
 
           {/* Results Info */}
           <div className="flex items-center justify-between px-2">
-            <p className="text-sm text-gray-500">
-              Mostrando <span className="font-bold text-gray-900">{filteredLots.length}</span> produtos encontrados
+            <p className="text-sm text-muted-foreground">
+              Mostrando <span className="font-semibold text-foreground">{filteredLots.length}</span> produtos encontrados
             </p>
             {selectedCategory !== 'Todos' && (
-              <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">
+              <span className="px-3 py-1 bg-success/10 text-success rounded-full text-xs font-semibold">
                 Categoria: {selectedCategory}
               </span>
             )}
@@ -446,163 +416,148 @@ export default function MarketplaceManagement() {
 
           {/* Product Grid */}
           <div className={cn(
-            "grid gap-6",
-            viewMode === 'grid' ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"
+            "grid gap-4",
+            viewMode === 'grid' ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1"
           )}>
             <AnimatePresence mode="popLayout">
               {filteredLots.map((lot, index) => (
-                <motion.div 
+                <motion.div
                   layout
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ delay: index * 0.05 }}
-                  key={lot.id} 
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ delay: index * 0.04 }}
+                  key={lot.id}
                   className={cn(
-                    "group bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-emerald-500/5 transition-all overflow-hidden flex",
-                    viewMode === 'grid' ? "flex-col" : "flex-row h-64"
+                    "group bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-all overflow-hidden flex",
+                    viewMode === 'grid' ? "flex-col" : "flex-row h-44"
                   )}
                 >
                   {/* Image Section */}
                   <div className={cn(
-                    "relative overflow-hidden",
-                    viewMode === 'grid' ? "aspect-[4/3]" : "w-80 shrink-0"
+                    "relative overflow-hidden bg-muted",
+                    viewMode === 'grid' ? "aspect-[4/3]" : "w-48 shrink-0"
                   )}>
-                    <img 
-                      src={lot.imagem} 
+                    <img
+                      src={lot.imagem}
                       alt={lot.nome_produto}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    
+
                     {/* Badges on Image */}
-                    <div className="absolute top-4 left-4 flex flex-col gap-2">
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
                       {lot.destaque === 'PREMIUM' && (
-                        <span className="px-3 py-1 bg-emerald-600 text-white rounded-full text-[10px] font-black uppercase tracking-wider shadow-lg">
+                        <span className="px-2 py-0.5 bg-primary text-primary-foreground rounded-md text-[9px] font-semibold uppercase tracking-wider">
                           Premium
                         </span>
                       )}
                       {lot.urgente && (
-                        <span className="px-3 py-1 bg-rose-600 text-white rounded-full text-[10px] font-black uppercase tracking-wider shadow-lg flex items-center gap-1">
-                          <Zap className="w-3 h-3 fill-white" />
+                        <span className="px-2 py-0.5 bg-destructive text-destructive-foreground rounded-md text-[9px] font-semibold uppercase tracking-wider flex items-center gap-1">
+                          <Zap className="w-2.5 h-2.5 fill-current" />
                           Urgente
                         </span>
                       )}
                     </div>
-                    
-                    <button className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-rose-500 rounded-xl transition-all shadow-lg">
-                      <Heart className="w-4 h-4" />
+
+                    <button className="absolute top-2 right-2 p-1.5 bg-background/70 backdrop-blur-md hover:bg-background text-foreground hover:text-destructive rounded-md transition-all">
+                      <Heart className="w-3.5 h-3.5" />
                     </button>
 
-                    {/* Quick View Button overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0">
-                      <button 
-                        onClick={() => handleViewDetails(lot)}
-                        className="bg-white text-emerald-900 px-6 py-3 rounded-2xl font-black text-sm shadow-2xl flex items-center gap-2 hover:bg-emerald-50 transition-all"
-                      >
-                        Ver Detalhes
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
+                    {/* Quick View overlay */}
+                    <button
+                      onClick={() => handleViewDetails(lot)}
+                      className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-all bg-background text-foreground px-2.5 py-1 rounded-md text-[11px] font-semibold shadow flex items-center gap-1 hover:bg-accent"
+                    >
+                      Ver
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
                   </div>
 
                   {/* Content Section */}
-                  <div className="p-6 flex flex-col flex-1">
-                    <div className="flex justify-between items-start mb-2">
-                      <button 
+                  <div className="p-3 flex flex-col flex-1 gap-2">
+                    <div className="flex justify-between items-start gap-2">
+                      <button
                         onClick={() => handleViewDetails(lot)}
-                        className="text-left"
+                        className="text-left min-w-0"
                       >
-                        <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">{lot.categoria}</p>
-                        <h3 className="text-xl font-black text-gray-900 leading-tight group-hover:text-emerald-700 transition-colors">
+                        <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">{lot.categoria}</p>
+                        <h3 className="text-sm font-semibold text-foreground leading-tight truncate group-hover:text-primary transition-colors">
                           {lot.nome_produto}
                         </h3>
                       </button>
-                      <div className="flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg">
-                        <Star className="w-3 h-3 text-emerald-600 fill-emerald-600" />
-                        <span className="text-xs font-black text-emerald-700">{lot.avaliacao}</span>
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        <Star className="w-3 h-3 text-foreground fill-foreground" />
+                        <span className="text-[11px] font-medium text-foreground">{lot.avaliacao}</span>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
-                      <User className="w-3 h-3" />
-                      <span>{maskData(lot.produtor, user?.role)}</span>
+                    <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                      <User className="w-3 h-3 shrink-0" />
+                      <span className="truncate">{maskData(lot.produtor, user?.role)}</span>
                       <span>•</span>
-                      <span>{lot.vendas} vendas</span>
+                      <span className="shrink-0">{lot.vendas} vendas</span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 mb-6">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center">
-                          <Package className="w-4 h-4 text-gray-400" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-gray-400 uppercase">Estoque</p>
-                          <p className="text-xs font-black text-gray-900">{lot.quantidade} {lot.unidade}</p>
-                        </div>
+                    <div className="flex items-center justify-between gap-2 text-[11px] text-muted-foreground border-t border-b border-border py-1.5">
+                      <div className="flex items-center gap-1 min-w-0">
+                        <Package className="w-3 h-3 shrink-0" />
+                        <span className="truncate">{lot.quantidade} {lot.unidade}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center">
-                          <MapPin className="w-4 h-4 text-gray-400" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-gray-400 uppercase">Local</p>
-                          <p className="text-xs font-black text-gray-900 truncate max-w-[80px]">{lot.local_retirada.split(',')[0]}</p>
-                        </div>
+                      <div className="flex items-center gap-1 min-w-0">
+                        <MapPin className="w-3 h-3 shrink-0" />
+                        <span className="truncate">{lot.local_retirada.split(',')[0]}</span>
                       </div>
                     </div>
 
-                    <div className="mt-auto pt-6 border-t border-gray-50 flex flex-col gap-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-[10px] font-bold text-gray-400 uppercase mb-0.5">Preço por {lot.unidade}</p>
-                          <p className="text-2xl font-black text-emerald-600">
-                            {lot.preco_unitario.toLocaleString()} <span className="text-xs font-bold">Kz</span>
-                          </p>
-                        </div>
-                        
-                        {lot.status === 'DISPONIVEL' && (
-                          <div className="flex items-center bg-gray-50 rounded-xl border border-gray-100 p-1">
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleUpdateCardQuantity(lot.id, -1);
-                              }}
-                              className="p-1 hover:bg-white rounded-lg transition-all text-gray-400 hover:text-emerald-600"
-                            >
-                              <Minus className="w-3 h-3" />
-                            </button>
-                            <span className="w-8 text-center font-black text-xs text-gray-900">
-                              {cardQuantities[lot.id] || 1}
-                            </span>
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleUpdateCardQuantity(lot.id, 1);
-                              }}
-                              className="p-1 hover:bg-white rounded-lg transition-all text-gray-400 hover:text-emerald-600"
-                            >
-                              <Plus className="w-3 h-3" />
-                            </button>
-                          </div>
-                        )}
+                    <div className="mt-auto flex items-end justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] font-medium text-muted-foreground uppercase">Por {lot.unidade}</p>
+                        <p className="text-lg font-semibold text-foreground leading-tight">
+                          {lot.preco_unitario.toLocaleString()} <span className="text-[10px] text-muted-foreground">Kz</span>
+                        </p>
                       </div>
 
-                      <button 
-                        onClick={() => handleAddToCart(lot, cardQuantities[lot.id] || 1)}
-                        disabled={lot.status !== 'DISPONIVEL'}
-                        className={cn(
-                          "w-full py-4 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2",
-                          lot.status === 'DISPONIVEL' 
-                            ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20" 
-                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        )}
-                      >
-                        <ShoppingCart className="w-4 h-4" />
-                        {lot.status === 'DISPONIVEL' ? 'Adicionar ao Carrinho' : 'Reservado'}
-                      </button>
+                      {lot.status === 'DISPONIVEL' && (
+                        <div className="flex items-center bg-muted rounded-md border border-border h-7">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleUpdateCardQuantity(lot.id, -1);
+                            }}
+                            className="px-1.5 h-full hover:bg-accent rounded-l-md text-muted-foreground hover:text-foreground"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="w-6 text-center text-[11px] font-medium text-foreground">
+                            {cardQuantities[lot.id] || 1}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleUpdateCardQuantity(lot.id, 1);
+                            }}
+                            className="px-1.5 h-full hover:bg-accent rounded-r-md text-muted-foreground hover:text-foreground"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
                     </div>
+
+                    <button
+                      onClick={() => handleAddToCart(lot, cardQuantities[lot.id] || 1)}
+                      disabled={lot.status !== 'DISPONIVEL'}
+                      className={cn(
+                        "w-full h-8 rounded-md text-xs font-medium transition-all flex items-center justify-center gap-1.5",
+                        lot.status === 'DISPONIVEL'
+                          ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                          : "bg-muted text-muted-foreground cursor-not-allowed"
+                      )}
+                    >
+                      <ShoppingCart className="w-3.5 h-3.5" />
+                      {lot.status === 'DISPONIVEL' ? 'Adicionar' : 'Reservado'}
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -611,25 +566,25 @@ export default function MarketplaceManagement() {
 
           {/* Empty State */}
           {filteredLots.length === 0 && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="p-20 text-center bg-white rounded-[3rem] border border-gray-100 border-dashed"
+              className="p-20 text-center bg-card rounded-[3rem] border border-border border-dashed"
             >
-              <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <ShoppingBag className="w-12 h-12 text-emerald-200" />
+              <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <ShoppingBag className="w-12 h-12 text-muted-foreground" />
               </div>
-              <h3 className="text-2xl font-black text-gray-900 mb-2">Nenhum produto encontrado</h3>
-              <p className="text-gray-500 max-w-xs mx-auto mb-8">
+              <h3 className="text-2xl font-semibold text-foreground mb-2">Nenhum produto encontrado</h3>
+              <p className="text-muted-foreground max-w-xs mx-auto mb-8">
                 Não encontramos resultados para os filtros selecionados. Tente mudar a categoria ou termo de pesquisa.
               </p>
-              <button 
+              <button
                 onClick={() => {
                   setSearchTerm('');
                   setSelectedCategory('Todos');
                   setFilters({ qualidade: 'Todos', status: 'Todos', precoRange: 'Todos' });
                 }}
-                className="text-emerald-600 font-black text-sm hover:underline"
+                className="text-primary font-semibold text-sm hover:underline"
               >
                 Limpar todos os filtros
               </button>
@@ -639,16 +594,16 @@ export default function MarketplaceManagement() {
           {/* Pagination Placeholder */}
           {filteredLots.length > 0 && (
             <div className="flex justify-center pt-8">
-              <div className="flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-50">
+              <div className="flex items-center gap-2 bg-card p-2 rounded-lg border border-border shadow-sm">
+                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-muted-foreground hover:bg-accent">
                   <ChevronRight className="w-5 h-5 rotate-180" />
                 </button>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-sm">1</button>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-50 font-bold text-sm">2</button>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-50 font-bold text-sm">3</button>
-                <div className="px-2 text-gray-300">...</div>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-50 font-bold text-sm">12</button>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-50">
+                <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-primary-foreground font-semibold text-sm">1</button>
+                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-muted-foreground hover:bg-accent font-semibold text-sm">2</button>
+                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-muted-foreground hover:bg-accent font-semibold text-sm">3</button>
+                <div className="px-2 text-muted-foreground">...</div>
+                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-muted-foreground hover:bg-accent font-semibold text-sm">12</button>
+                <button className="w-10 h-10 flex items-center justify-center rounded-xl text-muted-foreground hover:bg-accent">
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
@@ -687,11 +642,11 @@ export default function MarketplaceManagement() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           onClick={() => setIsCartOpen(true)}
-          className="fixed bottom-8 right-8 z-40 bg-emerald-600 text-white p-5 rounded-full shadow-2xl shadow-emerald-600/40 hover:bg-emerald-700 transition-all group"
+          className="fixed bottom-8 right-8 z-40 bg-primary text-primary-foreground p-5 rounded-full shadow-lg hover:bg-primary/90 transition-all group"
         >
           <div className="relative">
             <ShoppingCart className="w-8 h-8" />
-            <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-emerald-600 group-hover:scale-110 transition-transform">
+            <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-[10px] font-semibold w-6 h-6 rounded-full flex items-center justify-center border-2 border-primary group-hover:scale-110 transition-transform">
               {cart.reduce((acc, item) => acc + item.quantidade, 0)}
             </span>
           </div>

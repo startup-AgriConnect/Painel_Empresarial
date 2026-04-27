@@ -291,9 +291,9 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
   };
 
   const createCustomIcon = (status: string, isSelected: boolean = false) => {
-    const colorClass = status === 'EM_TRANSITO' ? "bg-emerald-600" :
-                      status === 'ENTREGUE' ? "bg-emerald-900" : 
-                      status === 'COM_PROBLEMA' ? "bg-rose-600" : "bg-emerald-500";
+    const colorClass = status === 'EM_TRANSITO' ? "bg-info" :
+                      status === 'ENTREGUE' ? "bg-success" :
+                      status === 'COM_PROBLEMA' ? "bg-destructive" : "bg-warning";
     
     const iconSvg = status === 'EM_TRANSITO' 
       ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>`
@@ -307,28 +307,28 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
       className: 'custom-div-icon',
       html: `
         <div class="relative group">
-          ${status === 'EM_TRANSITO' ? '<div class="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-20"></div>' : ''}
-          ${status === 'COM_PROBLEMA' ? '<div class="absolute inset-0 rounded-full bg-rose-400 animate-ping opacity-40"></div>' : ''}
-          <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-xl border-2 ${isSelected ? 'border-emerald-400 scale-125' : 'border-white'} text-white ${colorClass} transition-all duration-300 hover:scale-110" style="z-index: ${isSelected ? 1000 : 1};">
+          ${status === 'EM_TRANSITO' ? '<div class="absolute inset-0 rounded-full bg-info animate-ping opacity-30"></div>' : ''}
+          ${status === 'COM_PROBLEMA' ? '<div class="absolute inset-0 rounded-full bg-destructive animate-ping opacity-40"></div>' : ''}
+          <div class="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 ${isSelected ? 'border-foreground scale-125' : 'border-background'} text-white ${colorClass} transition-all duration-300 hover:scale-110" style="z-index: ${isSelected ? 1000 : 1};">
             ${iconSvg}
           </div>
         </div>
       `,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
     });
   };
 
   const createLocationIcon = (type: 'origem' | 'destino') => {
-    const color = type === 'origem' ? '#10b981' : '#064e3b';
+    const color = type === 'origem' ? '#525252' : '#171717';
     return L.divIcon({
       className: 'location-icon',
       html: `
         <div class="flex flex-col items-center">
-          <div class="px-2 py-1 bg-white rounded-lg shadow-lg border border-gray-100 text-[10px] font-black uppercase tracking-tighter mb-1">
+          <div class="px-2 py-1 bg-card rounded-lg shadow-lg border border-border text-[10px] font-black uppercase tracking-tighter mb-1">
             ${type}
           </div>
-          <div class="w-4 h-4 rounded-full border-2 border-white shadow-lg" style="background-color: ${color}"></div>
+          <div class="w-4 h-4 rounded-full border-2 border-background shadow-lg" style="background-color: ${color}"></div>
         </div>
       `,
       iconSize: [60, 40],
@@ -341,14 +341,14 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
       className: 'hub-icon',
       html: `
         <div class="relative group">
-          <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-xl border-2 border-white text-white bg-emerald-900 transition-all duration-300 hover:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-4 9 4v13"/><path d="M13 21V13h8"/><path d="M13 13V9l8 4v8"/><path d="M8 21v-7"/><path d="M3 13h5"/></svg>
+          <div class="w-9 h-9 rounded-md flex items-center justify-center shadow-lg border-2 border-background text-primary-foreground bg-foreground transition-all duration-300 hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-4 9 4v13"/><path d="M13 21V13h8"/><path d="M13 13V9l8 4v8"/><path d="M8 21v-7"/><path d="M3 13h5"/></svg>
           </div>
-          <div class="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${status === 'SATURADO' ? 'bg-rose-500' : 'bg-emerald-400'}"></div>
+          <div class="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${status === 'SATURADO' ? 'bg-destructive' : 'bg-success'}"></div>
         </div>
       `,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
     });
   }, []);
 
@@ -375,11 +375,11 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
       >
         <Popup>
           <div className="p-2">
-            <p className="font-black text-sm text-gray-900">{hub.name}</p>
-            <p className="text-xs text-gray-500">{hub.location}</p>
+            <p className="font-black text-sm text-foreground">{hub.name}</p>
+            <p className="text-xs text-muted-foreground">{hub.location}</p>
             <div className={cn(
               "mt-2 px-2 py-0.5 rounded-full text-[10px] font-black uppercase inline-block",
-              hub.status === 'SATURADO' ? "bg-rose-100 text-rose-700" : "bg-emerald-100 text-emerald-700"
+              hub.status === 'SATURADO' ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"
             )}>
               {hub.status}
             </div>
@@ -390,148 +390,147 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
   ), [createHubIcon]);
 
   return (
-    <div className="h-[calc(100vh-12rem)] flex flex-col space-y-4">
-      <header className="flex justify-between items-center">
+    <div className="flex flex-col gap-4">
+      <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Monitorização em Tempo Real</h2>
-          <p className="text-gray-500">Rastreamento GPS e status de todos os fretes ativos.</p>
+          <h2 className="text-2xl font-semibold text-foreground">Monitorização em Tempo Real</h2>
+          <p className="text-sm text-muted-foreground">Rastreamento GPS e status de todos os fretes ativos.</p>
         </div>
-        <div className="flex gap-2">
-          <div className="bg-white p-1 rounded-xl border border-gray-200 shadow-sm flex">
-            <Button className="h-9 rounded-lg bg-emerald-50 px-4 text-xs font-bold text-emerald-700 hover:bg-emerald-100" variant="ghost">
-             
-              Ao Vivo
-            </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => setSimulateRouteFailure((prev) => !prev)}
+            variant={simulateRouteFailure ? 'destructive' : 'outline'}
+            size="sm"
+          >
+            {simulateRouteFailure ? 'Erro simulado: ligado' : 'Simular erro'}
+          </Button>
+          <div className="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-border bg-card text-xs font-medium">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex size-full rounded-full bg-success opacity-75 animate-ping" />
+              <span className="relative inline-flex size-2 rounded-full bg-success" />
+            </span>
+            Ao Vivo
           </div>
         </div>
       </header>
 
-      <div className="flex-1 flex gap-4 relative overflow-hidden rounded-3xl border border-gray-100 shadow-sm bg-white">
+      <div className="-mx-6 lg:-mx-8 -mb-6 lg:-mb-8 h-[calc(100vh-11rem)] flex relative overflow-hidden border-t border-border bg-card">
         {/* Sidebar de Fretes */}
-        <motion.aside 
+        <motion.aside
           initial={false}
-          animate={{ width: isSidebarOpen ? '350px' : '0px', opacity: isSidebarOpen ? 1 : 0 }}
-          className="h-full border-r border-gray-100 flex flex-col bg-white z-10 overflow-hidden"
+          animate={{ width: isSidebarOpen ? '320px' : '0px', opacity: isSidebarOpen ? 1 : 0 }}
+          className="h-full border-r border-border flex flex-col bg-card z-10 overflow-hidden"
         >
-          <div className="p-4 border-b border-gray-50 space-y-4">
+          <div className="p-3 border-b border-border space-y-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Pesquisar frete ou motorista..." 
-                className="border-none bg-gray-50 pl-10 pr-4 text-sm shadow-none focus-visible:ring-2 focus-visible:ring-emerald-500/20"
+                placeholder="Pesquisar frete ou motorista..."
+                className="pl-9"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                onClick={() => setFilterStatus('TODOS')}
-                className={cn(
-                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
-                  filterStatus === 'TODOS' ? "bg-emerald-600 text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-                )}
-                variant="ghost"
-              >
-                Todos: {freights.length}
-              </Button>
-              <Button
-                onClick={() => setFilterStatus('EM_TRANSITO')}
-                className={cn(
-                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
-                  filterStatus === 'EM_TRANSITO' ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
-                )}
-                variant="ghost"
-              >
-                Em Trânsito: {freights.filter(f => f.status === 'EM_TRANSITO').length}
-              </Button>
-              <Button
-                onClick={() => setFilterStatus('PENDENTE')}
-                className={cn(
-                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
-                  filterStatus === 'PENDENTE' ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
-                )}
-                variant="ghost"
-              >
-                Pendentes: {freights.filter(f => f.status === 'PENDENTE').length}
-              </Button>
-              <Button
-                onClick={() => setFilterStatus('COM_PROBLEMA')}
-                className={cn(
-                  "h-auto rounded-lg px-2 py-1 text-[10px] font-bold uppercase transition-colors",
-                  filterStatus === 'COM_PROBLEMA' ? "bg-rose-600 text-white" : "bg-rose-50 text-rose-600 hover:bg-rose-100"
-                )}
-                variant="ghost"
-              >
-                Com Problemas: {freights.filter(f => f.status === 'COM_PROBLEMA').length}
-              </Button>
+            <div className="grid grid-cols-2 gap-1">
+              {[
+                { id: 'TODOS', label: 'Todos', count: freights.length },
+                { id: 'EM_TRANSITO', label: 'Em Trânsito', count: freights.filter(f => f.status === 'EM_TRANSITO').length },
+                { id: 'PENDENTE', label: 'Pendentes', count: freights.filter(f => f.status === 'PENDENTE').length },
+                { id: 'COM_PROBLEMA', label: 'Problemas', count: freights.filter(f => f.status === 'COM_PROBLEMA').length, destructive: true },
+              ].map((f) => {
+                const active = filterStatus === f.id;
+                return (
+                  <Button
+                    key={f.id}
+                    onClick={() => setFilterStatus(f.id)}
+                    variant="ghost"
+                    className={cn(
+                      "h-7 justify-between rounded-md px-2 text-[11px] font-medium transition-colors",
+                      active
+                        ? (f.destructive ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : "bg-primary text-primary-foreground hover:bg-primary/90")
+                        : (f.destructive ? "text-destructive hover:bg-destructive/10" : "text-muted-foreground hover:bg-accent hover:text-foreground")
+                    )}
+                  >
+                    <span className="truncate">{f.label}</span>
+                    <span className={cn(
+                      "ml-1.5 shrink-0 rounded px-1 text-[10px] font-semibold tabular-nums",
+                      active ? "bg-background/20" : "bg-muted"
+                    )}>
+                      {f.count}
+                    </span>
+                  </Button>
+                );
+              })}
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-2">
-            {filteredFreights.map((freight) => (
-              <Button
-                key={freight.id}
-                onClick={() => handleSelectFreight(freight)}
-                className={cn(
-                  "h-auto w-full rounded-2xl border-2 p-4 text-left transition-all",
-                  selectedFreight?.id === freight.id 
-                    ? "bg-emerald-50 border-emerald-200 shadow-sm" 
-                    : "bg-white border-transparent hover:bg-gray-50"
-                )}
-                variant="ghost"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className={cn(
-                      "p-2 rounded-lg",
-                      freight.status === 'EM_TRANSITO' ? "bg-emerald-100 text-emerald-600" :
-                      freight.status === 'ENTREGUE' ? "bg-emerald-900 text-white" : 
-                      freight.status === 'COM_PROBLEMA' ? "bg-rose-100 text-rose-600" : "bg-emerald-50 text-emerald-600"
-                    )}>
-                      {freight.status === 'COM_PROBLEMA' ? <AlertCircle className="w-4 h-4" /> : <Truck className="w-4 h-4" />}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">{freight.codigo}</p>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase">{freight.produto}</p>
-                    </div>
-                  </div>
-                  <span className={cn(
-                    "text-[10px] font-black uppercase px-2 py-0.5 rounded-full",
-                    freight.status === 'EM_TRANSITO' ? "text-emerald-600" :
-                    freight.status === 'ENTREGUE' ? "text-emerald-900" : 
-                    freight.status === 'COM_PROBLEMA' ? "text-rose-600" : "text-emerald-500"
-                  )}>
-                    {freight.status.replace('_', ' ')}
-                  </span>
-                </div>
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-2 text-[11px] text-gray-600">
-                    <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="truncate">{freight.origem} → {freight.destino}</span>
-                  </div>
-                  {freight.status === 'EM_TRANSITO' && (
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-[9px] font-bold text-gray-400 uppercase">
-                        <span>Progresso</span>
-                        <span>{freight.percentual}%</span>
-                      </div>
-                      <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-emerald-500 rounded-full"
-                          style={{ width: `${freight.percentual}%` }}
-                        />
-                      </div>
-                    </div>
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-2 space-y-1">
+            {filteredFreights.map((freight) => {
+              const statusColor =
+                freight.status === 'ENTREGUE' ? 'bg-success' :
+                freight.status === 'COM_PROBLEMA' ? 'bg-destructive' :
+                freight.status === 'EM_TRANSITO' ? 'bg-info' : 'bg-warning';
+              const statusText =
+                freight.status === 'EM_TRANSITO' ? 'Em Trânsito' :
+                freight.status === 'ENTREGUE' ? 'Entregue' :
+                freight.status === 'COM_PROBLEMA' ? 'Problema' : 'Pendente';
+              return (
+                <button
+                  key={freight.id}
+                  onClick={() => handleSelectFreight(freight)}
+                  className={cn(
+                    "relative w-full rounded-md border p-2.5 text-left transition-all",
+                    selectedFreight?.id === freight.id
+                      ? "bg-accent border-foreground/20"
+                      : "bg-card border-transparent hover:bg-accent/50 hover:border-border"
                   )}
-                </div>
-              </Button>
-            ))}
+                >
+                  <span className={cn("absolute left-0 top-2 bottom-2 w-0.5 rounded-r", statusColor)} />
+                  <div className="pl-2">
+                    <div className="flex items-center justify-between gap-2 min-w-0">
+                      <div className="flex items-center gap-2 min-w-0">
+                        {freight.status === 'COM_PROBLEMA' ? (
+                          <AlertCircle className="w-3.5 h-3.5 shrink-0 text-destructive" />
+                        ) : (
+                          <Truck className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
+                        )}
+                        <span className="text-xs font-semibold text-foreground">{freight.codigo}</span>
+                        <span className="text-[10px] text-muted-foreground truncate">· {freight.produto}</span>
+                      </div>
+                      <span className={cn(
+                        "text-[9px] font-semibold uppercase tracking-wider shrink-0",
+                        freight.status === 'ENTREGUE' ? "text-success" :
+                        freight.status === 'COM_PROBLEMA' ? "text-destructive" :
+                        freight.status === 'EM_TRANSITO' ? "text-info" : "text-warning"
+                      )}>
+                        {statusText}
+                      </span>
+                    </div>
+                    <div className="mt-1 flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      <span className="truncate">{freight.origem} → {freight.destino}</span>
+                    </div>
+                    {freight.status === 'EM_TRANSITO' && (
+                      <div className="mt-1.5 flex items-center gap-2">
+                        <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-foreground rounded-full transition-all"
+                            style={{ width: `${freight.percentual}%` }}
+                          />
+                        </div>
+                        <span className="text-[10px] font-medium text-muted-foreground tabular-nums">{freight.percentual}%</span>
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </motion.aside>
 
         {/* Mapa */}
-        <div className="flex-1 relative bg-gray-100 min-h-[400px]">
+        <div className="flex-1 relative bg-muted min-h-[400px]">
           <MapContainer 
             center={mapCenter} 
             zoom={mapZoom} 
@@ -556,9 +555,9 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
                     [selectedFreight.latitude, selectedFreight.longitude],
                     selectedFreight.destino_coords
                   ]}
-                  pathOptions={{ 
-                    color: '#10b981', 
-                    weight: 4, 
+                  pathOptions={{
+                    color: '#171717',
+                    weight: 4,
                     dashArray: isLoadingRoute ? '10, 10' : undefined,
                     opacity: 0.8
                   }}
@@ -572,24 +571,11 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
           {/* Botão de Toggle Sidebar */}
           <Button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="absolute left-4 top-4 z-20 rounded-xl border border-gray-100 bg-white shadow-lg hover:bg-gray-50"
+            className="absolute left-3 top-3 z-20 size-8 rounded-md border border-border bg-card shadow hover:bg-accent"
             size="icon"
             variant="outline"
           >
-            {isSidebarOpen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
-          </Button>
-
-          <Button
-            onClick={() => setSimulateRouteFailure((prev) => !prev)}
-            className={cn(
-              'absolute left-20 top-4 z-20 rounded-xl border px-3 py-2 text-xs font-bold shadow-lg transition-colors',
-              simulateRouteFailure
-                ? 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100'
-                : 'border-gray-100 bg-white text-gray-700 hover:bg-gray-50'
-            )}
-            variant="outline"
-          >
-            {simulateRouteFailure ? 'Erro simulado: ligado' : 'Simular erro de fetch'}
+            {isSidebarOpen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </Button>
 
           {routeWarning && (
@@ -610,15 +596,15 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute right-4 bottom-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-20"
+                className="absolute right-4 bottom-4 w-80 bg-card rounded-lg shadow-lg border border-border overflow-hidden z-20"
               >
                 <div className={cn(
-                  "p-4 text-white flex justify-between items-center",
-                  selectedFreight.status === 'COM_PROBLEMA' ? "bg-rose-900" : "bg-emerald-900"
+                  "p-4 text-primary-foreground flex justify-between items-center",
+                  selectedFreight.status === 'COM_PROBLEMA' ? "bg-destructive" : "bg-primary"
                 )}>
                   <div className="flex items-center gap-2">
-                    {selectedFreight.status === 'COM_PROBLEMA' ? <AlertCircle className="w-5 h-5 text-rose-400" /> : <Truck className="w-5 h-5 text-emerald-400" />}
-                    <h3 className="font-bold">{selectedFreight.codigo}</h3>
+                    {selectedFreight.status === 'COM_PROBLEMA' ? <AlertCircle className="w-5 h-5 text-primary-foreground" /> : <Truck className="w-5 h-5 text-primary-foreground" />}
+                    <h3 className="font-semibold">{selectedFreight.codigo}</h3>
                   </div>
                   <Button onClick={() => { setSelectedFreight(null); onClearSelection?.(); }} className="h-7 w-7 rounded-lg p-0 hover:bg-white/10" size="icon" variant="ghost">
                     <XCircle className="w-5 h-5" />
@@ -627,66 +613,66 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
                 <div className="p-4 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <p className="text-[10px] font-bold text-gray-400 uppercase">Motorista</p>
-                      <p className="text-xs font-bold text-gray-900">{maskData(selectedFreight.motorista, user?.role)}</p>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase">Motorista</p>
+                      <p className="text-xs font-semibold text-foreground">{maskData(selectedFreight.motorista, user?.role)}</p>
                     </div>
                     <div className="space-y-1 text-right">
-                      <p className="text-[10px] font-bold text-gray-400 uppercase">Velocidade</p>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase">Velocidade</p>
                       <p className={cn(
-                        "text-xs font-bold",
-                        selectedFreight.status === 'COM_PROBLEMA' ? "text-rose-600" : "text-emerald-600"
+                        "text-xs font-semibold",
+                        selectedFreight.status === 'COM_PROBLEMA' ? "text-destructive" : "text-primary"
                       )}>{selectedFreight.velocidade}</p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-[10px] font-bold text-gray-400 uppercase">Veículo</p>
-                      <p className="text-xs font-bold text-gray-900">{maskData(selectedFreight.veiculo, user?.role)}</p>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase">Veículo</p>
+                      <p className="text-xs font-semibold text-foreground">{maskData(selectedFreight.veiculo, user?.role)}</p>
                     </div>
                     <div className="space-y-1 text-right">
-                      <p className="text-[10px] font-bold text-gray-400 uppercase">Atualização</p>
-                      <p className="text-xs font-bold text-gray-500">{selectedFreight.ultima_atualizacao}</p>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase">Atualização</p>
+                      <p className="text-xs font-semibold text-muted-foreground">{selectedFreight.ultima_atualizacao}</p>
                     </div>
                   </div>
 
-                  <div className="p-3 bg-gray-50 rounded-xl space-y-2">
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
-                      <Navigation className="w-4 h-4 text-emerald-500" />
-                      <span className="font-bold">Rota: {selectedFreight.origem} → {selectedFreight.destino}</span>
+                  <div className="p-3 bg-muted/50 rounded-lg space-y-2">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Navigation className="w-4 h-4 text-primary" />
+                      <span className="font-semibold">Rota: {selectedFreight.origem} → {selectedFreight.destino}</span>
                     </div>
 
-                    <div className="mt-3 space-y-3 pl-2 border-l-2 border-emerald-100 ml-2">
+                    <div className="mt-3 space-y-3 pl-2 border-l-2 border-border ml-2">
                       {selectedFreight.checkpoints?.map((cp: any, idx: number) => (
                         <div key={idx} className="relative flex items-center gap-3">
                           <div className={cn(
                             "absolute -left-[13px] w-2 h-2 rounded-full",
-                            cp.status === 'COMPLETO' ? "bg-emerald-500" :
-                            cp.status === 'EM_CURSO' ? "bg-amber-500 animate-pulse" : 
-                            cp.status === 'ALERTA' ? "bg-rose-500 animate-pulse" : "bg-gray-300"
+                            cp.status === 'COMPLETO' ? "bg-success" :
+                            cp.status === 'EM_CURSO' ? "bg-warning animate-pulse" :
+                            cp.status === 'ALERTA' ? "bg-destructive animate-pulse" : "bg-muted-foreground"
                           )} />
                           <div className="flex-1 flex justify-between items-center">
                             <span className={cn(
                               "text-[10px] font-medium",
-                              cp.status === 'PENDENTE' ? "text-gray-400" : "text-gray-700"
+                              cp.status === 'PENDENTE' ? "text-muted-foreground" : "text-foreground"
                             )}>
                               {cp.local}
                             </span>
-                            <span className="text-[10px] font-bold text-gray-500">{cp.hora}</span>
+                            <span className="text-[10px] font-semibold text-muted-foreground">{cp.hora}</span>
                           </div>
                         </div>
                       ))}
                     </div>
 
-                    <div className="flex items-center gap-2 text-xs text-gray-600 pt-2 border-t border-gray-100">
-                      <Info className="w-4 h-4 text-amber-500" />
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border">
+                      <Info className="w-4 h-4 text-warning" />
                       <span>Carga: {selectedFreight.quantidade} Ton de {selectedFreight.produto}</span>
                     </div>
                   </div>
 
                   <div className="flex gap-2">
-                    <Button className="flex-1 rounded-xl py-2 text-xs font-bold">
+                    <Button className="flex-1 rounded-lg py-2 text-xs font-semibold">
                       Contactar Motorista
                     </Button>
-                    <Button className="rounded-xl px-3 py-2" variant="outline">
-                      <MoreVertical className="w-4 h-4 text-gray-400" />
+                    <Button className="rounded-lg px-3 py-2" variant="outline">
+                      <MoreVertical className="w-4 h-4 text-muted-foreground" />
                     </Button>
                   </div>
                 </div>
@@ -695,27 +681,29 @@ export default function MonitoringManagement({ initialSelectedId, onClearSelecti
           </AnimatePresence>
 
           {/* Legenda do Mapa */}
-          <div className="absolute left-4 bottom-4 bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-gray-100 z-10 space-y-2">
-            <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Legenda</p>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-600">
-              <div className="w-3 h-3 bg-emerald-600 rounded-full" />
-              <span>Em Trânsito</span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-600">
-              <div className="w-3 h-3 bg-emerald-400 rounded-full" />
-              <span>Pendente</span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-600">
-              <div className="w-3 h-3 bg-emerald-900 rounded-full" />
-              <span>Entregue</span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-600">
-              <div className="w-3 h-3 bg-rose-600 rounded-full" />
-              <span>Com Problema</span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-600 pt-1 border-t border-gray-100">
-              <div className="w-3 h-3 bg-emerald-900 rounded-sm" />
-              <span>Hub Logístico</span>
+          <div className="absolute left-3 bottom-3 bg-card/95 backdrop-blur-sm p-2.5 rounded-md shadow-md border border-border z-10">
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Legenda</p>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-[11px] text-foreground">
+                <div className="w-2.5 h-2.5 bg-info rounded-full" />
+                <span>Em Trânsito</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-foreground">
+                <div className="w-2.5 h-2.5 bg-warning rounded-full" />
+                <span>Pendente</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-foreground">
+                <div className="w-2.5 h-2.5 bg-success rounded-full" />
+                <span>Entregue</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-foreground">
+                <div className="w-2.5 h-2.5 bg-destructive rounded-full" />
+                <span>Com Problema</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-foreground pt-1 mt-1 border-t border-border">
+                <div className="w-2.5 h-2.5 bg-foreground rounded-sm" />
+                <span>Hub Logístico</span>
+              </div>
             </div>
           </div>
         </div>

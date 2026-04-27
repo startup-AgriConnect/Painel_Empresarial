@@ -71,34 +71,59 @@ export default function EditTeamMemberModal({ isOpen, onClose, onSuccess, member
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="company-edit-team-name">Nome Completo</Label>
+              <Label htmlFor="edit-team-name">Nome Completo</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-edit-team-name" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="pl-10" />
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="edit-team-name"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="pl-10"
+                />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company-edit-team-email">Email Corporativo</Label>
+              <Label htmlFor="edit-team-email">Email Corporativo</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-edit-team-email" required type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="pl-10" />
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="edit-team-email"
+                  required
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="pl-10"
+                />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company-edit-team-phone">Telefone</Label>
+              <Label htmlFor="edit-team-phone">Telefone</Label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-edit-team-phone" required type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="pl-10" />
+                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="edit-team-phone"
+                  required
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="pl-10"
+                />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company-edit-team-role">Cargo / Papel</Label>
+              <Label htmlFor="edit-team-role">Cargo / Papel</Label>
               <div className="relative">
-                <Shield className="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Select id="company-edit-team-role" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="pl-10">
+                <Shield className="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Select
+                  id="edit-team-role"
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  className="pl-10"
+                >
                   <option value="VISUALIZADOR">Visualizador</option>
                   <option value="GESTOR">Gestor</option>
                   <option value="AUDITOR">Auditor</option>

@@ -133,41 +133,41 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <div className="p-2 bg-emerald-100 rounded-lg">
-              <Headphones className="w-5 h-5 text-emerald-600" />
+            <div className="p-2 bg-muted rounded-lg">
+              <Headphones className="w-5 h-5 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Centro de Comando & Suporte</h2>
+            <h2 className="text-2xl font-semibold text-foreground tracking-tight">Centro de Comando & Suporte</h2>
           </div>
-          <p className="text-gray-500 text-sm">Gestão de emergências em tempo real e assistência ao utilizador.</p>
+          <p className="text-muted-foreground text-sm">Gestão de emergências em tempo real e assistência ao utilizador.</p>
         </div>
-        
-        <div className="flex bg-gray-100/80 p-1 rounded-xl border border-gray-200 backdrop-blur-sm">
-          <button 
+
+        <div className="flex bg-muted/80 p-1 rounded-lg border border-border backdrop-blur-sm">
+          <button
             onClick={() => { setActiveView('SOS'); setSelectedTicket(null); }}
             className={cn(
               "px-6 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2",
-              activeView === 'SOS' ? "bg-white text-rose-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              activeView === 'SOS' ? "bg-card text-destructive shadow-sm" : "text-muted-foreground hover:text-foreground"
             )}
           >
             <ShieldAlert className={cn("w-4 h-4", activeView === 'SOS' && "animate-pulse")} />
             Emergências (SOS)
             {stats.activeSos > 0 && (
               <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-destructive"></span>
               </span>
             )}
           </button>
-          <button 
+          <button
             onClick={() => setActiveView('TICKETS')}
             className={cn(
               "px-6 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2",
-              activeView === 'TICKETS' ? "bg-white text-emerald-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              activeView === 'TICKETS' ? "bg-card text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
             )}
           >
             <MessageSquare className="w-4 h-4" />
             Tickets de Suporte
-            <span className="bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded text-[10px]">
+            <span className="bg-secondary text-muted-foreground px-1.5 py-0.5 rounded text-[10px]">
               {tickets.length}
             </span>
           </button>
@@ -178,78 +178,77 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col gap-4 overflow-hidden">
           {/* Search and Quick Filters */}
-          <div className="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input 
-                type="text" 
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
                 placeholder={activeView === 'SOS' ? "Filtrar por motorista, ID ou localização..." : "Filtrar por assunto, utilizador ou ID..."}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                className="w-full h-9 pl-9 pr-3 bg-background border border-input rounded-md text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="h-8 w-[1px] bg-gray-100 mx-1" />
-            
-            <div className="flex items-center gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100">
+
+            <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border">
               {activeView === 'SOS' ? (
                 <>
-                  <button 
+                  <button
                     onClick={() => setSosFilter('ALL')}
                     className={cn(
                       "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
-                      sosFilter === 'ALL' ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
+                      sosFilter === 'ALL' ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     Todos
                   </button>
-                  <button 
+                  <button
                     onClick={() => setSosFilter('PENDENTE')}
                     className={cn(
                       "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2",
-                      sosFilter === 'PENDENTE' ? "bg-rose-600 text-white shadow-sm" : "text-gray-400 hover:text-rose-600"
+                      sosFilter === 'PENDENTE' ? "bg-destructive text-destructive-foreground shadow-sm" : "text-muted-foreground hover:text-destructive"
                     )}
                   >
-                    <div className={cn("w-1.5 h-1.5 rounded-full", sosFilter === 'PENDENTE' ? "bg-white" : "bg-rose-500")} />
+                    <div className={cn("w-1.5 h-1.5 rounded-full", sosFilter === 'PENDENTE' ? "bg-destructive-foreground" : "bg-destructive")} />
                     Pendentes
                   </button>
-                  <button 
+                  <button
                     onClick={() => setSosFilter('RESOLVIDO')}
                     className={cn(
                       "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2",
-                      sosFilter === 'RESOLVIDO' ? "bg-emerald-600 text-white shadow-sm" : "text-gray-400 hover:text-emerald-600"
+                      sosFilter === 'RESOLVIDO' ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-primary"
                     )}
                   >
-                    <div className={cn("w-1.5 h-1.5 rounded-full", sosFilter === 'RESOLVIDO' ? "bg-white" : "bg-emerald-500")} />
+                    <div className={cn("w-1.5 h-1.5 rounded-full", sosFilter === 'RESOLVIDO' ? "bg-primary-foreground" : "bg-success")} />
                     Resolvidos
                   </button>
                 </>
               ) : (
                 <>
-                  <button 
+                  <button
                     onClick={() => setTicketFilter('ALL')}
                     className={cn(
                       "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
-                      ticketFilter === 'ALL' ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
+                      ticketFilter === 'ALL' ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     Todos
                   </button>
-                  <button 
+                  <button
                     onClick={() => setTicketFilter('ABERTO')}
                     className={cn(
                       "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2",
-                      ticketFilter === 'ABERTO' ? "bg-emerald-600 text-white shadow-sm" : "text-gray-400 hover:text-emerald-600"
+                      ticketFilter === 'ABERTO' ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-primary"
                     )}
                   >
-                    <div className={cn("w-1.5 h-1.5 rounded-full", ticketFilter === 'ABERTO' ? "bg-white" : "bg-emerald-500")} />
+                    <div className={cn("w-1.5 h-1.5 rounded-full", ticketFilter === 'ABERTO' ? "bg-primary-foreground" : "bg-success")} />
                     Abertos
                   </button>
                 </>
               )}
             </div>
 
-            <button className="p-2 text-gray-400 hover:bg-gray-50 rounded-xl transition-colors">
+            <button className="p-2 text-muted-foreground hover:bg-accent rounded-lg transition-colors">
               <History className="w-5 h-5" />
             </button>
           </div>
@@ -265,16 +264,16 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
               >
                 {filteredSos.length > 0 ? filteredSos.map((sos) => (
                   <div key={sos.id} className={cn(
-                    "bg-white rounded-2xl border-2 overflow-hidden transition-all group relative",
-                    sos.severity === 'CRITICA' ? "border-rose-100 hover:border-rose-200" : "border-amber-100 hover:border-amber-200"
+                    "bg-card rounded-lg border-2 overflow-hidden transition-all group relative",
+                    sos.severity === 'CRITICA' ? "border-destructive/20 hover:border-destructive/30" : "border-warning/20 hover:border-warning/30"
                   )}>
                     {sos.status === 'PENDENTE' && (
-                      <div className="absolute top-0 left-0 w-1 h-full bg-rose-500" />
+                      <div className="absolute top-0 left-0 w-1 h-full bg-destructive" />
                     )}
                     <div className="p-5 flex flex-col lg:flex-row gap-6">
                       <div className={cn(
-                        "w-16 h-16 rounded-2xl shrink-0 flex items-center justify-center shadow-inner",
-                        sos.severity === 'CRITICA' ? "bg-rose-50 text-rose-600" : "bg-amber-50 text-amber-600"
+                        "w-16 h-16 rounded-lg shrink-0 flex items-center justify-center shadow-inner",
+                        sos.severity === 'CRITICA' ? "bg-destructive/10 text-destructive" : "bg-warning/10 text-warning"
                       )}>
                         <ShieldAlert className={cn("w-8 h-8", sos.status === 'PENDENTE' && "animate-pulse")} />
                       </div>
@@ -283,62 +282,62 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
                         <div className="flex flex-wrap justify-between items-start gap-4">
                           <div>
                             <div className="flex items-center gap-3 mb-1">
-                              <h3 className="text-lg font-black text-gray-900 tracking-tight">{maskData(sos.driver, user?.role)}</h3>
+                              <h3 className="text-lg font-black text-foreground tracking-tight">{maskData(sos.driver, user?.role)}</h3>
                               <div className={cn(
                                 "px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-widest",
-                                sos.severity === 'CRITICA' ? "bg-rose-600 text-white" : "bg-amber-500 text-white"
+                                sos.severity === 'CRITICA' ? "bg-destructive text-destructive-foreground" : "bg-warning text-warning-foreground"
                               )}>
                                 {sos.severity}
                               </div>
-                              <span className="text-[10px] font-mono font-bold text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">{sos.id}</span>
+                              <span className="text-[10px] font-mono font-semibold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded border border-border">{sos.id}</span>
                             </div>
-                            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-gray-500">
+                            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-muted-foreground">
                               <div className="flex items-center gap-1.5">
-                                <Phone className="w-3.5 h-3.5 text-gray-400" />
-                                <span className="font-bold text-gray-700">{maskData(sos.phone, user?.role)}</span>
+                                <Phone className="w-3.5 h-3.5 text-muted-foreground" />
+                                <span className="font-semibold text-foreground">{maskData(sos.phone, user?.role)}</span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <Truck className="w-3.5 h-3.5 text-gray-400" />
+                                <Truck className="w-3.5 h-3.5 text-muted-foreground" />
                                 <span className="font-medium">{maskData(sos.vehicle, user?.role)}</span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <Clock className="w-3.5 h-3.5 text-gray-400" />
+                                <Clock className="w-3.5 h-3.5 text-muted-foreground" />
                                 <span className="font-medium">Há {Math.floor((new Date().getTime() - new Date(sos.timestamp).getTime()) / 60000)} min</span>
                               </div>
                             </div>
                           </div>
                           <div className={cn(
                             "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-tighter border-2",
-                            sos.status === 'PENDENTE' ? "bg-rose-50 text-rose-600 border-rose-100" : 
-                            sos.status === 'RESOLVIDO' ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
-                            "bg-blue-50 text-blue-600 border-blue-100"
+                            sos.status === 'PENDENTE' ? "bg-destructive/10 text-destructive border-destructive/20" :
+                            sos.status === 'RESOLVIDO' ? "bg-success/10 text-success border-success/20" :
+                            "bg-info/10 text-info border-info/20"
                           )}>
                             {sos.status.replace('_', ' ')}
                           </div>
                         </div>
 
-                        <div className="p-3 bg-gray-50/50 rounded-xl flex items-start gap-3 border border-gray-100 group-hover:bg-white transition-colors">
-                          <div className="p-1.5 bg-white rounded-lg shadow-sm">
-                            <MapPin className="w-4 h-4 text-rose-500" />
+                        <div className="p-3 bg-muted/50 rounded-lg flex items-start gap-3 border border-border group-hover:bg-card transition-colors">
+                          <div className="p-1.5 bg-card rounded-lg shadow-sm">
+                            <MapPin className="w-4 h-4 text-destructive" />
                           </div>
                           <div>
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Localização do Incidente</p>
-                            <p className="text-xs font-bold text-gray-700 leading-tight">{sos.location}</p>
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">Localização do Incidente</p>
+                            <p className="text-xs font-semibold text-foreground leading-tight">{sos.location}</p>
                           </div>
                         </div>
 
                         <div className="flex flex-wrap gap-2 pt-1">
-                          <button 
+                          <button
                             onClick={() => onLocate?.(sos.driver)}
-                            className="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all flex items-center gap-2"
+                            className="px-4 py-2 bg-card border border-border text-foreground rounded-lg text-xs font-black uppercase tracking-widest hover:bg-accent transition-all flex items-center gap-2"
                           >
-                            <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                            <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
                             Localizar
                           </button>
                           {sos.status !== 'RESOLVIDO' && (
-                            <button 
+                            <button
                               onClick={() => handleResolveSos(sos.id)}
-                              className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center gap-2 ml-auto shadow-lg shadow-emerald-600/20"
+                              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-black uppercase tracking-widest hover:bg-primary/90 transition-all flex items-center gap-2 ml-auto shadow-lg"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               Resolver
@@ -349,76 +348,76 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
                     </div>
                   </div>
                 )) : (
-                  <div className="h-full flex flex-col items-center justify-center text-gray-400 space-y-4 py-20">
-                    <div className="p-6 bg-gray-50 rounded-full">
+                  <div className="h-full flex flex-col items-center justify-center text-muted-foreground space-y-4 py-20">
+                    <div className="p-6 bg-muted/50 rounded-full">
                       <Search className="w-12 h-12 opacity-20" />
                     </div>
-                    <p className="font-bold">Nenhum alerta SOS encontrado.</p>
+                    <p className="font-semibold">Nenhum alerta SOS encontrado.</p>
                   </div>
                 )}
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key="tickets-view"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="flex-1 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
+                className="flex-1 flex flex-col bg-card rounded-lg border border-border shadow-sm overflow-hidden"
               >
                 <div className="flex-1 overflow-auto custom-scrollbar">
                   <table className="w-full text-left border-collapse min-w-[800px]">
                     <thead className="sticky top-0 z-10">
-                      <tr className="bg-gray-50/80 backdrop-blur-md border-b border-gray-100">
-                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Ticket / Assunto</th>
-                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Utilizador</th>
-                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Prioridade</th>
-                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
-                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Ações</th>
+                      <tr className="bg-muted/80 backdrop-blur-md border-b border-border">
+                        <th className="px-6 py-4 text-[10px] font-black text-muted-foreground uppercase tracking-widest">Ticket / Assunto</th>
+                        <th className="px-6 py-4 text-[10px] font-black text-muted-foreground uppercase tracking-widest">Utilizador</th>
+                        <th className="px-6 py-4 text-[10px] font-black text-muted-foreground uppercase tracking-widest text-center">Prioridade</th>
+                        <th className="px-6 py-4 text-[10px] font-black text-muted-foreground uppercase tracking-widest">Status</th>
+                        <th className="px-6 py-4 text-[10px] font-black text-muted-foreground uppercase tracking-widest text-right">Ações</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody className="divide-y divide-border">
                       {filteredTickets.length > 0 ? filteredTickets.map((tkt) => (
-                        <tr 
-                          key={tkt.id} 
+                        <tr
+                          key={tkt.id}
                           onClick={() => setSelectedTicket(tkt)}
                           className={cn(
-                            "hover:bg-emerald-50/30 transition-all cursor-pointer group",
-                            selectedTicket?.id === tkt.id && "bg-emerald-50/50"
+                            "hover:bg-accent/30 transition-all cursor-pointer group",
+                            selectedTicket?.id === tkt.id && "bg-accent/50"
                           )}
                         >
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               <div className={cn(
-                                "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-                                tkt.status === 'ABERTO' ? "bg-emerald-50 text-emerald-600" : "bg-gray-50 text-gray-400"
+                                "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
+                                tkt.status === 'ABERTO' ? "bg-muted/50 text-primary" : "bg-muted/50 text-muted-foreground"
                               )}>
                                 <MessageCircle className="w-5 h-5" />
                               </div>
                               <div className="space-y-0.5">
-                                <p className="text-sm font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">{tkt.subject}</p>
+                                <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{tkt.subject}</p>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-[10px] font-mono font-bold text-gray-400 uppercase">{tkt.id}</span>
-                                  <span className="w-1 h-1 bg-gray-300 rounded-full" />
-                                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{tkt.category}</span>
+                                  <span className="text-[10px] font-mono font-semibold text-muted-foreground uppercase">{tkt.id}</span>
+                                  <span className="w-1 h-1 bg-muted-foreground rounded-full" />
+                                  <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-tighter">{tkt.category}</span>
                                 </div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4">
                               <div className="flex items-center gap-2.5">
-                                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center border border-white shadow-sm overflow-hidden">
-                                  <User className="w-4 h-4 text-gray-500" />
+                                <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center border border-background shadow-sm overflow-hidden">
+                                  <User className="w-4 h-4 text-muted-foreground" />
                                 </div>
-                                <span className="text-xs font-bold text-gray-700">{maskData(tkt.user, user?.role)}</span>
+                                <span className="text-xs font-semibold text-foreground">{maskData(tkt.user, user?.role)}</span>
                               </div>
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex justify-center">
                               <div className={cn(
                                 "px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest border",
-                                tkt.priority === 'ALTA' ? "bg-rose-50 text-rose-600 border-rose-100" : 
-                                tkt.priority === 'MEDIA' ? "bg-amber-50 text-amber-600 border-amber-100" : 
-                                "bg-emerald-50 text-emerald-600 border-emerald-100"
+                                tkt.priority === 'ALTA' ? "bg-destructive/10 text-destructive border-destructive/20" :
+                                tkt.priority === 'MEDIA' ? "bg-warning/10 text-warning border-warning/20" :
+                                "bg-success/10 text-success border-success/20"
                               )}>
                                 {tkt.priority}
                               </div>
@@ -428,15 +427,15 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
                             <div className="flex items-center gap-3">
                               <span className={cn(
                                 "px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter flex items-center gap-1.5",
-                                tkt.status === 'ABERTO' ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-600"
+                                tkt.status === 'ABERTO' ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"
                               )}>
                                 <div className={cn(
                                   "w-1.5 h-1.5 rounded-full",
-                                  tkt.status === 'ABERTO' ? "bg-emerald-500 animate-pulse" : "bg-gray-400"
+                                  tkt.status === 'ABERTO' ? "bg-success animate-pulse" : "bg-muted-foreground"
                                 )} />
                                 {tkt.status.replace('_', ' ')}
                               </span>
-                              <div className="flex items-center gap-1 text-[10px] text-gray-400 font-bold">
+                              <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-semibold">
                                 <Clock className="w-3 h-3" />
                                 {new Date(tkt.lastUpdate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </div>
@@ -445,12 +444,12 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-2">
                               {tkt.messages > 0 && (
-                                <div className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black">
+                                <div className="flex items-center gap-1 px-2 py-1 bg-muted/50 text-primary rounded-lg text-[10px] font-black">
                                   <MessageSquare className="w-3 h-3" />
                                   {tkt.messages}
                                 </div>
                               )}
-                              <button className="p-2 text-gray-400 hover:bg-gray-100 rounded-xl transition-colors">
+                              <button className="p-2 text-muted-foreground hover:bg-muted rounded-lg transition-colors">
                                 <ChevronRight className="w-4 h-4" />
                               </button>
                             </div>
@@ -458,12 +457,12 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
                         </tr>
                       )) : (
                         <tr>
-                          <td colSpan={5} className="py-20 text-center text-gray-400">
+                          <td colSpan={5} className="py-20 text-center text-muted-foreground">
                              <div className="flex flex-col items-center gap-4">
-                               <div className="p-6 bg-gray-50 rounded-full">
+                               <div className="p-6 bg-muted/50 rounded-full">
                                  <MessageSquare className="w-12 h-12 opacity-20" />
                                </div>
-                               <p className="font-bold">Nenhum ticket encontrado.</p>
+                               <p className="font-semibold">Nenhum ticket encontrado.</p>
                              </div>
                           </td>
                         </tr>
@@ -480,78 +479,78 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
         <div className="w-80 flex flex-col gap-4">
           {/* Stats Grid */}
           <div className="grid grid-cols-1 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+            <div className="bg-card p-5 rounded-lg border border-border shadow-sm relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                 <Activity className="w-16 h-16" />
               </div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-3 flex items-center gap-2">
                 <Clock className="w-3 h-3" />
                 Tempo de Resposta
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-gray-900">{stats.avgResponse}</span>
-                <span className="text-[10px] font-bold text-emerald-600 flex items-center">
+                <span className="text-3xl font-black text-foreground">{stats.avgResponse}</span>
+                <span className="text-[10px] font-semibold text-success flex items-center">
                   <ArrowUpRight className="w-3 h-3 rotate-180" />
                   -2m
                 </span>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+            <div className="bg-card p-5 rounded-lg border border-border shadow-sm relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                 <CheckCircle2 className="w-16 h-16" />
               </div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-3 flex items-center gap-2">
                 <Activity className="w-3 h-3" />
                 Taxa de Resolução
               </p>
               <div className="flex items-baseline gap-2 mb-3">
-                <span className="text-3xl font-black text-gray-900">{stats.resolutionRate}</span>
+                <span className="text-3xl font-black text-foreground">{stats.resolutionRate}</span>
               </div>
-              <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                <motion.div 
+              <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: stats.resolutionRate }}
-                  className="h-full bg-emerald-500 rounded-full" 
+                  className="h-full bg-primary rounded-full"
                 />
               </div>
             </div>
           </div>
 
           {/* Contextual Panel */}
-          <div className="flex-1 bg-emerald-900 rounded-3xl p-6 text-white relative overflow-hidden">
-            <div className="absolute top-[-20px] right-[-20px] w-40 h-40 bg-emerald-800 rounded-full blur-3xl opacity-50" />
-            
+          <div className="flex-1 bg-primary rounded-xl p-6 text-primary-foreground relative overflow-hidden">
+            <div className="absolute top-[-20px] right-[-20px] w-40 h-40 bg-primary/80 rounded-full blur-3xl opacity-50" />
+
             <div className="relative z-10 h-full flex flex-col">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-emerald-800 rounded-xl">
-                  <ShieldAlert className="w-6 h-6 text-emerald-400" />
+                <div className="p-2 bg-primary/80 rounded-lg">
+                  <ShieldAlert className="w-6 h-6 text-primary-foreground" />
                 </div>
-                <h3 className="text-lg font-bold">Protocolo SOS</h3>
+                <h3 className="text-lg font-semibold">Protocolo SOS</h3>
               </div>
-              
+
               <div className="space-y-4 flex-1">
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                  <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">Ação Automática</p>
-                  <p className="text-xs text-emerald-100 leading-relaxed">
-                    Alertas <span className="text-white font-bold">CRÍTICOS</span> ativam imediatamente a rede de emergência local e notificam a equipa de intervenção.
+                <div className="p-4 bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm">
+                  <p className="text-xs font-semibold text-primary-foreground uppercase tracking-widest mb-2">Ação Automática</p>
+                  <p className="text-xs text-primary-foreground/80 leading-relaxed">
+                    Alertas <span className="text-primary-foreground font-semibold">CRÍTICOS</span> ativam imediatamente a rede de emergência local e notificam a equipa de intervenção.
                   </p>
                 </div>
 
                 <div className="space-y-3">
-                  <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Contactos Rápidos</p>
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
-                    <span className="text-xs font-bold">Polícia Nacional</span>
-                    <span className="text-xs font-mono text-emerald-400">113</span>
+                  <p className="text-[10px] font-black text-primary-foreground/70 uppercase tracking-widest">Contactos Rápidos</p>
+                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+                    <span className="text-xs font-semibold">Polícia Nacional</span>
+                    <span className="text-xs font-mono text-primary-foreground">113</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
-                    <span className="text-xs font-bold">INEMA (Ambulância)</span>
-                    <span className="text-xs font-mono text-emerald-400">112</span>
+                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+                    <span className="text-xs font-semibold">INEMA (Ambulância)</span>
+                    <span className="text-xs font-mono text-primary-foreground">112</span>
                   </div>
                 </div>
               </div>
 
-              <button className="mt-auto w-full py-3 bg-white text-emerald-900 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-emerald-50 transition-all flex items-center justify-center gap-2">
+              <button className="mt-auto w-full py-3 bg-background text-primary rounded-lg text-xs font-black uppercase tracking-widest hover:bg-accent transition-all flex items-center justify-center gap-2">
                 Ver Manuais de Segurança
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -575,70 +574,70 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="w-full max-w-lg h-full bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+              className="w-full max-w-lg h-full bg-card rounded-xl shadow-lg flex flex-col overflow-hidden"
               onClick={e => e.stopPropagation()}
             >
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+              <div className="p-6 border-b border-border flex justify-between items-center bg-muted/50">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-white rounded-xl shadow-sm">
-                    <MessageSquare className="w-5 h-5 text-emerald-600" />
+                  <div className="p-2 bg-card rounded-lg shadow-sm">
+                    <MessageSquare className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-black text-gray-900 tracking-tight">{selectedTicket.id}</h3>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{selectedTicket.category}</p>
+                    <h3 className="font-black text-foreground tracking-tight">{selectedTicket.id}</h3>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">{selectedTicket.category}</p>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => setSelectedTicket(null)}
-                  className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+                  className="p-2 hover:bg-secondary rounded-full transition-colors"
                 >
-                  <XCircle className="w-6 h-6 text-gray-400" />
+                  <XCircle className="w-6 h-6 text-muted-foreground" />
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
                 <div className="space-y-2">
-                  <h4 className="text-xl font-black text-gray-900 leading-tight">{selectedTicket.subject}</h4>
+                  <h4 className="text-xl font-black text-foreground leading-tight">{selectedTicket.subject}</h4>
                   <div className="flex items-center gap-3">
                     <div className={cn(
                       "px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest",
-                      selectedTicket.priority === 'ALTA' ? "bg-rose-100 text-rose-600" : "bg-emerald-100 text-emerald-600"
+                      selectedTicket.priority === 'ALTA' ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"
                     )}>
                       Prioridade {selectedTicket.priority}
                     </div>
-                    <span className="text-xs text-gray-400 font-medium">Aberto em {new Date(selectedTicket.lastUpdate).toLocaleDateString()}</span>
+                    <span className="text-xs text-muted-foreground font-medium">Aberto em {new Date(selectedTicket.lastUpdate).toLocaleDateString()}</span>
                   </div>
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm border border-gray-100">
-                    <User className="w-6 h-6 text-gray-400" />
+                <div className="p-4 bg-muted/50 rounded-lg border border-border flex items-center gap-4">
+                  <div className="w-12 h-12 bg-card rounded-lg flex items-center justify-center shadow-sm border border-border">
+                    <User className="w-6 h-6 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Utilizador</p>
-                    <p className="text-sm font-bold text-gray-900">{maskData(selectedTicket.user, user?.role)}</p>
+                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Utilizador</p>
+                    <p className="text-sm font-semibold text-foreground">{maskData(selectedTicket.user, user?.role)}</p>
                   </div>
-                  <button className="ml-auto p-2 text-emerald-600 hover:bg-emerald-100 rounded-xl transition-colors">
+                  <button className="ml-auto p-2 text-primary hover:bg-accent rounded-lg transition-colors">
                     <Phone className="w-5 h-5" />
                   </button>
                 </div>
 
                 <div className="space-y-4">
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Histórico de Mensagens</p>
+                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Histórico de Mensagens</p>
                   <div className="space-y-4">
                     <div className="flex gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
-                        <User className="w-4 h-4 text-emerald-600" />
+                      <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                        <User className="w-4 h-4 text-primary" />
                       </div>
-                      <div className="bg-gray-100 p-3 rounded-2xl rounded-tl-none text-sm text-gray-700 max-w-[80%]">
+                      <div className="bg-muted p-3 rounded-lg rounded-tl-none text-sm text-foreground max-w-[80%]">
                         Olá, estou com dificuldades em validar o meu NIF no sistema. Podem ajudar?
                       </div>
                     </div>
                     <div className="flex gap-3 flex-row-reverse">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-900 flex items-center justify-center shrink-0">
-                        <Headphones className="w-4 h-4 text-emerald-400" />
+                      <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
+                        <Headphones className="w-4 h-4 text-primary-foreground" />
                       </div>
-                      <div className="bg-emerald-900 p-3 rounded-2xl rounded-tr-none text-sm text-white max-w-[80%]">
+                      <div className="bg-primary p-3 rounded-lg rounded-tr-none text-sm text-primary-foreground max-w-[80%]">
                         Olá! Com certeza. Por favor, confirme se o NIF inserido tem 9 dígitos e se corresponde ao nome da empresa.
                       </div>
                     </div>
@@ -646,13 +645,13 @@ export default function SupportManagement({ onLocate }: SupportManagementProps) 
                 </div>
               </div>
 
-              <div className="p-6 border-t border-gray-100 bg-white">
+              <div className="p-6 border-t border-border bg-card">
                 <div className="relative">
-                  <textarea 
+                  <textarea
                     placeholder="Escreva a sua resposta..."
-                    className="w-full pl-4 pr-12 py-3 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:ring-2 focus:ring-emerald-500/20 outline-none resize-none min-h-[100px]"
+                    className="w-full pl-4 pr-12 py-3 bg-muted/50 border border-border rounded-lg text-sm focus:ring-2 focus:ring-ring outline-none resize-none min-h-[100px]"
                   />
-                  <button className="absolute right-3 bottom-3 p-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
+                  <button className="absolute right-3 bottom-3 p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-lg">
                     <Send className="w-4 h-4" />
                   </button>
                 </div>

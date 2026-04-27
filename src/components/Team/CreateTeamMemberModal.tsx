@@ -95,34 +95,62 @@ export default function CreateTeamMemberModal({ isOpen, onClose, onSuccess }: Cr
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="company-team-name">Nome Completo</Label>
+              <Label htmlFor="team-name">Nome Completo</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-team-name" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Ex: Manuel dos Santos" className="pl-10" />
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="team-name"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Ex: Manuel dos Santos"
+                  className="pl-10"
+                />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company-team-email">Email Corporativo</Label>
+              <Label htmlFor="team-email">Email Corporativo</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-team-email" required type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="email@agriconnect.ao" className="pl-10" />
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="team-email"
+                  required
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="email@agriconnect.ao"
+                  className="pl-10"
+                />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company-team-phone">Telefone</Label>
+              <Label htmlFor="team-phone">Telefone</Label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-team-phone" required type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="+244 9XX XXX XXX" className="pl-10" />
+                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="team-phone"
+                  required
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="+244 9XX XXX XXX"
+                  className="pl-10"
+                />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company-team-role">Cargo / Papel</Label>
+              <Label htmlFor="team-role">Cargo / Papel</Label>
               <div className="relative">
-                <Shield className="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Select id="company-team-role" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="pl-10">
+                <Shield className="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Select
+                  id="team-role"
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  className="pl-10"
+                >
                   <option value="VISUALIZADOR">Visualizador</option>
                   <option value="GESTOR">Gestor</option>
                   <option value="AUDITOR">Auditor</option>
@@ -132,23 +160,45 @@ export default function CreateTeamMemberModal({ isOpen, onClose, onSuccess }: Cr
             </div>
           </div>
 
-          <div className="grid gap-4 border-t border-gray-100 pt-5 md:grid-cols-2">
+          <div className="grid gap-4 border-t border-border pt-5 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="company-team-password">Senha Temporária</Label>
+              <Label htmlFor="team-password">Senha Temporária</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-team-password" required type={showPassword ? 'text' : 'password'} value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder="••••••••" className="pl-10 pr-10" />
-                <Button type="button" variant="ghost" size="icon" onClick={() => setShowPassword(!showPassword)} className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="team-password"
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="••••••••"
+                  className="pl-10 pr-10"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2"
+                >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company-team-confirm-password">Confirmar Senha</Label>
+              <Label htmlFor="team-confirm-password">Confirmar Senha</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input id="company-team-confirm-password" required type={showPassword ? 'text' : 'password'} value={formData.confirmPassword} onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} placeholder="••••••••" className="pl-10" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="team-confirm-password"
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  placeholder="••••••••"
+                  className="pl-10"
+                />
               </div>
             </div>
           </div>
@@ -156,7 +206,10 @@ export default function CreateTeamMemberModal({ isOpen, onClose, onSuccess }: Cr
           <div className="rounded-2xl border border-sky-100 bg-sky-50 p-4 text-sm text-sky-900">
             <div className="flex gap-3">
               <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-sky-600" />
-              <p>O novo membro receberá um email com as credenciais de acesso. Por defeito, a conta será criada com o estado <strong>ATIVO</strong>.</p>
+              <p>
+                O novo membro receberá um email com as credenciais de acesso. Por defeito, a conta será criada com o
+                estado <strong>ATIVO</strong>.
+              </p>
             </div>
           </div>
 
