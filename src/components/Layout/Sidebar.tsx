@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Truck, 
+import {
+  LayoutDashboard,
+  Users,
+  Truck,
   Settings,
   LogOut,
   Package,
@@ -15,7 +15,7 @@ import {
   Tractor,
   FileText,
   ChevronDown,
-  DollarSign
+  DollarSign,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
@@ -23,6 +23,8 @@ import { useAuth } from '../../context/AuthContext';
 import ConfirmationModal from '../Common/ConfirmationModal';
 import { LOGIN_HASH } from '../../lib/routes';
 import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 interface SidebarProps {
   activeTab: string;
@@ -59,8 +61,39 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
     setIsLogoutModalOpen(false);
   };
 
+  const renderItem = (item: { id: string; label: string; icon: React.ComponentType<{ className?: string }> }) => {
+    const Icon = item.icon;
+    const isActive = activeTab === item.id;
+    const button = (
+      <Button
+        key={item.id}
+        onClick={() => setActiveTab(item.id)}
+        variant="ghost"
+        className={cn(
+          'h-9 w-full justify-start gap-2 px-3 font-medium',
+          isActive
+            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+            : 'text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+          isCollapsed && 'justify-center px-0'
+        )}
+      >
+        <Icon className="size-4 shrink-0" />
+        {!isCollapsed && <span className="truncate">{item.label}</span>}
+      </Button>
+    );
+    if (isCollapsed) {
+      return (
+        <Tooltip key={item.id}>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent side="right">{item.label}</TooltipContent>
+        </Tooltip>
+      );
+    }
+    return button;
+  };
+
   return (
-    <>
+    <TooltipProvider delayDuration={100}>
       <ConfirmationModal
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
@@ -71,203 +104,127 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         cancelText="Continuar no painel"
         variant="warning"
       />
-      <motion.aside 
+      <motion.aside
         initial={false}
-        animate={{ width: isCollapsed ? 80 : 280 }}
+        animate={{ width: isCollapsed ? 72 : 256 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="bg-[#052e16] text-[#f0fdf4] h-screen flex flex-col sticky top-0 z-20 shadow-2xl border-r border-[#166534]/30"
+        className="bg-sidebar text-sidebar-foreground border-sidebar-border sticky top-0 z-20 flex h-screen flex-col border-r"
       >
-      <div className={cn(
-        "p-6 flex items-center relative",
-        isCollapsed ? "justify-center" : "justify-between"
-      )}>
-        <div className={cn("flex items-center gap-3 overflow-hidden transition-all duration-300", isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100")}>
-          <div className="w-10 h-10 bg-[#166534] rounded-xl flex items-center justify-center shrink-0 shadow-lg border border-[#86efac]/20">
-            <img 
-              src="/Assets/Logos/logo_simples_branca.png" 
-              alt="AgriConnect Logo" 
-              className="w-6 h-6 object-contain"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className="min-w-max">
-            <h1 className="text-lg font-bold tracking-tight text-[#f0fdf4]">AgriConnect</h1>
-            <p className="text-[#86efac] text-[10px] font-bold uppercase tracking-widest">
-              {user?.companyName || (user?.role === 'STARTUP' ? 'Startup Panel' : 'Business Intelligence')}
-            </p>
-          </div>
+        <div
+          className={cn(
+            'flex h-16 items-center px-4',
+            isCollapsed ? 'justify-center' : 'justify-between'
+          )}
+        >
+          {!isCollapsed && (
+            <div className="flex items-center gap-2 overflow-hidden">
+              <div className="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-md">
+                <img
+                  src="/Assets/Logos/logo_simples_branca.png"
+                  alt="AgriConnect"
+                  className="size-5 object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold leading-none">AgriConnect</span>
+                <span className="text-muted-foreground mt-1 text-[10px] uppercase tracking-wider">
+                  {user?.companyName || (user?.role === 'STARTUP' ? 'Startup Panel' : 'BI')}
+                </span>
+              </div>
+            </div>
+          )}
+          {isCollapsed && (
+            <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md">
+              <img
+                src="/Assets/Logos/logo_simples_branca.png"
+                alt="AgriConnect"
+                className="size-5 object-contain"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          )}
         </div>
 
-        {isCollapsed && (
-          <div className="w-10 h-10 bg-[#166534] rounded-xl flex items-center justify-center shadow-lg border border-[#86efac]/20">
-            <img 
-              src="/Assets/Logos/logo_simples_branca.png" 
-              alt="AgriConnect Logo" 
-              className="w-6 h-6 object-contain"
-              referrerPolicy="no-referrer"
-            />
+        <Separator className="bg-sidebar-border" />
+
+        <nav className="custom-scrollbar flex-1 overflow-y-auto p-2 space-y-4">
+          <div className="space-y-0.5">
+            {!isCollapsed && (
+              <p className="text-muted-foreground px-3 py-2 text-[10px] font-medium uppercase tracking-wider">
+                Operacional
+              </p>
+            )}
+            {operationalItems.map(renderItem)}
           </div>
-        )}
+
+          <div className="space-y-0.5">
+            {!isCollapsed ? (
+              <button
+                type="button"
+                onClick={() => setIsBICategoryOpen(!isBICategoryOpen)}
+                className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between px-3 py-2 text-[10px] font-medium uppercase tracking-wider transition-colors"
+              >
+                <span>Inteligência Estratégica</span>
+                <ChevronDown
+                  className={cn('size-3 transition-transform', !isBICategoryOpen && '-rotate-90')}
+                />
+              </button>
+            ) : (
+              <div className="my-2 h-px bg-sidebar-border mx-2" />
+            )}
+
+            <AnimatePresence initial={false}>
+              {(isBICategoryOpen || isCollapsed) && (
+                <motion.div
+                  initial={isCollapsed ? false : { height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="space-y-0.5 overflow-hidden"
+                >
+                  {biItems.map(renderItem)}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </nav>
+
+        <Separator className="bg-sidebar-border" />
+
+        <div className="space-y-0.5 p-2">
+          <Button
+            variant="ghost"
+            className={cn(
+              'h-9 w-full justify-start gap-2 px-3 font-medium text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              isCollapsed && 'justify-center px-0'
+            )}
+          >
+            <Settings className="size-4 shrink-0" />
+            {!isCollapsed && <span>Configurações</span>}
+          </Button>
+          <Button
+            onClick={() => setIsLogoutModalOpen(true)}
+            variant="ghost"
+            className={cn(
+              'h-9 w-full justify-start gap-2 px-3 font-medium text-destructive hover:bg-destructive/10 hover:text-destructive',
+              isCollapsed && 'justify-center px-0'
+            )}
+          >
+            <LogOut className="size-4 shrink-0" />
+            {!isCollapsed && <span>Sair</span>}
+          </Button>
+        </div>
 
         <Button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={cn(
-            "absolute -right-3 top-1/2 z-30 h-6 w-6 -translate-y-1/2 rounded-full border border-[#86efac]/30 bg-[#166534] p-0 text-[#86efac] shadow-lg hover:bg-[#15803d]",
-            isCollapsed && "right-[-12px]"
-          )}
           size="icon"
-          variant="ghost"
+          variant="outline"
+          className="absolute -right-3 top-16 size-6 rounded-full shadow-sm"
         >
-          {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          {isCollapsed ? <ChevronRight className="size-3" /> : <ChevronLeft className="size-3" />}
         </Button>
-      </div>
-
-      <nav className="flex-1 py-6 px-3 space-y-6 overflow-y-auto custom-scrollbar">
-        {/* Operational Section */}
-        <div className="space-y-1">
-          {!isCollapsed && (
-            <p className="px-4 text-[11px] font-bold text-[#86efac] uppercase tracking-wider mb-2 opacity-60">Operacional Partilhado</p>
-          )}
-          {operationalItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <Button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={cn(
-                  "relative flex h-auto w-full items-center gap-3 rounded-2xl px-3 py-2 transition-all duration-200 group",
-                  isActive 
-                    ? "text-[#86efac]" 
-                    : "text-[#dcfce7] hover:bg-[#166534]/30 hover:text-[#f0fdf4]"
-                )}
-                variant="ghost"
-                title={isCollapsed ? item.label : undefined}
-              >
-                <div className={cn(
-                  "flex items-center gap-3 w-full px-1 py-1 rounded-full transition-all duration-300",
-                  isActive && !isCollapsed && "bg-[#166534]"
-                )}>
-                  <div className={cn(
-                    "w-10 h-8 flex items-center justify-center rounded-full transition-all duration-300",
-                    isActive && isCollapsed && "bg-[#166534]"
-                  )}>
-                    <Icon className={cn(
-                      "w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110",
-                      isActive ? "text-[#86efac]" : "text-[#dcfce7]"
-                    )} />
-                  </div>
-                  <span className={cn(
-                    "font-bold text-sm transition-all duration-300 overflow-hidden whitespace-nowrap",
-                    isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
-                  )}>
-                    {item.label}
-                  </span>
-                </div>
-              </Button>
-            );
-          })}
-        </div>
-
-        {/* BI Section */}
-        <div className="space-y-1">
-          {!isCollapsed ? (
-            <Button 
-              onClick={() => setIsBICategoryOpen(!isBICategoryOpen)}
-              className="mb-2 flex h-auto w-full items-center justify-between px-4 group"
-              variant="ghost"
-            >
-              <p className="text-[11px] font-bold text-[#86efac] uppercase tracking-wider opacity-60 group-hover:opacity-100 transition-opacity">Inteligência Estratégica</p>
-              <ChevronDown className={cn("w-3 h-3 text-[#86efac] transition-transform", !isBICategoryOpen && "-rotate-90")} />
-            </Button>
-          ) : (
-            <div className="h-[1px] bg-[#166534]/30 mx-4 my-4" />
-          )}
-          
-          <AnimatePresence>
-            {(isBICategoryOpen || isCollapsed) && (
-              <motion.div
-                initial={isCollapsed ? false : { height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="space-y-1 overflow-hidden"
-              >
-                {biItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activeTab === item.id;
-                  return (
-                    <Button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={cn(
-                        "relative flex h-auto w-full items-center gap-3 rounded-2xl px-3 py-2 transition-all duration-200 group",
-                        isActive 
-                          ? "text-[#86efac]" 
-                          : "text-[#dcfce7] hover:bg-[#166534]/30 hover:text-[#f0fdf4]"
-                      )}
-                      variant="ghost"
-                      title={isCollapsed ? item.label : undefined}
-                    >
-                      <div className={cn(
-                        "flex items-center gap-3 w-full px-1 py-1 rounded-full transition-all duration-300",
-                        isActive && !isCollapsed && "bg-[#166534]"
-                      )}>
-                        <div className={cn(
-                          "w-10 h-8 flex items-center justify-center rounded-full transition-all duration-300",
-                          isActive && isCollapsed && "bg-[#166534]"
-                        )}>
-                          <Icon className={cn(
-                            "w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110",
-                            isActive ? "text-[#86efac]" : "text-[#dcfce7]"
-                          )} />
-                        </div>
-                        <span className={cn(
-                          "font-bold text-sm transition-all duration-300 overflow-hidden whitespace-nowrap",
-                          isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
-                        )}>
-                          {item.label}
-                        </span>
-                      </div>
-                    </Button>
-                  );
-                })}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </nav>
-
-      <div className="p-4 border-t border-[#166534]/30 space-y-1">
-        <Button className={cn(
-          "h-auto w-full justify-start gap-3 rounded-2xl px-3 py-2.5 text-[#dcfce7] transition-all group hover:bg-[#166534]/30 hover:text-[#f0fdf4]",
-          isCollapsed && "justify-center"
-        )} variant="ghost">
-          <Settings className="w-5 h-5 shrink-0 group-hover:rotate-90 transition-transform duration-500" />
-          <span className={cn(
-            "font-bold text-sm transition-all duration-300 overflow-hidden whitespace-nowrap",
-            isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
-          )}>
-            Configurações
-          </span>
-        </Button>
-        <Button 
-          onClick={() => setIsLogoutModalOpen(true)}
-          className={cn(
-            "h-auto w-full justify-start gap-3 rounded-2xl px-3 py-2.5 text-[#ffb4ab] transition-all group hover:bg-[#93000a]/20 hover:text-[#ffdad6]",
-            isCollapsed && "justify-center"
-          )}
-          variant="ghost"
-        >
-          <LogOut className="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" />
-          <span className={cn(
-            "font-bold text-sm transition-all duration-300 overflow-hidden whitespace-nowrap",
-            isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
-          )}>
-            Sair
-          </span>
-        </Button>
-      </div>
       </motion.aside>
-    </>
+    </TooltipProvider>
   );
 }

@@ -1,20 +1,18 @@
 import React from 'react';
-import { 
-  Bell, 
-  X, 
-  CheckCircle2, 
-  AlertCircle, 
-  Info, 
+import {
+  Bell,
+  X,
   Clock,
   Package,
   Truck,
   UserPlus,
-  MessageSquare
+  MessageSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn, maskData } from '../../lib/utils';
+import { cn } from '../../lib/utils';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
 
 interface Notification {
   id: string;
@@ -34,7 +32,7 @@ const initialNotifications: Notification[] = [
     time: '2 min atrás',
     type: 'info',
     icon: Package,
-    read: false
+    read: false,
   },
   {
     id: '2',
@@ -43,7 +41,7 @@ const initialNotifications: Notification[] = [
     time: '15 min atrás',
     type: 'success',
     icon: Truck,
-    read: false
+    read: false,
   },
   {
     id: '3',
@@ -52,7 +50,7 @@ const initialNotifications: Notification[] = [
     time: '1 hora atrás',
     type: 'warning',
     icon: MessageSquare,
-    read: true
+    read: true,
   },
   {
     id: '4',
@@ -61,8 +59,8 @@ const initialNotifications: Notification[] = [
     time: '3 horas atrás',
     type: 'info',
     icon: UserPlus,
-    read: true
-  }
+    read: true,
+  },
 ];
 
 interface NotificationsPopoverProps {
@@ -83,118 +81,114 @@ export default function NotificationsPopover({ isOpen, onClose }: NotificationsP
     return desc;
   };
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  };
+
+  const typeClass: Record<Notification['type'], string> = {
+    info: 'bg-info/10 text-info',
+    success: 'bg-success/10 text-success',
+    warning: 'bg-warning/15 text-warning',
+    error: 'bg-destructive/10 text-destructive',
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={onClose}
-          />
+          <div className="fixed inset-0 z-40" onClick={onClose} />
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            className="absolute right-0 top-full mt-4 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-gray-100 z-50 overflow-hidden"
+            className="bg-popover text-popover-foreground absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-md border shadow-lg sm:w-96"
           >
-            <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <div className="flex items-center justify-between p-4">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-[#dcfce7] rounded-xl text-[#16a34a]">
-                  <Bell className="w-5 h-5" />
+                <div className="bg-muted text-foreground flex size-8 items-center justify-center rounded-md">
+                  <Bell className="size-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900">Notificações</h3>
-                  <p className="text-[10px] text-gray-500 font-medium">
-                    {unreadCount > 0 ? `Tens ${unreadCount} novas notificações` : 'Estás atualizado'}
+                  <h3 className="text-sm font-semibold">Notificações</h3>
+                  <p className="text-muted-foreground text-xs">
+                    {unreadCount > 0 ? `${unreadCount} novas` : 'Estás atualizado'}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 {unreadCount > 0 && (
-                  <Button 
-                    onClick={markAllAsRead}
-                    className="h-auto px-0 text-[10px] font-bold text-[#16a34a] hover:text-[#15803d]"
-                    variant="ghost"
-                  >
-                    Marcar todas como lidas
+                  <Button onClick={markAllAsRead} variant="ghost" size="sm" className="text-xs">
+                    Marcar lidas
                   </Button>
                 )}
-                <Button 
-                  onClick={onClose}
-                  className="h-8 w-8 rounded-lg p-0 hover:bg-gray-200"
-                  size="icon"
-                  variant="ghost"
-                >
-                  <X className="w-4 h-4 text-gray-400" />
+                <Button onClick={onClose} variant="ghost" size="icon" className="size-7">
+                  <X className="size-4" />
                 </Button>
               </div>
             </div>
 
-            <div className="max-h-[400px] overflow-y-auto divide-y divide-gray-50">
+            <Separator />
+
+            <div className="max-h-[400px] overflow-y-auto">
               {notifications.length > 0 ? (
                 notifications.map((notification) => (
-                  <div 
+                  <button
                     key={notification.id}
                     onClick={() => markAsRead(notification.id)}
                     className={cn(
-                      "p-4 flex gap-4 hover:bg-gray-50 transition-all cursor-pointer relative group",
-                      !notification.read && "bg-[#f0fdf4]"
+                      'hover:bg-accent flex w-full cursor-pointer gap-3 border-b p-4 text-left transition-colors last:border-b-0',
+                      !notification.read && 'bg-muted/50'
                     )}
                   >
-                    {!notification.read && (
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#22c55e]" />
-                    )}
-                    <div className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-                      notification.type === 'info' && "bg-blue-100 text-blue-600",
-                      notification.type === 'success' && "bg-[#dcfce7] text-[#16a34a]",
-                      notification.type === 'warning' && "bg-amber-100 text-amber-600",
-                      notification.type === 'error' && "bg-rose-100 text-rose-600"
-                    )}>
-                      <notification.icon className="w-5 h-5" />
+                    <div
+                      className={cn(
+                        'flex size-9 shrink-0 items-center justify-center rounded-md',
+                        typeClass[notification.type]
+                      )}
+                    >
+                      <notification.icon className="size-4" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-start mb-1">
-                        <h4 className={cn(
-                          "text-xs font-bold truncate pr-2",
-                          notification.read ? "text-gray-700" : "text-gray-900"
-                        )}>
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-1 flex items-start justify-between gap-2">
+                        <h4
+                          className={cn(
+                            'truncate text-sm',
+                            notification.read ? 'font-medium' : 'font-semibold'
+                          )}
+                        >
                           {notification.title}
                         </h4>
-                        <span className="text-[10px] text-gray-400 whitespace-nowrap flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
+                        <span className="text-muted-foreground flex shrink-0 items-center gap-1 whitespace-nowrap text-[10px]">
+                          <Clock className="size-3" />
                           {notification.time}
                         </span>
                       </div>
-                      <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
+                      <p className="text-muted-foreground line-clamp-2 text-xs">
                         {maskDescription(notification.description)}
                       </p>
                     </div>
-                  </div>
+                  </button>
                 ))
               ) : (
                 <div className="p-12 text-center">
-                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Bell className="w-8 h-8 text-gray-300" />
+                  <div className="bg-muted mx-auto mb-3 flex size-12 items-center justify-center rounded-full">
+                    <Bell className="text-muted-foreground size-5" />
                   </div>
-                  <p className="text-sm font-bold text-gray-400">Sem notificações</p>
-                  <p className="text-xs text-gray-300">Tudo limpo por aqui!</p>
+                  <p className="text-sm font-medium">Sem notificações</p>
+                  <p className="text-muted-foreground text-xs">Tudo limpo por aqui</p>
                 </div>
               )}
             </div>
 
-            <div className="p-3 bg-gray-50 border-t border-gray-100 text-center">
-              <Button className="h-auto px-0 text-[11px] font-bold text-gray-500 hover:text-[#16a34a]" variant="ghost">
+            <Separator />
+            <div className="p-2 text-center">
+              <Button variant="ghost" size="sm" className="w-full text-xs">
                 Ver todo o histórico
               </Button>
             </div>

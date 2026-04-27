@@ -15,7 +15,7 @@ import { motion } from 'motion/react';
 import { cn } from '../../lib/utils';
 import OrganicParticles from './OrganicParticles';
 import FeedbackBanner from '../Common/FeedbackBanner';
-import { DEFAULT_APP_HASH, isLoginHash } from '../../lib/routes';
+import { DEFAULT_APP_HASH, LOGIN_HASH, isLoginHash } from '../../lib/routes';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Card, CardContent } from '../ui/card';
@@ -63,9 +63,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row overflow-hidden">
       {/* Left Side - Brand & Message */}
-      <div className="md:w-1/2 bg-[#042f1a] relative flex flex-col justify-center p-12 md:p-24 overflow-hidden">
+      <div className="md:w-1/2 bg-primary relative flex flex-col justify-center p-12 md:p-24 overflow-hidden">
         <OrganicParticles />
         {/* Subtle Network Pattern Background */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -85,25 +85,25 @@ export default function Login() {
                 className="w-18 h-18 object-contain"
                 referrerPolicy="no-referrer"
               />
-            <h2 className="text-4xl font-black text-white tracking-tighter">AgriConnect</h2>
+            <h2 className="text-4xl font-semibold text-primary-foreground tracking-tighter">AgriConnect</h2>
           </div>
 
           {/* Slogan */}
           <div className="space-y-4">
-            <h1 className="text-6xl md:text-7xl font-black text-white leading-[1.1] tracking-tight">
+            <h1 className="text-6xl md:text-7xl font-semibold text-primary-foreground leading-[1.1] tracking-tight">
               Prever,<br />
               <span className="text-[#f27d26]">Transportar</span><br />
               & Crescer.
             </h1>
-            <p className="text-emerald-100/80 text-lg max-w-md leading-relaxed">
-              A principal <span className="text-white font-bold">Central de Inteligência Agrícola</span> em Angola. Conectando o campo ao mercado com tecnologia de ponta.
+            <p className="text-primary-foreground/80 text-lg max-w-md leading-relaxed">
+              A principal <span className="text-primary-foreground font-semibold">Central de Inteligência Agrícola</span> em Angola. Conectando o campo ao mercado com tecnologia de ponta.
             </p>
           </div>
         </div>
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="md:w-1/2 flex items-center justify-center p-8 md:p-16 bg-white">
+      <div className="md:w-1/2 flex items-center justify-center p-8 md:p-16 bg-background">
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -113,12 +113,12 @@ export default function Login() {
             
             
             <div className="space-y-2">
-              <h2 className="text-4xl font-black text-gray-900 tracking-tight">Acesso Restrito</h2>
-              <p className="text-gray-400 font-medium">Central de Inteligência Agrícola</p>
+              <h2 className="text-4xl font-semibold text-foreground tracking-tight">Acesso Restrito</h2>
+              <p className="text-muted-foreground font-medium">Central de Inteligência Agrícola</p>
             </div>
           </div>
 
-          <Card className="border-gray-100 shadow-none">
+          <Card className="border shadow-none">
             <CardContent className="space-y-6 p-0">
           <form onSubmit={handleSubmit} className="space-y-6">
             {success && (
@@ -131,8 +131,8 @@ export default function Login() {
             )}
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-700 flex items-center gap-2 ml-1">
-                <Mail className="w-4 h-4 text-gray-400" />
+              <label className="text-xs font-semibold text-foreground flex items-center gap-2 ml-1">
+                <Mail className="w-4 h-4 text-muted-foreground" />
                 Email de acesso
               </label>
               <Input
@@ -141,30 +141,30 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="empresa@agriconnect.ao"
-                className="h-14 rounded-2xl border-gray-100 bg-gray-50 px-6"
+                className="h-14 rounded-lg border bg-muted/50 px-6"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-700 flex items-center gap-2 ml-1">
-                <Lock className="w-4 h-4 text-gray-400" />
+              <label className="text-xs font-semibold text-foreground flex items-center gap-2 ml-1">
+                <Lock className="w-4 h-4 text-muted-foreground" />
                 Senha de Acesso
               </label>
               <div className="relative">
                 <Input
-                  type={showPassword ? "text" : "password"} 
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-14 rounded-2xl border-gray-100 bg-gray-50 px-6 pr-14"
+                  className="h-14 rounded-lg border bg-muted/50 px-6 pr-14"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 h-8 w-8 -translate-y-1/2 rounded-full p-0 text-gray-400 hover:text-emerald-600"
+                  className="absolute right-4 top-1/2 h-8 w-8 -translate-y-1/2 rounded-full p-0 text-muted-foreground hover:text-primary"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </Button>
@@ -172,7 +172,7 @@ export default function Login() {
             </div>
 
             <div className="flex justify-end">
-              <Button type="button" variant="link" className="h-auto p-0 text-xs font-bold text-gray-400 hover:text-emerald-600">
+              <Button type="button" variant="link" className="h-auto p-0 text-xs font-semibold text-muted-foreground hover:text-primary">
                 Esqueceu a senha?
               </Button>
             </div>
@@ -188,14 +188,14 @@ export default function Login() {
               </motion.div>
             )}
 
-            <div className="rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-600">
+            <div className="rounded-lg border bg-muted/50 px-4 py-3 text-xs text-muted-foreground">
               Credenciais de demonstração: `empresa@agriconnect.ao` com a senha `empresa123`.
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="h-14 w-full rounded-2xl bg-[#10b981] font-black uppercase tracking-widest text-xs shadow-xl shadow-emerald-500/20 hover:bg-[#059669]"
+              className="h-14 w-full rounded-lg bg-primary text-primary-foreground font-semibold uppercase tracking-widest text-xs shadow-lg hover:bg-primary/90"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -210,11 +210,11 @@ export default function Login() {
             </CardContent>
           </Card>
 
-          <div className="pt-8 border-t border-gray-100 space-y-8">
+          <div className="pt-8 border-t border space-y-8">
 
             <div className="text-center space-y-2">
-              <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Dúvidas? Entre em contacto:</p>
-              <p className="text-sm font-black text-emerald-600 tracking-tight">(+244) 925 206 298</p>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Dúvidas? Entre em contacto:</p>
+              <p className="text-sm font-semibold text-primary tracking-tight">(+244) 925 206 298</p>
             </div>
           </div>
         </motion.div>

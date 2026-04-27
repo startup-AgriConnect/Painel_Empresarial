@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
 import LoadsManagement from './components/Loads/LoadsManagement';
@@ -13,12 +13,12 @@ import ProducersFarms from './components/BI/ProducersFarms/ProducersFarms';
 import PriceDemand from './components/BI/PriceDemand/PriceDemand';
 import Reports from './components/BI/Reports/Reports';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn } from './lib/utils';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Auth/Login';
 import { useHashRoute } from './hooks/useHashRoute';
 import { DEFAULT_APP_HASH, isLoginHash, isProtectedHash } from './lib/routes';
+import { Toaster } from './components/ui/sonner';
 
 function AppContent() {
   const { user, isAuthenticated } = useAuth();
@@ -68,20 +68,20 @@ function AppContent() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 font-sans text-gray-900">
+    <div className="bg-background text-foreground flex min-h-screen font-sans">
       <Sidebar activeTab={activeTab} setActiveTab={navigateToTab} userRole={user?.role || 'COMPANY'} />
-      
-      <div className="flex-1 flex flex-col min-w-0">
+
+      <div className="flex min-w-0 flex-1 flex-col">
         <Header />
-        
-        <main className="flex-1 p-8 overflow-y-auto custom-scrollbar">
+
+        <main className="custom-scrollbar flex-1 overflow-y-auto p-6 lg:p-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.15 }}
             >
               {renderContent()}
             </motion.div>
@@ -96,6 +96,7 @@ export default function App() {
   return (
     <AuthProvider>
       <AppContent />
+      <Toaster position="top-right" richColors />
     </AuthProvider>
   );
 }

@@ -12,9 +12,9 @@ interface FeedbackBannerProps {
 
 const styles = {
   success: {
-    container: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+    container: 'border-success/20 bg-success/10 text-success',
     icon: CheckCircle2,
-    iconClassName: 'text-emerald-600',
+    iconClassName: 'text-success',
   },
   error: {
     container: 'border-rose-200 bg-rose-50 text-rose-900',

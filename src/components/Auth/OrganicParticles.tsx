@@ -92,7 +92,7 @@ const OrganicParticles: React.FC = () => {
         // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(16, 185, 129, ${particle.opacity})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
         ctx.fill();
       });
 
@@ -108,7 +108,7 @@ const OrganicParticles: React.FC = () => {
             ctx.moveTo(particleA.x, particleA.y);
             ctx.lineTo(particleB.x, particleB.y);
             const opacity = (1 - distance / 150) * 0.2;
-            ctx.strokeStyle = `rgba(16, 185, 129, ${opacity})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
@@ -125,7 +125,7 @@ const OrganicParticles: React.FC = () => {
             ctx.moveTo(particleA.x, particleA.y);
             ctx.lineTo(mouseRef.current.x, mouseRef.current.y);
             const opacity = (1 - distance / 200) * 0.5;
-            ctx.strokeStyle = `rgba(16, 185, 129, ${opacity})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
