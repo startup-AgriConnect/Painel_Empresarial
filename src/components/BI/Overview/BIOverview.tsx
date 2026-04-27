@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { 
-  BarChart3, 
-  Truck, 
-  DollarSign, 
-  TrendingUp, 
+import {
+  BarChart3,
+  Truck,
+  DollarSign,
+  TrendingUp,
   Package,
   ArrowUpRight,
   ArrowDownRight,
@@ -20,13 +20,13 @@ import {
   Thermometer,
   Filter
 } from 'lucide-react';
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -39,6 +39,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '../../ui/button';
 import { Label } from '../../ui/label';
 import { Select } from '../../ui/select';
+import { Card, CardContent } from '../../ui/card';
+import { Badge } from '../../ui/badge';
 
 const productionTrend = [
   { day: '01', volume: 420 },
@@ -67,32 +69,30 @@ const supplyDemandData = [
   { region: 'Uíge', supply: 250, demand: 180 },
 ];
 
-const StatCard = ({ title, value, change, trend, icon: Icon, unit, colorClass = "text-[#16a34a]", bgClass = "bg-[#f0fdf4]" }: any) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 group"
-  >
-    <div className="flex justify-between items-start mb-4">
-      <div className={cn("p-3 rounded-2xl", bgClass)}>
-        <Icon className={cn("w-6 h-6", colorClass)} />
-      </div>
-      {change && (
-        <div className={cn(
-          "flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg uppercase tracking-wider",
-          trend === 'up' ? "bg-[#f0fdf4] text-[#16a34a]" : "bg-rose-50 text-rose-600"
-        )}>
-          {trend === 'up' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-          {change}
+const StatCard = ({ title, value, change, trend, icon: Icon, unit }: any) => (
+  <Card className="py-0">
+    <CardContent className="p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+          <Icon className="w-4 h-4 text-foreground" />
         </div>
-      )}
-    </div>
-    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{title}</p>
-    <div className="flex items-baseline gap-1">
-      <h3 className="text-2xl font-bold text-gray-900 tracking-tight">{value}</h3>
-      {unit && <span className="text-xs font-bold text-gray-400">{unit}</span>}
-    </div>
-  </motion.div>
+        {change && (
+          <div className={cn(
+            "flex items-center gap-1 text-xs font-medium",
+            trend === 'up' ? "text-success" : "text-destructive"
+          )}>
+            {trend === 'up' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+            {change}
+          </div>
+        )}
+      </div>
+      <p className="mt-3 text-xs text-muted-foreground">{title}</p>
+      <div className="flex items-baseline gap-1">
+        <h3 className="text-2xl font-semibold text-foreground tracking-tight">{value}</h3>
+        {unit && <span className="text-xs text-muted-foreground">{unit}</span>}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 export default function BIOverview() {
@@ -127,410 +127,422 @@ export default function BIOverview() {
   const cultures = ['Todas', 'Milho', 'Feijão', 'Batata Doce', 'Mandioca', 'Café', 'Hortícolas'];
 
   return (
-    <div className="space-y-8">
-      <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+    <div className="space-y-6">
+      <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Visão Geral BI</h2>
-          <p className="text-gray-500 text-sm font-medium">Painel estratégico de inteligência de mercado e dinâmica agrícola.</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Visão Geral BI</h2>
+          <p className="text-sm text-muted-foreground">Painel estratégico de inteligência de mercado e dinâmica agrícola.</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex bg-gray-100 p-1 rounded-xl border border-gray-200">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center gap-1 rounded-md bg-muted p-1">
             {['Hoje', 'Semana', 'Mês'].map((period) => (
               <Button
                 key={period}
                 onClick={() => setActivePeriod(period)}
-                className={cn(
-                  "h-auto rounded-lg px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all",
-                  activePeriod === period 
-                    ? "bg-white text-[#16a34a] shadow-sm" 
-                    : "text-gray-400 hover:text-gray-600"
-                )}
                 variant="ghost"
+                size="sm"
+                className={cn(
+                  "h-7 rounded-sm px-3 text-xs font-medium",
+                  activePeriod === period
+                    ? "bg-background text-foreground shadow-xs"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
               >
                 {period}
               </Button>
             ))}
           </div>
+          <Button variant="outline" size="sm">
+            <Download className="w-4 h-4" /> Exportar
+          </Button>
         </div>
       </header>
 
       {/* Global Filters */}
-      <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
-        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          <Filter className="w-3 h-3" /> Filtros Globais de Inteligência
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="space-y-1.5">
-            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Província</Label>
-            <Select 
-              value={filterProvince}
-              onChange={(e) => {
-                setFilterProvince(e.target.value);
-                setFilterMunicipality('Todos');
-                setFilterCommune('Todas');
-              }}
-              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900"
-            >
-              {provinces.map(p => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </Select>
+      <Card className="py-0">
+        <CardContent className="p-4 space-y-3">
+          <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+            <Filter className="w-3.5 h-3.5" /> Filtros Globais de Inteligência
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Província</Label>
+              <Select
+                value={filterProvince}
+                onChange={(e) => {
+                  setFilterProvince(e.target.value);
+                  setFilterMunicipality('Todos');
+                  setFilterCommune('Todas');
+                }}
+                className="w-full text-sm"
+              >
+                {provinces.map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </Select>
+            </div>
 
-          <div className="space-y-1.5">
-            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Município</Label>
-            <Select 
-              value={filterMunicipality}
-              onChange={(e) => {
-                setFilterMunicipality(e.target.value);
-                setFilterCommune('Todas');
-              }}
-              disabled={filterProvince === 'Todas'}
-              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900 disabled:opacity-50"
-            >
-              <option value="Todos">Todos</option>
-              {filterProvince !== 'Todas' && municipalitiesByProvince[filterProvince].map(m => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </Select>
-          </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Município</Label>
+              <Select
+                value={filterMunicipality}
+                onChange={(e) => {
+                  setFilterMunicipality(e.target.value);
+                  setFilterCommune('Todas');
+                }}
+                disabled={filterProvince === 'Todas'}
+                className="w-full text-sm disabled:opacity-50"
+              >
+                <option value="Todos">Todos</option>
+                {filterProvince !== 'Todas' && municipalitiesByProvince[filterProvince].map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </Select>
+            </div>
 
-          <div className="space-y-1.5">
-            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Comuna</Label>
-            <Select 
-              value={filterCommune}
-              onChange={(e) => setFilterCommune(e.target.value)}
-              disabled={filterMunicipality === 'Todos'}
-              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900 disabled:opacity-50"
-            >
-              <option value="Todas">Todas</option>
-              {filterMunicipality !== 'Todos' && communesByMunicipality[filterMunicipality]?.map(c => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </Select>
-          </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Comuna</Label>
+              <Select
+                value={filterCommune}
+                onChange={(e) => setFilterCommune(e.target.value)}
+                disabled={filterMunicipality === 'Todos'}
+                className="w-full text-sm disabled:opacity-50"
+              >
+                <option value="Todas">Todas</option>
+                {filterMunicipality !== 'Todos' && communesByMunicipality[filterMunicipality]?.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </Select>
+            </div>
 
-          <div className="space-y-1.5">
-            <Label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Cultura</Label>
-            <Select 
-              value={filterCulture}
-              onChange={(e) => setFilterCulture(e.target.value)}
-              className="w-full border-slate-100 bg-slate-50 text-xs font-bold text-slate-900"
-            >
-              {cultures.map(c => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </Select>
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Cultura</Label>
+              <Select
+                value={filterCulture}
+                onChange={(e) => setFilterCulture(e.target.value)}
+                className="w-full text-sm"
+              >
+                {cultures.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </Select>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* KPI Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <StatCard 
-          title="Volume no Mercado" 
-          value="45.820" 
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <StatCard
+          title="Volume no Mercado"
+          value="45.820"
           unit="Ton"
-          change="+12%" 
-          trend="up" 
-          icon={Package} 
+          change="+12%"
+          trend="up"
+          icon={Package}
         />
-        <StatCard 
-          title="Preço Médio Frete" 
-          value="450" 
+        <StatCard
+          title="Preço Médio Frete"
+          value="450"
           unit="Kz/Km"
-          change="+2.4%" 
-          trend="up" 
-          icon={DollarSign} 
+          change="+2.4%"
+          trend="up"
+          icon={DollarSign}
         />
-        <StatCard 
-          title="Maior Produção" 
-          value="Huambo" 
+        <StatCard
+          title="Maior Produção"
+          value="Huambo"
           unit="Província"
-          icon={MapPin} 
-          colorClass="text-blue-600"
-          bgClass="bg-blue-50"
+          icon={MapPin}
         />
-        <StatCard 
-          title="Nível de Demanda" 
-          value="Alta" 
-          icon={Activity} 
-          colorClass="text-rose-600"
-          bgClass="bg-rose-50"
+        <StatCard
+          title="Nível de Demanda"
+          value="Alta"
+          icon={Activity}
         />
-        <StatCard 
-          title="Risco Logístico" 
-          value="Baixo" 
-          icon={ShieldAlert} 
-          colorClass="text-emerald-600"
-          bgClass="bg-emerald-50"
+        <StatCard
+          title="Risco Logístico"
+          value="Baixo"
+          icon={ShieldAlert}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Production Trend Chart */}
-        <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-[#f0fdf4] rounded-2xl">
-                <TrendingUp className="w-6 h-6 text-[#16a34a]" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-gray-900 tracking-tight">Tendência de Produção</h3>
-                <p className="text-xs text-gray-500 font-medium">Últimos 30 dias (Toneladas)</p>
+        <Card className="py-0">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+                  <TrendingUp className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-foreground tracking-tight">Tendência de Produção</h3>
+                  <p className="text-xs text-muted-foreground">Últimos 30 dias (Toneladas)</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={productionTrend}>
-                <defs>
-                  <linearGradient id="colorProd" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#16a34a" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#16a34a" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis 
-                  dataKey="day" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 600}} 
-                  dy={10}
-                />
-                <YAxis 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 600}}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#fff', 
-                    borderRadius: '20px', 
-                    border: 'none', 
-                    boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' 
-                  }}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="volume" 
-                  stroke="#16a34a" 
-                  strokeWidth={4} 
-                  fillOpacity={1} 
-                  fill="url(#colorProd)" 
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={productionTrend}>
+                  <defs>
+                    <linearGradient id="colorProd" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--foreground)" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="var(--foreground)" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis
+                    dataKey="day"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{fill: 'var(--muted-foreground)', fontSize: 12}}
+                    dy={10}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{fill: 'var(--muted-foreground)', fontSize: 12}}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'var(--popover)',
+                      color: 'var(--popover-foreground)',
+                      borderRadius: 'var(--radius)',
+                      border: '1px solid var(--border)',
+                      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="volume"
+                    stroke="var(--foreground)"
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#colorProd)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Freight Price Evolution */}
-        <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-[#f0fdf4] rounded-2xl">
-                <DollarSign className="w-6 h-6 text-[#16a34a]" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-gray-900 tracking-tight">Evolução de Preços</h3>
-                <p className="text-xs text-gray-500 font-medium">Custo médio de frete por Km</p>
+        <Card className="py-0">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+                  <DollarSign className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-foreground tracking-tight">Evolução de Preços</h3>
+                  <p className="text-xs text-muted-foreground">Custo médio de frete por Km</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={freightPriceEvolution}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis 
-                  dataKey="month" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 600}} 
-                  dy={10}
-                />
-                <YAxis 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 600}}
-                />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="price" 
-                  stroke="#16a34a" 
-                  strokeWidth={4} 
-                  dot={{ r: 6, fill: '#16a34a', strokeWidth: 2, stroke: '#fff' }}
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={freightPriceEvolution}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis
+                    dataKey="month"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{fill: 'var(--muted-foreground)', fontSize: 12}}
+                    dy={10}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{fill: 'var(--muted-foreground)', fontSize: 12}}
+                  />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: 'var(--popover)', color: 'var(--popover-foreground)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="price"
+                    stroke="var(--foreground)"
+                    strokeWidth={2}
+                    dot={{ r: 4, fill: 'var(--foreground)', strokeWidth: 2, stroke: 'var(--background)' }}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Supply vs Demand */}
-        <div className="lg:col-span-2 bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-[#f0fdf4] rounded-2xl">
-                <BarChart3 className="w-6 h-6 text-[#16a34a]" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-gray-900 tracking-tight">Oferta vs Demanda por Região</h3>
-                <p className="text-xs text-gray-500 font-medium">Equilíbrio entre cargas disponíveis e veículos</p>
+        <Card className="lg:col-span-2 py-0">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+                  <BarChart3 className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-foreground tracking-tight">Oferta vs Demanda por Região</h3>
+                  <p className="text-xs text-muted-foreground">Equilíbrio entre cargas disponíveis e veículos</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={supplyDemandData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis 
-                  dataKey="region" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#1e293b', fontSize: 12, fontWeight: 800}}
-                />
-                <YAxis 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 600}}
-                />
-                <Tooltip 
-                  cursor={{fill: '#f8fafc'}}
-                  contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                />
-                <Legend 
-                  verticalAlign="top" 
-                  align="right"
-                  height={36}
-                  formatter={(value) => <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{value === 'supply' ? 'Oferta' : 'Demanda'}</span>}
-                />
-                <Bar dataKey="supply" fill="#16a34a" radius={[10, 10, 0, 0]} barSize={40} />
-                <Bar dataKey="demand" fill="#3b82f6" radius={[10, 10, 0, 0]} barSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+            <div className="h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={supplyDemandData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis
+                    dataKey="region"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{fill: 'var(--foreground)', fontSize: 12, fontWeight: 600}}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{fill: 'var(--muted-foreground)', fontSize: 12}}
+                  />
+                  <Tooltip
+                    cursor={{fill: 'var(--muted)'}}
+                    contentStyle={{ backgroundColor: 'var(--popover)', color: 'var(--popover-foreground)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    align="right"
+                    height={36}
+                    formatter={(value) => <span className="text-xs text-muted-foreground">{value === 'supply' ? 'Oferta' : 'Demanda'}</span>}
+                  />
+                  <Bar dataKey="supply" fill="var(--foreground)" radius={[4, 4, 0, 0]} barSize={32} />
+                  <Bar dataKey="demand" fill="var(--chart-1)" radius={[4, 4, 0, 0]} barSize={32} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* AI Insight Banner - Moved to bottom and made more compact */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-[#052e16] p-5 rounded-[2rem] text-[#f0fdf4] relative overflow-hidden shadow-xl border border-[#166534]/30"
-      >
-        <div className="absolute top-[-40px] right-[-40px] w-64 h-64 bg-[#16a34a]/10 rounded-full blur-3xl" />
-        <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-          <div className="p-3 bg-[#16a34a]/20 rounded-2xl border border-[#16a34a]/30 shrink-0">
-            <Brain className="w-7 h-7 text-[#86efac]" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <Zap className="w-3.5 h-3.5 text-[#86efac]" />
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#86efac]">Insight Automático (IA)</span>
+      {/* AI Insight Banner - compact version */}
+      <Card className="py-0">
+        <CardContent className="p-5">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+            <div className="flex size-10 items-center justify-center rounded-md bg-muted shrink-0">
+              <Brain className="w-5 h-5 text-foreground" />
             </div>
-            <h3 className="text-lg md:text-xl font-bold leading-tight">
-              “A produção de milho aumentou <span className="text-[#86efac]">20%</span> no Cuanza Norte — oportunidade de compra antecipada”
-            </h3>
-            <p className="text-[#86efac]/70 text-xs font-medium mt-1">Baseado em dados de satélite e transações recentes na plataforma.</p>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-3.5 h-3.5 text-muted-foreground" />
+                <span className="text-xs font-medium text-muted-foreground">Insight Automático (IA)</span>
+              </div>
+              <h3 className="text-base font-semibold text-foreground leading-tight">
+                "A produção de milho aumentou <span className="text-success">20%</span> no Cuanza Norte — oportunidade de compra antecipada"
+              </h3>
+              <p className="text-xs text-muted-foreground mt-1">Baseado em dados de satélite e transações recentes na plataforma.</p>
+            </div>
+            <Button onClick={() => setIsDrawerOpen(true)} size="sm">
+              Ver Detalhes
+            </Button>
           </div>
-          <Button 
-            onClick={() => setIsDrawerOpen(true)}
-            className="h-auto whitespace-nowrap rounded-xl px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-[#16a34a]/20"
-          >
-            Ver Detalhes
-          </Button>
-        </div>
-      </motion.div>
+        </CardContent>
+      </Card>
 
       {/* Detail Side Panel Overlay */}
       <AnimatePresence>
         {isDrawerOpen && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsDrawerOpen(false)}
               className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[2000]"
             />
-            <motion.div 
+            <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[2001] overflow-y-auto no-scrollbar border-l border-gray-100"
+              className="fixed top-0 right-0 h-full w-full max-w-md bg-card shadow-md z-[2001] overflow-y-auto no-scrollbar border-l border-border"
             >
-              <div className="p-8">
-                <div className="flex justify-between items-center mb-8">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl">
-                      <Brain className="w-6 h-6" />
+                    <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+                      <Brain className="w-4 h-4 text-foreground" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Análise Estratégica</h3>
-                      <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Inteligência de Mercado</p>
+                      <h3 className="text-lg font-semibold text-foreground tracking-tight">Análise Estratégica</h3>
+                      <p className="text-xs text-muted-foreground">Inteligência de Mercado</p>
                     </div>
                   </div>
-                  <Button 
+                  <Button
                     onClick={() => setIsDrawerOpen(false)}
-                    className="h-10 w-10 rounded-xl p-0 hover:bg-gray-100"
                     size="icon"
                     variant="ghost"
                   >
-                    <X className="w-6 h-6 text-gray-400" />
+                    <X className="w-4 h-4 text-muted-foreground" />
                   </Button>
                 </div>
 
-                <div className="space-y-8">
+                <div className="space-y-6">
                   <section>
-                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Previsão Climática</h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                        <div className="flex items-center gap-2 mb-2">
-                          <CloudRain className="w-4 h-4 text-blue-600" />
-                          <span className="text-[10px] font-bold text-blue-400 uppercase">Precipitação</span>
-                        </div>
-                        <p className="text-xl font-black text-blue-900">12mm</p>
-                        <p className="text-[9px] text-blue-600 font-bold mt-1">Ideal para colheita</p>
-                      </div>
-                      <div className="p-4 bg-rose-50 rounded-2xl border border-rose-100">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Thermometer className="w-4 h-4 text-rose-600" />
-                          <span className="text-[10px] font-bold text-rose-400 uppercase">Temperatura</span>
-                        </div>
-                        <p className="text-xl font-black text-rose-900">26°C</p>
-                        <p className="text-[9px] text-rose-600 font-bold mt-1">Estável</p>
-                      </div>
+                    <h4 className="text-xs font-medium text-muted-foreground mb-3">Previsão Climática</h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Card className="py-0">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <CloudRain className="w-4 h-4 text-info" />
+                            <span className="text-xs text-muted-foreground">Precipitação</span>
+                          </div>
+                          <p className="text-xl font-semibold text-foreground">12mm</p>
+                          <p className="text-xs text-info mt-1">Ideal para colheita</p>
+                        </CardContent>
+                      </Card>
+                      <Card className="py-0">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Thermometer className="w-4 h-4 text-destructive" />
+                            <span className="text-xs text-muted-foreground">Temperatura</span>
+                          </div>
+                          <p className="text-xl font-semibold text-foreground">26°C</p>
+                          <p className="text-xs text-destructive mt-1">Estável</p>
+                        </CardContent>
+                      </Card>
                     </div>
                   </section>
 
                   <section>
-                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Oportunidades Detalhadas</h4>
-                    <div className="space-y-4">
-                      <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                        <p className="text-xs font-bold text-emerald-900 mb-2 uppercase">Cuanza Norte - Milho</p>
-                        <p className="text-xs text-emerald-700 leading-relaxed">
-                          O aumento de 20% na produção local cria uma janela de oportunidade para aquisição com preços 15% abaixo da média de Luanda.
-                        </p>
-                      </div>
-                      <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                        <p className="text-xs font-bold text-blue-900 mb-2 uppercase">Logística de Retorno</p>
-                        <p className="text-xs text-blue-700 leading-relaxed">
-                          Alta disponibilidade de veículos retornando vazios de Luanda para o Huambo. Potencial de redução de 25% no custo de frete de insumos.
-                        </p>
-                      </div>
+                    <h4 className="text-xs font-medium text-muted-foreground mb-3">Oportunidades Detalhadas</h4>
+                    <div className="space-y-3">
+                      <Card className="py-0">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="success">Cuanza Norte - Milho</Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            O aumento de 20% na produção local cria uma janela de oportunidade para aquisição com preços 15% abaixo da média de Luanda.
+                          </p>
+                        </CardContent>
+                      </Card>
+                      <Card className="py-0">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="info">Logística de Retorno</Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            Alta disponibilidade de veículos retornando vazios de Luanda para o Huambo. Potencial de redução de 25% no custo de frete de insumos.
+                          </p>
+                        </CardContent>
+                      </Card>
                     </div>
                   </section>
 
                   <section>
-                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Tendência de Preços (Próximos 15 dias)</h4>
-                    <div className="h-40 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-center">
-                      <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Gráfico de Projeção IA</p>
+                    <h4 className="text-xs font-medium text-muted-foreground mb-3">Tendência de Preços (Próximos 15 dias)</h4>
+                    <div className="h-40 bg-muted rounded-lg border border-border flex items-center justify-center">
+                      <p className="text-xs text-muted-foreground">Gráfico de Projeção IA</p>
                     </div>
                   </section>
                 </div>

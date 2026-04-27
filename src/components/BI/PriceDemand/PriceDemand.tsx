@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  DollarSign, 
-  TrendingUp, 
-  TrendingDown, 
-  BarChart3, 
-  ArrowUpRight, 
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  ArrowUpRight,
   ArrowDownRight,
   Info,
   Filter,
@@ -24,13 +24,13 @@ import {
   ChevronRight,
   Search
 } from 'lucide-react';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -48,6 +48,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '../../ui/button';
 import { Select } from '../../ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../ui/table';
+import { Card, CardContent } from '../../ui/card';
+import { Badge } from '../../ui/badge';
 
 // Mock Data
 const priceHistory = [
@@ -83,11 +85,11 @@ const forecastData = [
 ];
 
 const demandByProduct = [
-  { name: 'Milho', value: 45, color: '#10b981' },
-  { name: 'Mandioca', value: 25, color: '#3b82f6' },
-  { name: 'Feijão', value: 15, color: '#f59e0b' },
-  { name: 'Soja', value: 10, color: '#ef4444' },
-  { name: 'Outros', value: 5, color: '#64748b' },
+  { name: 'Milho', value: 45, color: 'var(--chart-1)' },
+  { name: 'Mandioca', value: 25, color: 'var(--chart-2)' },
+  { name: 'Feijão', value: 15, color: 'var(--chart-3)' },
+  { name: 'Soja', value: 10, color: 'var(--chart-4)' },
+  { name: 'Outros', value: 5, color: 'var(--chart-5)' },
 ];
 
 export default function PriceDemand() {
@@ -104,31 +106,27 @@ export default function PriceDemand() {
     <div className="space-y-6">
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="p-2 bg-emerald-50 rounded-lg">
-              <Coins className="w-5 h-5 text-emerald-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Preços & Demanda</h2>
-          </div>
-          <p className="text-gray-500 text-sm font-medium">Análise de custos logísticos, equilíbrio de mercado e oportunidades de negócio.</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Preços & Demanda</h2>
+          <p className="text-sm text-muted-foreground">Análise de custos logísticos, equilíbrio de mercado e oportunidades de negócio.</p>
         </div>
       </header>
 
       {/* Tabs Navigation */}
-      <div className="flex bg-gray-100 p-1.5 rounded-[1.5rem] border border-gray-200 overflow-x-auto no-scrollbar">
+      <div className="inline-flex items-center gap-1 rounded-md bg-muted p-1 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <Button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "h-auto whitespace-nowrap rounded-xl px-6 py-3 text-[10px] font-black uppercase tracking-widest transition-all",
-              activeTab === tab.id 
-                ? "bg-white text-[#16a34a] shadow-sm" 
-                : "text-gray-400 hover:text-gray-600"
-            )}
             variant="ghost"
+            size="sm"
+            className={cn(
+              "h-8 whitespace-nowrap rounded-sm px-3 text-xs font-medium",
+              activeTab === tab.id
+                ? "bg-background text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
+            )}
           >
-            <tab.icon className="w-4 h-4" />
+            <tab.icon className="w-3.5 h-3.5" />
             {tab.label}
           </Button>
         ))}
@@ -156,100 +154,121 @@ function OverviewTab() {
   return (
     <div className="space-y-6">
       {/* Top KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {[
-          { label: 'Preço Médio / Km', value: '420 Kz', trend: '+12%', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-          { label: 'Preço Médio / Ton', value: '15.400 Kz', trend: '+5.2%', icon: Coins, color: 'text-blue-600', bg: 'bg-blue-50' },
-          { label: 'Variação (30d)', value: '+8.4%', trend: 'Alta', icon: TrendingUp, color: 'text-rose-600', bg: 'bg-rose-50' },
-          { label: 'Região Mais Cara', value: 'Luanda', trend: '850 Kz/km', icon: MapPin, color: 'text-amber-600', bg: 'bg-amber-50' },
+          { label: 'Preço Médio / Km', value: '420 Kz', trend: '+12%', icon: DollarSign, trendUp: true },
+          { label: 'Preço Médio / Ton', value: '15.400 Kz', trend: '+5.2%', icon: Coins, trendUp: true },
+          { label: 'Variação (30d)', value: '+8.4%', trend: 'Alta', icon: TrendingUp, trendUp: true },
+          { label: 'Região Mais Cara', value: 'Luanda', trend: '850 Kz/km', icon: MapPin, trendUp: false },
         ].map((kpi, i) => (
-          <div key={i} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-            <div className={cn("p-3 rounded-2xl w-fit mb-4", kpi.bg)}>
-              <kpi.icon className={cn("w-6 h-6", kpi.color)} />
-            </div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{kpi.label}</p>
-            <div className="flex items-baseline gap-2">
-              <h3 className="text-2xl font-black text-gray-900">{kpi.value}</h3>
-              <span className={cn("text-[10px] font-bold", kpi.trend.startsWith('+') ? "text-rose-600" : "text-emerald-600")}>
-                {kpi.trend}
-              </span>
-            </div>
-          </div>
+          <Card key={i} className="py-0">
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+                  <kpi.icon className="w-4 h-4 text-foreground" />
+                </div>
+                {kpi.trend && (
+                  <span className={cn(
+                    "text-xs font-medium",
+                    kpi.trendUp ? "text-success" : "text-muted-foreground"
+                  )}>
+                    {kpi.trend}
+                  </span>
+                )}
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">{kpi.label}</p>
+              <h3 className="text-2xl font-semibold text-foreground tracking-tight">{kpi.value}</h3>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Price Chart */}
-        <div className="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-lg font-bold text-gray-900 tracking-tight flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-emerald-600" />
-              Evolução do Preço de Frete
-            </h3>
-            <Select className="border-none bg-gray-50 px-4 py-2 text-[10px] font-bold uppercase tracking-widest shadow-none focus-visible:ring-2 focus-visible:ring-emerald-500">
-              <option>Últimos 6 Meses</option>
-              <option>Último Ano</option>
-            </Select>
-          </div>
-          <div className="h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={priceHistory}>
-                <defs>
-                  <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                />
-                <Area type="monotone" dataKey="price" stroke="#10b981" strokeWidth={4} fillOpacity={1} fill="url(#colorPrice)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        <Card className="lg:col-span-2 py-0">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+                  <TrendingUp className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-foreground tracking-tight">Evolução do Preço de Frete</h3>
+                  <p className="text-xs text-muted-foreground">Últimos 6 meses</p>
+                </div>
+              </div>
+              <Select className="w-auto text-xs">
+                <option>Últimos 6 Meses</option>
+                <option>Último Ano</option>
+              </Select>
+            </div>
+            <div className="h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={priceHistory}>
+                  <defs>
+                    <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--foreground)" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="var(--foreground)" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'var(--popover)',
+                      color: 'var(--popover-foreground)',
+                      borderRadius: 'var(--radius)',
+                      border: '1px solid var(--border)',
+                      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                    }}
+                  />
+                  <Area type="monotone" dataKey="price" stroke="var(--foreground)" strokeWidth={2} fillOpacity={1} fill="url(#colorPrice)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Insights & Alerts */}
         <div className="space-y-6">
-          <div className="bg-[#052e16] p-8 rounded-[2.5rem] text-white relative overflow-hidden">
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
-                <Brain className="w-6 h-6 text-emerald-400" />
-                <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-400">Insight de Mercado</h4>
+          <Card className="py-0">
+            <CardContent className="p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <Brain className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs font-medium text-muted-foreground">Insight de Mercado</span>
               </div>
-              <p className="text-sm font-bold leading-relaxed mb-6">
-                "Preço de frete subiu 12% em Luanda devido à alta demanda. Oportunidade de frete premium em Benguela."
+              <p className="text-sm text-foreground leading-relaxed mb-4">
+                "Preço de frete subiu <span className="text-success font-medium">12%</span> em Luanda devido à alta demanda. Oportunidade de frete premium em Benguela."
               </p>
-              <Button className="h-auto w-full rounded-xl py-3 text-[10px] font-black uppercase tracking-widest">
+              <Button size="sm" className="w-full">
                 Ver Detalhes
               </Button>
-            </div>
-            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl" />
-          </div>
+            </CardContent>
+          </Card>
 
-          <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-            <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-600" />
-              Alertas Ativos
-            </h4>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-rose-50 rounded-2xl border border-rose-100">
-                <div className="p-2 bg-white rounded-lg">
-                  <TrendingUp className="w-3 h-3 text-rose-600" />
+          <Card className="py-0">
+            <CardContent className="p-5">
+              <h4 className="text-xs font-medium text-muted-foreground mb-3 flex items-center gap-2">
+                <AlertCircle className="w-3.5 h-3.5 text-destructive" />
+                Alertas Ativos
+              </h4>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3 p-3 bg-destructive/10 rounded-md border border-border">
+                  <div className="p-1.5 bg-card rounded-md">
+                    <TrendingUp className="w-3 h-3 text-destructive" />
+                  </div>
+                  <p className="text-xs font-medium text-foreground">Alta demanda crítica em Luanda</p>
                 </div>
-                <p className="text-[10px] font-bold text-rose-900">Alta demanda crítica em Luanda</p>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-emerald-50 rounded-2xl border border-emerald-100">
-                <div className="p-2 bg-white rounded-lg">
-                  <TrendingDown className="w-3 h-3 text-emerald-600" />
+                <div className="flex items-center gap-3 p-3 bg-success/10 rounded-md border border-border">
+                  <div className="p-1.5 bg-card rounded-md">
+                    <TrendingDown className="w-3 h-3 text-success" />
+                  </div>
+                  <p className="text-xs font-medium text-foreground">Queda de preço no Huambo</p>
                 </div>
-                <p className="text-[10px] font-bold text-emerald-900">Queda de preço no Huambo</p>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
@@ -259,87 +278,92 @@ function OverviewTab() {
 function SupplyDemandTab() {
   return (
     <div className="space-y-6">
-      <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 tracking-tight">Equilíbrio de Mercado por Região</h3>
-            <p className="text-xs text-gray-500 font-medium">Análise de escassez vs excesso de oferta</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-emerald-500" />
-              <span className="text-[10px] font-bold text-gray-500 uppercase">Oferta</span>
+      <Card className="py-0">
+        <CardContent className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h3 className="text-base font-semibold text-foreground tracking-tight">Equilíbrio de Mercado por Região</h3>
+              <p className="text-xs text-muted-foreground">Análise de escassez vs excesso de oferta</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-blue-500" />
-              <span className="text-[10px] font-bold text-gray-500 uppercase">Demanda</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-foreground" />
+                <span className="text-xs text-muted-foreground">Oferta</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full" style={{ background: 'var(--chart-1)' }} />
+                <span className="text-xs text-muted-foreground">Demanda</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="h-[400px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={supplyDemandByRegion} barGap={8}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-              <XAxis dataKey="region" axisLine={false} tickLine={false} tick={{fill: '#1e293b', fontSize: 12, fontWeight: 800}} />
-              <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-              <Tooltip cursor={{fill: '#f8fafc'}} contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-              <Bar dataKey="supply" fill="#10b981" radius={[10, 10, 0, 0]} barSize={40} />
-              <Bar dataKey="demand" fill="#3b82f6" radius={[10, 10, 0, 0]} barSize={40} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-          <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-6">Status Regional</h4>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-b border-gray-50 hover:bg-transparent">
-                  <TableHead className="pb-4">Região</TableHead>
-                  <TableHead className="pb-4">Status</TableHead>
-                  <TableHead className="pb-4">Preço</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody className="divide-y divide-gray-50">
-                {supplyDemandByRegion.map((row, i) => (
-                  <TableRow key={i} className="group transition-all hover:bg-gray-50">
-                    <TableCell className="py-4 text-xs font-bold text-gray-900">{row.region}</TableCell>
-                    <TableCell className="py-4">
-                      <span className={cn(
-                        "px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider",
-                        row.status === 'Escassez' ? "bg-rose-100 text-rose-700" : 
-                        row.status === 'Excesso' ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700"
-                      )}>
-                        {row.status}
-                      </span>
-                    </TableCell>
-                    <TableCell className="py-4 text-xs font-bold text-gray-600">{row.price}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-          <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-6">Demanda por Produto</h4>
-          <div className="h-[300px] w-full">
+          <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={demandByProduct} layout="vertical">
-                <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: '#1e293b', fontSize: 12, fontWeight: 700}} width={100} />
-                <Tooltip cursor={{fill: 'transparent'}} />
-                <Bar dataKey="value" radius={[0, 10, 10, 0]} barSize={20}>
-                  {demandByProduct.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Bar>
+              <BarChart data={supplyDemandByRegion} barGap={8}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis dataKey="region" axisLine={false} tickLine={false} tick={{fill: 'var(--foreground)', fontSize: 12, fontWeight: 600}} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} />
+                <Tooltip cursor={{fill: 'var(--muted)'}} contentStyle={{ backgroundColor: 'var(--popover)', color: 'var(--popover-foreground)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                <Bar dataKey="supply" fill="var(--foreground)" radius={[4, 4, 0, 0]} barSize={40} />
+                <Bar dataKey="demand" fill="var(--chart-1)" radius={[4, 4, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="py-0">
+          <CardContent className="p-6">
+            <h4 className="text-sm font-semibold text-foreground tracking-tight mb-4">Status Regional</h4>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-b border-border hover:bg-transparent">
+                    <TableHead className="pb-3 text-xs text-muted-foreground">Região</TableHead>
+                    <TableHead className="pb-3 text-xs text-muted-foreground">Status</TableHead>
+                    <TableHead className="pb-3 text-xs text-muted-foreground">Preço</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {supplyDemandByRegion.map((row, i) => (
+                    <TableRow key={i} className="group transition-all hover:bg-muted/50 border-b border-border">
+                      <TableCell className="py-3 text-xs font-medium text-foreground">{row.region}</TableCell>
+                      <TableCell className="py-3">
+                        <Badge variant={
+                          row.status === 'Escassez' ? 'destructive' :
+                          row.status === 'Excesso' ? 'success' : 'secondary'
+                        }>
+                          {row.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="py-3 text-xs text-muted-foreground">{row.price}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="py-0">
+          <CardContent className="p-6">
+            <h4 className="text-sm font-semibold text-foreground tracking-tight mb-4">Demanda por Produto</h4>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={demandByProduct} layout="vertical">
+                  <XAxis type="number" hide />
+                  <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: 'var(--foreground)', fontSize: 12, fontWeight: 600}} width={100} />
+                  <Tooltip cursor={{fill: 'transparent'}} contentStyle={{ backgroundColor: 'var(--popover)', color: 'var(--popover-foreground)', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }} />
+                  <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
+                    {demandByProduct.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
@@ -349,62 +373,64 @@ function RoutesTab() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-          <h3 className="text-lg font-bold text-gray-900 tracking-tight mb-8">Análise de Rotas e Rentabilidade</h3>
-          <div className="space-y-4">
-            {routePrices.map((route) => (
-              <div key={route.id} className="p-6 bg-gray-50 rounded-[2rem] border border-gray-100 hover:border-emerald-200 transition-all group">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-white rounded-2xl shadow-sm">
-                      <Truck className="w-5 h-5 text-emerald-600" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-black text-gray-900">{route.from}</span>
-                        <ArrowRightLeft className="w-3 h-3 text-gray-400" />
-                        <span className="text-sm font-black text-gray-900">{route.to}</span>
+        <Card className="md:col-span-2 py-0">
+          <CardContent className="p-6">
+            <h3 className="text-base font-semibold text-foreground tracking-tight mb-6">Análise de Rotas e Rentabilidade</h3>
+            <div className="space-y-3">
+              {routePrices.map((route) => (
+                <div key={route.id} className="p-4 bg-muted/50 rounded-md border border-border hover:border-ring transition-all group">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-md bg-card border border-border">
+                        <Truck className="w-4 h-4 text-foreground" />
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1 text-[10px] font-bold text-gray-500">
-                          <Clock className="w-3 h-3" /> {route.time}
-                        </span>
-                        <span className={cn(
-                          "px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest",
-                          route.profit === 'Alta' ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
-                        )}>
-                          Rentabilidade {route.profit}
-                        </span>
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm font-medium text-foreground">{route.from}</span>
+                          <ArrowRightLeft className="w-3 h-3 text-muted-foreground" />
+                          <span className="text-sm font-medium text-foreground">{route.to}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Clock className="w-3 h-3" /> {route.time}
+                          </span>
+                          <Badge variant={route.profit === 'Alta' ? 'success' : 'warning'}>
+                            Rentabilidade {route.profit}
+                          </Badge>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xl font-black text-gray-900">{route.price}</p>
-                    <div className="flex items-center justify-end gap-1 mt-1">
-                      {route.trend === 'up' ? <TrendingUp className="w-3 h-3 text-rose-500" /> : 
-                       route.trend === 'down' ? <TrendingDown className="w-3 h-3 text-emerald-500" /> : 
-                       <Activity className="w-3 h-3 text-gray-400" />}
-                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tendência</span>
+                    <div className="text-right">
+                      <p className="text-base font-semibold text-foreground tracking-tight">{route.price}</p>
+                      <div className="flex items-center justify-end gap-1 mt-1">
+                        {route.trend === 'up' ? <TrendingUp className="w-3 h-3 text-destructive" /> :
+                         route.trend === 'down' ? <TrendingDown className="w-3 h-3 text-success" /> :
+                         <Activity className="w-3 h-3 text-muted-foreground" />}
+                        <span className="text-xs text-muted-foreground">Tendência</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="space-y-6">
-          <div className="bg-[#052e16] p-8 rounded-[2.5rem] text-white">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">Insight de Rota</h4>
-            <p className="text-sm leading-relaxed mb-6">
+        <Card className="py-0">
+          <CardContent className="p-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <Brain className="w-4 h-4 text-muted-foreground" />
+              <h4 className="text-xs font-medium text-muted-foreground">Insight de Rota</h4>
+            </div>
+            <p className="text-sm text-foreground leading-relaxed">
               "A rota Bié → Luanda está com custo 15% acima da média, porém o tempo de trânsito reduziu em 2h devido a melhorias na EN230."
             </p>
-            <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-              <p className="text-[10px] font-bold text-emerald-400 uppercase mb-2">Recomendação</p>
-              <p className="text-xs font-bold">Priorizar cargas de alto valor perecível nesta rota.</p>
+            <div className="p-3 bg-muted rounded-md border border-border">
+              <p className="text-xs font-medium text-muted-foreground mb-1">Recomendação</p>
+              <p className="text-xs text-foreground">Priorizar cargas de alto valor perecível nesta rota.</p>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
@@ -414,67 +440,79 @@ function TrendsTab() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-lg font-bold text-gray-900 tracking-tight">Previsão de Preços (ML)</h3>
-            <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-bold">
-              <Brain className="w-3 h-3" /> IA Preditiva Ativa
+        <Card className="md:col-span-2 py-0">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-md bg-muted">
+                  <TrendingUp className="w-4 h-4 text-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-foreground tracking-tight">Previsão de Preços (ML)</h3>
+                  <p className="text-xs text-muted-foreground">Modelo preditivo</p>
+                </div>
+              </div>
+              <Badge variant="outline" className="gap-1">
+                <Brain className="w-3 h-3" /> IA Preditiva
+              </Badge>
             </div>
-          </div>
-          <div className="h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={forecastData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                <Tooltip contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }} />
-                <Line type="monotone" dataKey="price" stroke="#10b981" strokeWidth={4} dot={{ r: 6, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }} strokeDasharray="5 5" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="mt-8 p-6 bg-emerald-50 rounded-[2rem] border border-emerald-100">
-            <p className="text-sm font-bold text-emerald-900 leading-relaxed">
-              "Nossa IA prevê um aumento de 15% nos preços de frete nas próximas 3 semanas devido ao início da colheita de milho no Planalto Central."
-            </p>
-          </div>
-        </div>
+            <div className="h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={forecastData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} />
+                  <Tooltip contentStyle={{ backgroundColor: 'var(--popover)', color: 'var(--popover-foreground)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                  <Line type="monotone" dataKey="price" stroke="var(--foreground)" strokeWidth={2} dot={{ r: 4, fill: 'var(--foreground)', strokeWidth: 2, stroke: 'var(--background)' }} strokeDasharray="5 5" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-6 p-4 bg-success/10 rounded-md border border-border">
+              <p className="text-sm text-foreground leading-relaxed">
+                "Nossa IA prevê um aumento de <span className="text-success font-medium">15%</span> nos preços de frete nas próximas 3 semanas devido ao início da colheita de milho no Planalto Central."
+              </p>
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-          <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-6">Dinâmica de Mercado</h4>
-          <div className="space-y-6">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-[10px] font-bold text-gray-500 uppercase">Relação Oferta/Preço</span>
-                <span className="text-xs font-black text-rose-600">Inversa</span>
-              </div>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-rose-500 w-[85%]" />
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-[10px] font-bold text-gray-500 uppercase">Sazonalidade</span>
-                <span className="text-xs font-black text-emerald-600">Alta</span>
-              </div>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 w-[70%]" />
-              </div>
-            </div>
-            <div className="pt-6 border-t border-gray-50">
-              <h5 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-4">Próximos Eventos</h5>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-amber-500" />
-                  <p className="text-[10px] font-bold text-gray-600">Início Colheita Milho (15 dias)</p>
+        <Card className="py-0">
+          <CardContent className="p-6">
+            <h4 className="text-sm font-semibold text-foreground tracking-tight mb-6">Dinâmica de Mercado</h4>
+            <div className="space-y-6">
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-muted-foreground">Relação Oferta/Preço</span>
+                  <span className="text-xs font-medium text-destructive">Inversa</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-blue-500" />
-                  <p className="text-[10px] font-bold text-gray-600">Aumento Demanda Luanda (7 dias)</p>
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div className="h-full bg-destructive w-[85%]" />
                 </div>
               </div>
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-muted-foreground">Sazonalidade</span>
+                  <span className="text-xs font-medium text-success">Alta</span>
+                </div>
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div className="h-full bg-success w-[70%]" />
+                </div>
+              </div>
+              <div className="pt-6 border-t border-border">
+                <h5 className="text-xs font-medium text-muted-foreground mb-3">Próximos Eventos</h5>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-warning" />
+                    <p className="text-xs text-foreground">Início Colheita Milho (15 dias)</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-info" />
+                    <p className="text-xs text-foreground">Aumento Demanda Luanda (7 dias)</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
